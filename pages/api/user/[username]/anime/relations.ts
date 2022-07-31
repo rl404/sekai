@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { UserAnimeRelation } from '../../../../../types/Types';
 
 type Data = {
-  status: Number;
+  status: number;
   message: string;
   data: UserAnimeRelation;
 };

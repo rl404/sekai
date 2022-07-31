@@ -11,10 +11,12 @@ const ForceGraph = ({
   graphData,
   nodeColor,
   linkColor,
+  onNodeClick,
 }: {
   graphData: GraphData | any;
   nodeColor: any;
   linkColor: any;
+  onNodeClick: (anime_id: number) => void;
 }) => {
   const [highlightNodes, setHighlightNodes] = React.useState(new Set());
   const [highlightLinks, setHighlightLinks] = React.useState(new Set());
@@ -83,6 +85,9 @@ const ForceGraph = ({
         node.fx = node.x;
         node.fy = node.y;
       }}
+      onNodeClick={(node: GraphNode | any) => {
+        onNodeClick(node.anime_id);
+      }}
       linkLabel=""
       linkColor={(link: GraphLink | any) => {
         if (!hoverNode) return defaultLinkColor;
@@ -93,6 +98,7 @@ const ForceGraph = ({
       linkDirectionalArrowLength={10}
       linkCanvasObjectMode={() => 'after'}
       linkCanvasObject={(link: GraphLink | any, ctx, _) => {
+        return;
         if (!highlightLinks.has(link)) return;
 
         ctx.textAlign = 'center';

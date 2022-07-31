@@ -4,20 +4,22 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import InitDialog from '../components/dialog/InitDialog';
 import { AnimeRelation, UserAnimeStatus } from '../utils/constant';
-import { GraphData } from '../types/Types';
+import { AnimeDrawerState, GraphData, InitDialogState } from '../types/Types';
+import AnimeDrawer from '../components/drawer/AnimeDrawer';
 
 const NoSSRForceGraph = dynamic(() => import('../components/graph/ForceGraph'), {
   ssr: false,
 });
 
 const Home: NextPage = () => {
-  const [initDialogState, setInitDialogState] = React.useState({
+  const [initDialogState, setInitDialogState] = React.useState<InitDialogState>({
     open: true,
   });
 
   const handleOpenInitDialog = () => {
     setInitDialogState({ ...initDialogState, open: true });
   };
+
   const handleCloseInitDialog = () => {
     setInitDialogState({ ...initDialogState, open: false });
   };
@@ -26,6 +28,10 @@ const Home: NextPage = () => {
     nodes: [],
     links: [],
   });
+
+  const setGraphData = (data: GraphData) => {
+    setGraphDataState(data);
+  };
 
   const [graphNodeColorState, setGraphNodeColorState] = React.useState({
     [UserAnimeStatus.watching]: '#4caf50',
@@ -50,8 +56,17 @@ const Home: NextPage = () => {
     [AnimeRelation.other]: 'rgba(255,255,255,0.1)',
   });
 
-  const setGraphData = (data: GraphData) => {
-    setGraphDataState(data);
+  const [animeDrawerState, setAnimeDrawerState] = React.useState<AnimeDrawerState>({
+    open: false,
+    anime_id: 0,
+  });
+
+  const handleOpenAnimeDrawer = (anime_id: number) => {
+    setAnimeDrawerState({ ...animeDrawerState, open: true, anime_id: anime_id });
+  };
+
+  const handleCloseAnimeDrawer = () => {
+    setAnimeDrawerState({ ...animeDrawerState, open: false, anime_id: 0 });
   };
 
   return (
@@ -66,12 +81,19 @@ const Home: NextPage = () => {
         graphData={graphDataState}
         nodeColor={graphNodeColorState}
         linkColor={graphLinkColorState}
+        onNodeClick={handleOpenAnimeDrawer}
       />
 
       <InitDialog
         open={initDialogState.open}
         onClose={handleCloseInitDialog}
         setGraphData={setGraphData}
+      />
+
+      <AnimeDrawer
+        open={animeDrawerState.open}
+        anime_id={animeDrawerState.anime_id}
+        onClose={handleCloseAnimeDrawer}
       />
     </>
   );

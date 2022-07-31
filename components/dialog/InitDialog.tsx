@@ -97,7 +97,7 @@ const InitDialog = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open}>
       <DialogTitle>Welcome to Sekai</DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={2}>
@@ -117,6 +117,11 @@ const InitDialog = ({
               Go
             </LoadingButton>
           </Grid>
+          {formState.error !== '' && (
+            <Grid item xs={12}>
+              {formState.error}
+            </Grid>
+          )}
         </Grid>
       </DialogContent>
     </Dialog>

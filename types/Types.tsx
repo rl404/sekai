@@ -1,8 +1,41 @@
-export interface UserAnime {
-  anime_id: Number;
+export interface Anime {
+  id: number;
+  title: string;
+  alternative_titles: AlternativeTitle;
+  picture: string;
+  synopsis: string;
+  start_date: Date;
+  end_date: Date;
+  type: string;
   status: string;
-  score: Number;
-  episode: Number;
+  rank: number;
+  mean: number;
+  popularity: number;
+  genres: Array<Genre>;
+}
+
+interface AlternativeTitle {
+  synonyms: Array<string>;
+  english: string;
+  japanese: string;
+}
+
+export interface Date {
+  year: number;
+  month: number;
+  day: number;
+}
+
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export interface UserAnime {
+  anime_id: number;
+  status: string;
+  score: number;
+  episode: number;
   tags: Array<string>;
   comment: string;
   updated_at: Date;
@@ -14,17 +47,17 @@ export interface UserAnimeRelation {
 }
 
 export interface UserAnimeRelationNode {
-  anime_id: Number;
+  anime_id: number;
   title: string;
   status: string;
-  score: Number;
+  score: number;
   type: string;
   user_anime_status: string;
 }
 
 export interface UserAnimeRelationLink {
-  anime_id1: Number;
-  anime_id2: Number;
+  anime_id1: number;
+  anime_id2: number;
   relation: string;
 }
 
@@ -34,11 +67,11 @@ export interface GraphData {
 }
 
 export interface GraphNode {
-  id: Number;
-  anime_id: Number;
+  id: number;
+  anime_id: number;
   title: string;
   status: string;
-  score: Number;
+  score: number;
   type: string;
   user_anime_status: string;
   neighbors: Array<GraphNode>;
@@ -46,7 +79,37 @@ export interface GraphNode {
 }
 
 export interface GraphLink {
-  source: Number;
-  target: Number;
+  source: number;
+  target: number;
   relation: string;
+}
+
+export interface InitDialogState {
+  open: boolean;
+}
+
+export interface AnimeDrawerState {
+  open: boolean;
+  anime_id: number;
+}
+
+export interface AnimeDrawerData {
+  id: number;
+  title: string;
+  title_synonyms: Array<string>;
+  title_english: string;
+  title_japanese: string;
+  picture: string;
+  synopsis: string;
+  start_date: string;
+  end_date: string;
+  type: string;
+  status: string;
+  rank: number;
+  mean: number;
+  popularity: number;
+  genres: Array<string>;
+
+  loading: boolean;
+  error: string;
 }

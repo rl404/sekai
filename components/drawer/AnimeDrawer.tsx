@@ -1,0 +1,249 @@
+import * as React from 'react';
+import { Chip, Divider, Drawer, Grid, IconButton, Link, Tooltip, Typography } from '@mui/material';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ChevronLefttIcon from '@mui/icons-material/ChevronLeft';
+import { AnimeDrawerData, Genre } from '../../types/Types';
+import axios from 'axios';
+import { theme } from '../theme';
+import { DateToStr, PrintDate } from '../../utils/utils';
+import { AnimeStatusToStr, AnimeTypeToStr } from '../../utils/constant';
+
+const style = {
+  drawer: {
+    width: 500,
+    padding: 2,
+  },
+  titleTooltip: {
+    '& .MuiTooltip-tooltip': {
+      padding: 2,
+      background: theme.palette.background.paper,
+      border: `1px solid ${theme.palette.divider}`,
+    },
+  },
+  dateTooltip: {
+    '& .MuiTooltip-tooltip': {
+      padding: 2,
+      background: theme.palette.background.paper,
+      border: `1px solid ${theme.palette.divider}`,
+      maxWidth: 'none',
+    },
+  },
+  imageArea: {
+    maxHeight: 500,
+    textAlign: 'center',
+  },
+  image: {
+    height: '100%',
+    maxWidth: '100%',
+  },
+  genreChip: {
+    margin: 0.5,
+  },
+};
+
+const AnimeDrawer = ({
+  open,
+  anime_id,
+  onClose,
+}: {
+  open: boolean;
+  anime_id: number;
+  onClose: any;
+}) => {
+  const [animeState, setAnimeState] = React.useState<AnimeDrawerData>({
+    id: 0,
+    title: '',
+    title_synonyms: [],
+    title_english: '',
+    title_japanese: '',
+    picture: '',
+    synopsis: '',
+    start_date: '',
+    end_date: '',
+    type: '',
+    status: '',
+    rank: 0,
+    mean: 0,
+    popularity: 0,
+    genres: [],
+    loading: false,
+    error: '',
+  });
+
+  React.useEffect(() => {
+    if (!anime_id || anime_id === 0) {
+      setAnimeState({ ...animeState, loading: false, error: 'empty id' });
+      return;
+    }
+
+    setAnimeState({ ...animeState, loading: true, error: '' });
+
+    axios
+      .get(`/api/anime/${anime_id}`)
+      .then((resp) => {
+        const anime = resp.data.data;
+
+        setAnimeState({
+          ...animeState,
+          id: anime.id,
+          title: anime.title,
+          title_synonyms: anime.alternative_titles.synonyms,
+          title_english: anime.alternative_titles.english,
+          title_japanese: anime.alternative_titles.japanese,
+          picture: anime.picture,
+          synopsis: anime.synopsis,
+          start_date: DateToStr(anime.start_date),
+          end_date: DateToStr(anime.end_date),
+          type: anime.type,
+          status: anime.status,
+          rank: anime.rank,
+          mean: anime.mean,
+          popularity: anime.popularity,
+          genres: anime.genres.map((g: Genre) => g.name),
+          loading: false,
+          error: '',
+        });
+      })
+      .catch((error) => {
+        setAnimeState({ ...animeState, loading: false, error: error.response?.data?.message });
+      });
+  }, [anime_id]);
+
+  return (
+    <Drawer open={open} anchor="right" variant="persistent" PaperProps={{ sx: style.drawer }}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Tooltip title="Close" placement="right" arrow>
+            <IconButton onClick={onClose}>
+              {open ? <ChevronRightIcon /> : <ChevronLefttIcon />}
+            </IconButton>
+          </Tooltip>
+        </Grid>
+        {animeState.error !== '' ? (
+          <Grid item xs={12}>
+            {animeState.error}
+          </Grid>
+        ) : animeState.loading ? (
+          <Grid item xs={12}>
+            loading...
+          </Grid>
+        ) : (
+          <>
+            <Grid item xs={12}>
+              <Tooltip
+                placement="left"
+                arrow
+                PopperProps={{ sx: style.titleTooltip }}
+                title={
+                  (animeState.title_synonyms.length > 0 ||
+                    animeState.title_english !== '' ||
+                    animeState.title_japanese !== '') && (
+                    <Grid container spacing={1}>
+                      {animeState.title_synonyms.length > 0 && (
+                        <Grid item xs={12} container>
+                          <Grid item xs={3}>
+                            <Typography variant="subtitle2">Synonym</Typography>
+                          </Grid>
+                          <Grid item xs>
+                            <Typography>{animeState.title_synonyms.join(', ')}</Typography>
+                          </Grid>
+                        </Grid>
+                      )}
+                      {animeState.title_english !== '' && (
+                        <Grid item xs={12} container>
+                          <Grid item xs={3}>
+                            <Typography variant="subtitle2">English</Typography>
+                          </Grid>
+                          <Grid item xs>
+                            <Typography>{animeState.title_english}</Typography>
+                          </Grid>
+                        </Grid>
+                      )}
+                      {animeState.title_japanese !== '' && (
+                        <Grid item xs={12} container>
+                          <Grid item xs={3}>
+                            <Typography variant="subtitle2">Japanese</Typography>
+                          </Grid>
+                          <Grid item xs>
+                            <Typography>{animeState.title_japanese}</Typography>
+                          </Grid>
+                        </Grid>
+                      )}
+                    </Grid>
+                  )
+                }
+              >
+                <Typography variant="h5" align="center" gutterBottom>
+                  <b>
+                    <Link
+                      href={`https://myanimelist.net/anime/${animeState.id}`}
+                      color="inherit"
+                      underline="hover"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {animeState.title}
+                    </Link>
+                  </b>
+                </Typography>
+              </Tooltip>
+              <Divider />
+            </Grid>
+            <Grid item xs={12} sx={style.imageArea}>
+              <img src={animeState.picture} alt={animeState.title} style={style.image} />
+            </Grid>
+            <Grid item xs={4}>
+              <Divider>Rank</Divider>
+              <Typography variant="h6" align="center">
+                <b>#{animeState.rank.toLocaleString()}</b>
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Divider>Score</Divider>
+              <Typography variant="h6" align="center">
+                <b>{animeState.mean.toLocaleString()}</b>
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Divider>Popularity</Divider>
+              <Typography variant="h6" align="center">
+                <b>#{animeState.popularity.toLocaleString()}</b>
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Divider>Type</Divider>
+              <Typography variant="h6" align="center">
+                <b>{AnimeTypeToStr(animeState.type)}</b>
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Divider>Status</Divider>
+              <Tooltip
+                placement="bottom"
+                arrow
+                PopperProps={{ sx: style.dateTooltip }}
+                title={PrintDate(animeState.start_date, animeState.end_date)}
+              >
+                <Typography variant="h6" align="center">
+                  <b>{AnimeStatusToStr(animeState.status)}</b>
+                </Typography>
+              </Tooltip>
+            </Grid>
+            <Grid item xs={12} sx={{ textAlign: 'justify' }}>
+              <Divider sx={{ marginBottom: 1 }}>Synopsis</Divider>
+              <Typography sx={{ whiteSpace: 'pre-line' }}>{animeState.synopsis}</Typography>
+            </Grid>
+            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+              <Divider sx={{ marginBottom: 1 }}>Genres</Divider>
+              {animeState.genres.map((g) => {
+                return <Chip size="small" label={g} key={g} sx={style.genreChip} />;
+              })}
+            </Grid>
+          </>
+        )}
+      </Grid>
+    </Drawer>
+  );
+};
+
+export default AnimeDrawer;
