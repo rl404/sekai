@@ -88,6 +88,17 @@ export interface InitDialogState {
   open: boolean;
 }
 
+export interface ConfigDialogState {
+  open: boolean;
+}
+
+export interface ConfigState {
+  username: string;
+  showDetailOnClick: boolean;
+  showTitle: boolean;
+  showRelation: boolean;
+}
+
 export interface AnimeDrawerState {
   open: boolean;
   anime_id: number;

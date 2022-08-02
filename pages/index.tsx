@@ -4,8 +4,15 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import InitDialog from '../components/dialog/InitDialog';
 import { AnimeRelation, UserAnimeStatus } from '../utils/constant';
-import { AnimeDrawerState, GraphData, InitDialogState } from '../types/Types';
+import {
+  AnimeDrawerState,
+  ConfigDialogState,
+  ConfigState,
+  GraphData,
+  InitDialogState,
+} from '../types/Types';
 import AnimeDrawer from '../components/drawer/AnimeDrawer';
+import ConfigDialog from '../components/dialog/ConfigDialog';
 
 const NoSSRForceGraph = dynamic(() => import('../components/graph/ForceGraph'), {
   ssr: false,
@@ -34,6 +41,7 @@ const Home: NextPage = () => {
   };
 
   const [graphNodeColorState, setGraphNodeColorState] = React.useState({
+    '': '#000',
     [UserAnimeStatus.watching]: '#4caf50',
     [UserAnimeStatus.completed]: '#2196f3',
     [UserAnimeStatus.on_hold]: '#ffc107',
@@ -42,6 +50,7 @@ const Home: NextPage = () => {
   });
 
   const [graphLinkColorState, setGraphLinkColorState] = React.useState({
+    '': 'rgba(255,255,255,0.1)',
     [AnimeRelation.sequel]: 'rgba(255,255,255,0.1)',
     [AnimeRelation.prequel]: 'rgba(255,255,255,0.1)',
     [AnimeRelation.alternative_setting]: 'rgba(255,255,255,0.1)',
@@ -62,11 +71,48 @@ const Home: NextPage = () => {
   });
 
   const handleOpenAnimeDrawer = (anime_id: number) => {
+    if (!configState.showDetailOnClick) return;
     setAnimeDrawerState({ ...animeDrawerState, open: true, anime_id: anime_id });
   };
 
   const handleCloseAnimeDrawer = () => {
     setAnimeDrawerState({ ...animeDrawerState, open: false, anime_id: 0 });
+  };
+
+  const [configDialogState, setConfigDialogState] = React.useState<ConfigDialogState>({
+    open: false,
+  });
+
+  const handleOpenConfigDialog = () => {
+    setConfigDialogState({ ...configDialogState, open: true });
+  };
+
+  const handleCloseConfigDialog = () => {
+    setConfigDialogState({ ...configDialogState, open: false });
+  };
+
+  const [configState, setConfigState] = React.useState<ConfigState>({
+    username: '',
+    showDetailOnClick: true,
+    showTitle: false,
+    showRelation: false,
+  });
+
+  const setConfigUsername = (username: string) => {
+    setConfigState({ ...configState, username: username });
+  };
+
+  const setShowDetailOnClick = (v: boolean) => {
+    setConfigState({ ...configState, showDetailOnClick: v });
+    !v && handleCloseAnimeDrawer();
+  };
+
+  const setShowTitle = (v: boolean) => {
+    setConfigState({ ...configState, showTitle: v });
+  };
+
+  const setShowRelation = (v: boolean) => {
+    setConfigState({ ...configState, showRelation: v });
   };
 
   return (
@@ -81,6 +127,8 @@ const Home: NextPage = () => {
         graphData={graphDataState}
         nodeColor={graphNodeColorState}
         linkColor={graphLinkColorState}
+        showTitle={configState.showTitle}
+        showRelation={configState.showRelation}
         onNodeClick={handleOpenAnimeDrawer}
       />
 
@@ -88,6 +136,21 @@ const Home: NextPage = () => {
         open={initDialogState.open}
         onClose={handleCloseInitDialog}
         setGraphData={setGraphData}
+        openConfigDialog={handleOpenConfigDialog}
+        setConfigUsername={setConfigUsername}
+      />
+
+      <ConfigDialog
+        open={configDialogState.open}
+        onClose={handleCloseConfigDialog}
+        config={configState}
+        nodeColor={graphNodeColorState}
+        setNodeColor={(status, color) => {
+          setGraphNodeColorState({ ...graphNodeColorState, [status]: color });
+        }}
+        setShowDetailOnClick={setShowDetailOnClick}
+        setShowTitle={setShowTitle}
+        setShowRelation={setShowRelation}
       />
 
       <AnimeDrawer

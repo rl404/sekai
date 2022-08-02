@@ -14,10 +14,14 @@ const InitDialog = ({
   open,
   onClose,
   setGraphData,
+  openConfigDialog,
+  setConfigUsername,
 }: {
   open: boolean;
   onClose: any;
   setGraphData: (data: GraphData) => void;
+  openConfigDialog: () => void;
+  setConfigUsername: (username: string) => void;
 }) => {
   const [formState, setFormState] = React.useState({
     username: '',
@@ -86,6 +90,8 @@ const InitDialog = ({
 
         setFormState({ ...formState, loading: false });
         onClose();
+        openConfigDialog();
+        setConfigUsername(formState.username);
       })
       .catch((error) => {
         setFormState({

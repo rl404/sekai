@@ -2,8 +2,6 @@ import * as React from 'react';
 import { ForceGraph2D } from 'react-force-graph';
 import { GraphData, GraphLink, GraphNode } from '../../types/Types';
 
-const defaultNodeColor = 'black';
-const defaultLinkColor = 'rgba(255,255,255,0.1)';
 const inactiveColor = 'rgba(255,255,255,0.1)';
 const activeColor = 'white';
 
@@ -11,11 +9,15 @@ const ForceGraph = ({
   graphData,
   nodeColor,
   linkColor,
+  showTitle,
+  showRelation,
   onNodeClick,
 }: {
   graphData: GraphData | any;
   nodeColor: any;
   linkColor: any;
+  showTitle: boolean;
+  showRelation: boolean;
   onNodeClick: (anime_id: number) => void;
 }) => {
   const [highlightNodes, setHighlightNodes] = React.useState(new Set());
@@ -62,13 +64,21 @@ const ForceGraph = ({
       nodeRelSize={10}
       nodeColor={(node: GraphNode | any) => {
         if (!hoverNode || highlightNodes.has(node)) {
-          return nodeColor[node.user_anime_status] || defaultNodeColor;
+          return nodeColor[node.user_anime_status];
         }
         return inactiveColor;
       }}
       nodeCanvasObjectMode={() => 'before'}
       nodeCanvasObject={(node: GraphNode | any, ctx, _) => {
-        if (!highlightNodes.has(node)) return;
+        if (!highlightNodes.has(node)) {
+          if (showTitle) {
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = activeColor;
+            ctx.fillText(node.title, node.x, node.y + 15);
+          }
+          return;
+        }
 
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -88,18 +98,34 @@ const ForceGraph = ({
       onNodeClick={(node: GraphNode | any) => {
         onNodeClick(node.anime_id);
       }}
-      linkLabel=""
+      linkLabel="relation"
       linkColor={(link: GraphLink | any) => {
-        if (!hoverNode) return defaultLinkColor;
+        if (!hoverNode) return inactiveColor;
         if (highlightLinks.has(link)) return activeColor;
-        return linkColor[link.relation] || defaultLinkColor;
+        return linkColor[link.relation];
       }}
       linkCurvature={0.1}
       linkDirectionalArrowLength={10}
       linkCanvasObjectMode={() => 'after'}
       linkCanvasObject={(link: GraphLink | any, ctx, _) => {
         return;
-        if (!highlightLinks.has(link)) return;
+        if (!highlightLinks.has(link)) {
+          if (showRelation) {
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = activeColor;
+            ctx.fillText(
+              link.relation.toLowerCase().replace('_', ' '),
+              link.target.x > link.source.x
+                ? link.source.x + (link.source.x - link.target.x) / 2
+                : link.target.x + (link.source.x - link.target.x) / 2,
+              link.target.y > link.source.y
+                ? link.source.y + (link.source.y - link.target.y) / 2
+                : link.target.y + (link.source.y - link.target.y) / 2,
+            );
+          }
+          return;
+        }
 
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
