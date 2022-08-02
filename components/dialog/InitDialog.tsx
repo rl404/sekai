@@ -53,6 +53,7 @@ const InitDialog = ({
             type: n.type,
             score: n.score,
             user_anime_status: n.user_anime_status,
+            user_anime_score: n.user_anime_score,
             neighbors: [],
             links: [],
           };

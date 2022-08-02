@@ -11,14 +11,14 @@ const ForceGraph = ({
   linkColor,
   showTitle,
   showRelation,
-  onNodeClick,
+  showAnimeDrawer,
 }: {
   graphData: GraphData | any;
   nodeColor: any;
   linkColor: any;
   showTitle: boolean;
   showRelation: boolean;
-  onNodeClick: (anime_id: number) => void;
+  showAnimeDrawer: (anime_id: number) => void;
 }) => {
   const [highlightNodes, setHighlightNodes] = React.useState(new Set());
   const [highlightLinks, setHighlightLinks] = React.useState(new Set());
@@ -56,6 +56,10 @@ const ForceGraph = ({
     updateHighlight();
   };
 
+  const handleNodeClick = (node: GraphNode | any) => {
+    showAnimeDrawer(node.anime_id);
+  };
+
   return (
     <ForceGraph2D
       graphData={graphData}
@@ -80,24 +84,22 @@ const ForceGraph = ({
           return;
         }
 
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillStyle = activeColor;
-        ctx.fillText(node.title, node.x, node.y + 15);
-
         ctx.beginPath();
         ctx.arc(node.x, node.y, 10 * 1.1, 0, 2 * Math.PI, false);
         ctx.fillStyle = activeColor;
         ctx.fill();
+
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = activeColor;
+        ctx.fillText(node.title, node.x, node.y + 15);
       }}
       onNodeHover={handleNodeHover}
       onNodeDragEnd={(node) => {
         node.fx = node.x;
         node.fy = node.y;
       }}
-      onNodeClick={(node: GraphNode | any) => {
-        onNodeClick(node.anime_id);
-      }}
+      onNodeClick={handleNodeClick}
       linkLabel="relation"
       linkColor={(link: GraphLink | any) => {
         if (!hoverNode) return inactiveColor;

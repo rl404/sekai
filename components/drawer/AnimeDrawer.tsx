@@ -2,13 +2,20 @@ import * as React from 'react';
 import { Chip, Divider, Drawer, Grid, IconButton, Link, Tooltip, Typography } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLefttIcon from '@mui/icons-material/ChevronLeft';
-import { AnimeDrawerData, Genre } from '../../types/Types';
+import { AnimeDrawerData, Genre, GraphNode } from '../../types/Types';
 import axios from 'axios';
 import { theme } from '../theme';
 import { DateToStr, PrintDate } from '../../utils/utils';
-import { AnimeStatusToStr, AnimeTypeToStr } from '../../utils/constant';
+import { AnimeStatusToStr, AnimeTypeToStr, UserAnimeStatus } from '../../utils/constant';
 
 const style = {
+  statusCircle: {
+    width: 20,
+    height: 20,
+    borderRadius: '50%',
+    border: '1px solid white',
+    marginTop: 10,
+  },
   drawer: {
     width: 500,
     padding: 2,
@@ -45,10 +52,14 @@ const AnimeDrawer = ({
   open,
   anime_id,
   onClose,
+  node,
+  nodeColor,
 }: {
   open: boolean;
   anime_id: number;
   onClose: any;
+  node: GraphNode | undefined;
+  nodeColor: any;
 }) => {
   const [animeState, setAnimeState] = React.useState<AnimeDrawerData>({
     id: 0,
@@ -112,12 +123,21 @@ const AnimeDrawer = ({
   return (
     <Drawer open={open} anchor="right" variant="persistent" PaperProps={{ sx: style.drawer }}>
       <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Tooltip title="Close" placement="right" arrow>
-            <IconButton onClick={onClose}>
-              {open ? <ChevronRightIcon /> : <ChevronLefttIcon />}
-            </IconButton>
-          </Tooltip>
+        <Grid item xs={12} container>
+          <Grid item>
+            <Tooltip title="Close" placement="right" arrow>
+              <IconButton onClick={onClose}>
+                {open ? <ChevronRightIcon /> : <ChevronLefttIcon />}
+              </IconButton>
+            </Tooltip>
+          </Grid>
+          <Grid item xs />
+          <Grid item>
+            <StatusColor
+              status={node?.user_anime_status || ''}
+              color={nodeColor[node?.user_anime_status || ''] || ''}
+            />
+          </Grid>
         </Grid>
         {animeState.error !== '' ? (
           <Grid item xs={12}>
@@ -200,9 +220,16 @@ const AnimeDrawer = ({
             </Grid>
             <Grid item xs={4}>
               <Divider>Score</Divider>
-              <Typography variant="h6" align="center">
-                <b>{animeState.mean.toLocaleString()}</b>
-              </Typography>
+              <Tooltip
+                placement="bottom"
+                arrow
+                PopperProps={{ sx: style.dateTooltip }}
+                title={`Your score: ${node?.user_anime_score}`}
+              >
+                <Typography variant="h6" align="center">
+                  <b>{animeState.mean.toLocaleString()}</b>
+                </Typography>
+              </Tooltip>
             </Grid>
             <Grid item xs={4}>
               <Divider>Popularity</Divider>
@@ -247,3 +274,44 @@ const AnimeDrawer = ({
 };
 
 export default AnimeDrawer;
+
+const StatusColor = ({ status, color }: { status: string; color: string }) => {
+  switch (status) {
+    case UserAnimeStatus.watching:
+      return (
+        <Tooltip placement="left" arrow title="You are watching this">
+          <div style={{ ...style.statusCircle, background: color }} />
+        </Tooltip>
+      );
+    case UserAnimeStatus.completed:
+      return (
+        <Tooltip placement="left" arrow title="You have completed this">
+          <div style={{ ...style.statusCircle, background: color }} />
+        </Tooltip>
+      );
+    case UserAnimeStatus.on_hold:
+      return (
+        <Tooltip placement="left" arrow title="You put this on hold">
+          <div style={{ ...style.statusCircle, background: color }} />
+        </Tooltip>
+      );
+    case UserAnimeStatus.dropped:
+      return (
+        <Tooltip placement="left" arrow title="You have dropped this">
+          <div style={{ ...style.statusCircle, background: color }} />
+        </Tooltip>
+      );
+    case UserAnimeStatus.planned:
+      return (
+        <Tooltip placement="left" arrow title="You are planning to watch this">
+          <div style={{ ...style.statusCircle, background: color }} />
+        </Tooltip>
+      );
+    default:
+      return (
+        <Tooltip placement="left" arrow title="Not in your list">
+          <div style={{ ...style.statusCircle, background: color }} />
+        </Tooltip>
+      );
+  }
+};

@@ -53,6 +53,7 @@ export interface UserAnimeRelationNode {
   score: number;
   type: string;
   user_anime_status: string;
+  user_anime_score: number;
 }
 
 export interface UserAnimeRelationLink {
@@ -74,6 +75,7 @@ export interface GraphNode {
   score: number;
   type: string;
   user_anime_status: string;
+  user_anime_score: number;
   neighbors: Array<GraphNode>;
   links: Array<GraphLink>;
 }

@@ -129,7 +129,7 @@ const Home: NextPage = () => {
         linkColor={graphLinkColorState}
         showTitle={configState.showTitle}
         showRelation={configState.showRelation}
-        onNodeClick={handleOpenAnimeDrawer}
+        showAnimeDrawer={handleOpenAnimeDrawer}
       />
 
       <InitDialog
@@ -157,6 +157,8 @@ const Home: NextPage = () => {
         open={animeDrawerState.open}
         anime_id={animeDrawerState.anime_id}
         onClose={handleCloseAnimeDrawer}
+        node={graphDataState.nodes.find((n) => n.anime_id === animeDrawerState.anime_id)}
+        nodeColor={graphNodeColorState}
       />
     </>
   );
