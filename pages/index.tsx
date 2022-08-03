@@ -123,6 +123,7 @@ const Home: NextPage = () => {
 
   const handleOpenListDialog = () => {
     setListDialogState({ ...listDialogState, open: true });
+    handleCloseAnimeDrawer();
   };
 
   const handleCloseListDialog = () => {
@@ -173,6 +174,7 @@ const Home: NextPage = () => {
         onClose={handleCloseListDialog}
         username={configState.username}
         nodes={graphDataState.nodes}
+        showAnimeDrawer={handleOpenAnimeDrawer}
       />
 
       <AnimeDrawer

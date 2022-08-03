@@ -44,11 +44,13 @@ const ListDialog = ({
   onClose,
   username,
   nodes = [],
+  showAnimeDrawer,
 }: {
   open: boolean;
   onClose: () => void;
   username: string;
   nodes: Array<GraphNode>;
+  showAnimeDrawer: (anime_id: number) => void;
 }) => {
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState('title');
@@ -162,7 +164,12 @@ const ListDialog = ({
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d) => (
                   <TableRow hover key={d.id}>
-                    <TableCell>{d.title}</TableCell>
+                    <TableCell
+                      onClick={() => showAnimeDrawer(d.anime_id)}
+                      sx={{ cursor: 'pointer' }}
+                    >
+                      {d.title}
+                    </TableCell>
                     <TableCell align="center">
                       <StatusBadge status={d.status} />
                     </TableCell>
