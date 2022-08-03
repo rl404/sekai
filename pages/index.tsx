@@ -10,9 +10,11 @@ import {
   ConfigState,
   GraphData,
   InitDialogState,
+  ListDialogState,
 } from '../types/Types';
 import AnimeDrawer from '../components/drawer/AnimeDrawer';
 import ConfigDialog from '../components/dialog/ConfigDialog';
+import ListDialog from '../components/dialog/ListDialog';
 
 const NoSSRForceGraph = dynamic(() => import('../components/graph/ForceGraph'), {
   ssr: false,
@@ -115,6 +117,18 @@ const Home: NextPage = () => {
     setConfigState({ ...configState, showRelation: v });
   };
 
+  const [listDialogState, setListDialogState] = React.useState<ListDialogState>({
+    open: false,
+  });
+
+  const handleOpenListDialog = () => {
+    setListDialogState({ ...listDialogState, open: true });
+  };
+
+  const handleCloseListDialog = () => {
+    setListDialogState({ ...listDialogState, open: false });
+  };
+
   return (
     <>
       <Head>
@@ -151,6 +165,14 @@ const Home: NextPage = () => {
         setShowDetailOnClick={setShowDetailOnClick}
         setShowTitle={setShowTitle}
         setShowRelation={setShowRelation}
+        openListDialog={handleOpenListDialog}
+      />
+
+      <ListDialog
+        open={listDialogState.open}
+        onClose={handleCloseListDialog}
+        username={configState.username}
+        nodes={graphDataState.nodes}
       />
 
       <AnimeDrawer

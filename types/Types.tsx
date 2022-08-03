@@ -90,6 +90,10 @@ export interface InitDialogState {
   open: boolean;
 }
 
+export interface ListDialogState {
+  open: boolean;
+}
+
 export interface ConfigDialogState {
   open: boolean;
 }
@@ -125,4 +129,23 @@ export interface AnimeDrawerData {
 
   loading: boolean;
   error: string;
+}
+
+type align = 'left' | 'center' | 'right';
+
+export interface TableHeader {
+  key: string;
+  label: string;
+  align?: align;
+}
+
+export interface TableData {
+  id: number;
+  anime_id: number;
+  title: string;
+  status: string;
+  score: number;
+  type: string;
+  user_anime_status: string;
+  user_anime_score: number;
 }

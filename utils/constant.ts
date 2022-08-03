@@ -32,6 +32,19 @@ export const AnimeStatus = {
   not_yet: 'NOT_YET',
 };
 
+export const AnimeStatusStr = (status: string): string => {
+  switch (status) {
+    case AnimeStatus.finished:
+      return 'Finished';
+    case AnimeStatus.releasing:
+      return 'Airing';
+    case AnimeStatus.not_yet:
+      return 'Not yet aired';
+    default:
+      return '';
+  }
+};
+
 export const AnimeStatusToStr = (status: string): string => {
   switch (status) {
     case AnimeStatus.finished:
@@ -51,6 +64,23 @@ export const UserAnimeStatus = {
   on_hold: 'ON_HOLD',
   dropped: 'DROPPED',
   planned: 'PLANNED',
+};
+
+export const UserAnimeStatusStr = (status: string): string => {
+  switch (status) {
+    case UserAnimeStatus.watching:
+      return 'Watching';
+    case UserAnimeStatus.completed:
+      return 'Completed';
+    case UserAnimeStatus.on_hold:
+      return 'On Hold';
+    case UserAnimeStatus.dropped:
+      return 'Dropped';
+    case UserAnimeStatus.planned:
+      return 'Planned';
+    default:
+      return '';
+  }
 };
 
 export const AnimeRelation = {

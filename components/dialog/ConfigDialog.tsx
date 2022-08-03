@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Checkbox,
   Dialog,
   DialogContent,
@@ -48,6 +49,7 @@ const ConfigDialog = ({
   setShowDetailOnClick,
   setShowTitle,
   setShowRelation,
+  openListDialog,
 }: {
   open: boolean;
   onClose: any;
@@ -57,11 +59,11 @@ const ConfigDialog = ({
   setShowDetailOnClick: (v: boolean) => void;
   setShowTitle: (v: boolean) => void;
   setShowRelation: (v: boolean) => void;
+  openListDialog: () => void;
 }) => {
   const [formState, setFormState] = React.useState({
     open: false,
 
-    nodeColorShow: false,
     watchingNodeColor: nodeColor[UserAnimeStatus.watching],
     watchingNodeColorShow: false,
     completedNodeColor: nodeColor[UserAnimeStatus.completed],
@@ -82,10 +84,6 @@ const ConfigDialog = ({
 
   const handleToggleOpenForm = () => {
     setFormState({ ...formState, open: !formState.open });
-  };
-
-  const handleToggleOpenNodeColor = () => {
-    setFormState({ ...formState, nodeColorShow: !formState.nodeColorShow });
   };
 
   const showColor = (status: string, show: boolean) => {
@@ -156,7 +154,7 @@ const ConfigDialog = ({
     <Dialog
       open={open}
       PaperComponent={DraggablePaper}
-      PaperProps={{ sx: { overflow: 'visible', width: 300 } }}
+      PaperProps={{ sx: { overflow: 'visible', width: 270 } }}
       hideBackdrop
       disableEnforceFocus
       style={{
@@ -180,157 +178,153 @@ const ConfigDialog = ({
         </Grid>
       </DialogTitle>
       {formState.open && (
-        <DialogContent dividers>
-          <Grid container spacing={0}>
-            <Grid item xs={12} container spacing={0}>
+        <>
+          <DialogContent dividers>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                Status Colors
+              </Grid>
+              <Grid item xs={2}>
+                <Box
+                  component="span"
+                  onClick={() => showColor(UserAnimeStatus.watching, true)}
+                  sx={{ ...style.rectangle, background: formState.watchingNodeColor }}
+                />
+                <ColorPicker
+                  open={formState.watchingNodeColorShow}
+                  color={formState.watchingNodeColor}
+                  onClose={() => showColor(UserAnimeStatus.watching, false)}
+                  onChange={(color: any) => setColor(UserAnimeStatus.watching, color.hex)}
+                />
+              </Grid>
               <Grid item xs={10}>
-                Node Colors
+                Watching
               </Grid>
-              <Grid item xs={2} sx={{ textAlign: 'center' }}>
-                <IconButton onClick={handleToggleOpenNodeColor} size="small">
-                  {formState.nodeColorShow ? (
-                    <ExpandLessIcon fontSize="small" />
-                  ) : (
-                    <ExpandMoreIcon fontSize="small" />
-                  )}
-                </IconButton>
+
+              <Grid item xs={2}>
+                <Box
+                  component="span"
+                  onClick={() => showColor(UserAnimeStatus.completed, true)}
+                  sx={{ ...style.rectangle, background: formState.completedNodeColor }}
+                />
+                <ColorPicker
+                  open={formState.completedNodeColorShow}
+                  color={formState.completedNodeColor}
+                  onClose={() => showColor(UserAnimeStatus.completed, false)}
+                  onChange={(color: any) => setColor(UserAnimeStatus.completed, color.hex)}
+                />
               </Grid>
-              {formState.nodeColorShow && (
-                <>
-                  <Grid item xs={2}>
-                    <Box
-                      component="span"
-                      onClick={() => showColor(UserAnimeStatus.watching, true)}
-                      sx={{ ...style.rectangle, background: formState.watchingNodeColor }}
-                    />
-                    <ColorPicker
-                      open={formState.watchingNodeColorShow}
-                      color={formState.watchingNodeColor}
-                      onClose={() => showColor(UserAnimeStatus.watching, false)}
-                      onChange={(color: any) => setColor(UserAnimeStatus.watching, color.hex)}
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    Watching
-                  </Grid>
+              <Grid item xs={10}>
+                Completed
+              </Grid>
 
-                  <Grid item xs={2}>
-                    <Box
-                      component="span"
-                      onClick={() => showColor(UserAnimeStatus.completed, true)}
-                      sx={{ ...style.rectangle, background: formState.completedNodeColor }}
-                    />
-                    <ColorPicker
-                      open={formState.completedNodeColorShow}
-                      color={formState.completedNodeColor}
-                      onClose={() => showColor(UserAnimeStatus.completed, false)}
-                      onChange={(color: any) => setColor(UserAnimeStatus.completed, color.hex)}
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    Completed
-                  </Grid>
+              <Grid item xs={2}>
+                <Box
+                  component="span"
+                  onClick={() => showColor(UserAnimeStatus.on_hold, true)}
+                  sx={{ ...style.rectangle, background: formState.onHoldNodeColor }}
+                />
+                <ColorPicker
+                  open={formState.onHoldNodeColorShow}
+                  color={formState.onHoldNodeColor}
+                  onClose={() => showColor(UserAnimeStatus.on_hold, false)}
+                  onChange={(color: any) => setColor(UserAnimeStatus.on_hold, color.hex)}
+                />
+              </Grid>
+              <Grid item xs={10}>
+                On Hold
+              </Grid>
 
-                  <Grid item xs={2}>
-                    <Box
-                      component="span"
-                      onClick={() => showColor(UserAnimeStatus.on_hold, true)}
-                      sx={{ ...style.rectangle, background: formState.onHoldNodeColor }}
-                    />
-                    <ColorPicker
-                      open={formState.onHoldNodeColorShow}
-                      color={formState.onHoldNodeColor}
-                      onClose={() => showColor(UserAnimeStatus.on_hold, false)}
-                      onChange={(color: any) => setColor(UserAnimeStatus.on_hold, color.hex)}
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    On Hold
-                  </Grid>
+              <Grid item xs={2}>
+                <Box
+                  component="span"
+                  onClick={() => showColor(UserAnimeStatus.dropped, true)}
+                  sx={{ ...style.rectangle, background: formState.droppedNodeColor }}
+                />
+                <ColorPicker
+                  open={formState.droppedNodeColorShow}
+                  color={formState.droppedNodeColor}
+                  onClose={() => showColor(UserAnimeStatus.dropped, false)}
+                  onChange={(color: any) => setColor(UserAnimeStatus.dropped, color.hex)}
+                />
+              </Grid>
+              <Grid item xs={10}>
+                Dropped
+              </Grid>
 
-                  <Grid item xs={2}>
-                    <Box
-                      component="span"
-                      onClick={() => showColor(UserAnimeStatus.dropped, true)}
-                      sx={{ ...style.rectangle, background: formState.droppedNodeColor }}
-                    />
-                    <ColorPicker
-                      open={formState.droppedNodeColorShow}
-                      color={formState.droppedNodeColor}
-                      onClose={() => showColor(UserAnimeStatus.dropped, false)}
-                      onChange={(color: any) => setColor(UserAnimeStatus.dropped, color.hex)}
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    Dropped
-                  </Grid>
+              <Grid item xs={2}>
+                <Box
+                  component="span"
+                  onClick={() => showColor(UserAnimeStatus.planned, true)}
+                  sx={{ ...style.rectangle, background: formState.plannedNodeColor }}
+                />
+                <ColorPicker
+                  open={formState.plannedNodeColorShow}
+                  color={formState.plannedNodeColor}
+                  onClose={() => showColor(UserAnimeStatus.planned, false)}
+                  onChange={(color: any) => setColor(UserAnimeStatus.planned, color.hex)}
+                />
+              </Grid>
+              <Grid item xs={10}>
+                Planned
+              </Grid>
 
-                  <Grid item xs={2}>
-                    <Box
-                      component="span"
-                      onClick={() => showColor(UserAnimeStatus.planned, true)}
-                      sx={{ ...style.rectangle, background: formState.plannedNodeColor }}
-                    />
-                    <ColorPicker
-                      open={formState.plannedNodeColorShow}
-                      color={formState.plannedNodeColor}
-                      onClose={() => showColor(UserAnimeStatus.planned, false)}
-                      onChange={(color: any) => setColor(UserAnimeStatus.planned, color.hex)}
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    Planned
-                  </Grid>
-
-                  <Grid item xs={2}>
-                    <Box
-                      component="span"
-                      onClick={() => showColor('', true)}
-                      sx={{ ...style.rectangle, background: formState.otherNodeColor }}
-                    />
-                    <ColorPicker
-                      open={formState.otherNodeColorShow}
-                      color={formState.otherNodeColor}
-                      onClose={() => showColor('', false)}
-                      onChange={(color: any) => setColor('', color.hex)}
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    Other
-                  </Grid>
-                </>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <Tooltip placement="right" arrow title="Show anime detail when a node is clicked">
+              <Grid item xs={2}>
+                <Box
+                  component="span"
+                  onClick={() => showColor('', true)}
+                  sx={{ ...style.rectangle, background: formState.otherNodeColor }}
+                />
+                <ColorPicker
+                  open={formState.otherNodeColorShow}
+                  color={formState.otherNodeColor}
+                  onClose={() => showColor('', false)}
+                  onChange={(color: any) => setColor('', color.hex)}
+                />
+              </Grid>
+              <Grid item xs={10}>
+                Other
+              </Grid>
+              <Grid item xs={12}>
+                <Tooltip placement="right" arrow title="Show anime detail when a node is clicked">
+                  <FormControlLabel
+                    label="Show anime detail"
+                    control={
+                      <Checkbox
+                        size="small"
+                        defaultChecked={formState.showDetails}
+                        value={formState.showDetails}
+                        onChange={handleShowDetailCheckBox}
+                      />
+                    }
+                  />
+                </Tooltip>
+              </Grid>
+              <Grid item xs={12}>
                 <FormControlLabel
+                  label="Always show anime title"
                   control={
                     <Checkbox
                       size="small"
-                      defaultChecked={formState.showDetails}
-                      value={formState.showDetails}
-                      onChange={handleShowDetailCheckBox}
+                      defaultChecked={formState.showTitle}
+                      value={formState.showTitle}
+                      onChange={handleShowTitle}
                     />
                   }
-                  label="Show anime detail"
                 />
-              </Tooltip>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    defaultChecked={formState.showTitle}
-                    value={formState.showTitle}
-                    onChange={handleShowTitle}
-                  />
-                }
-                label="Always show anime title"
-              />
+          </DialogContent>
+          <DialogContent>
+            <Grid container>
+              <Grid item xs={12}>
+                <Button fullWidth onClick={openListDialog}>
+                  Show Anime List
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-        </DialogContent>
+          </DialogContent>
+        </>
       )}
     </Dialog>
   );

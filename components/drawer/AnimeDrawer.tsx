@@ -19,6 +19,7 @@ const style = {
   drawer: {
     width: 500,
     padding: 2,
+    zIndex: 1301,
   },
   titleTooltip: {
     '& .MuiTooltip-tooltip': {
@@ -224,7 +225,7 @@ const AnimeDrawer = ({
                 placement="bottom"
                 arrow
                 PopperProps={{ sx: style.dateTooltip }}
-                title={`Your score: ${node?.user_anime_score}`}
+                title={!node?.user_anime_status ? '' : `Your score: ${node?.user_anime_score}`}
               >
                 <Typography variant="h6" align="center">
                   <b>{animeState.mean.toLocaleString()}</b>
