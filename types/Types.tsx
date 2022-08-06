@@ -3,6 +3,7 @@ export interface Anime {
   title: string;
   alternative_titles: AlternativeTitle;
   picture: string;
+  pictures: Array<string>;
   synopsis: string;
   start_date: Date;
   end_date: Date;
@@ -129,7 +130,7 @@ export interface AnimeDrawerData {
   title_synonyms: Array<string>;
   title_english: string;
   title_japanese: string;
-  picture: string;
+  pictures: Array<string>;
   synopsis: string;
   start_date: string;
   end_date: string;

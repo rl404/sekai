@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Chip, Divider, Drawer, Grid, IconButton, Link, Tooltip, Typography } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLefttIcon from '@mui/icons-material/ChevronLeft';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { AnimeDrawerData, Genre, GraphNode } from '../../types/Types';
 import axios from 'axios';
 import { theme } from '../theme';
@@ -20,6 +22,18 @@ const style = {
     width: 500,
     padding: 2,
     zIndex: 1301,
+  },
+  picturePrevButton: {
+    position: 'absolute',
+    top: '50%',
+    left: 16,
+    transform: 'translateY(-50%)',
+  },
+  pictureNextButton: {
+    position: 'absolute',
+    top: '50%',
+    right: 16,
+    transform: 'translateY(-50%)',
   },
   titleTooltip: {
     '& .MuiTooltip-tooltip': {
@@ -47,6 +61,7 @@ const style = {
   imageArea: {
     maxHeight: 500,
     textAlign: 'center',
+    position: 'relative',
   },
   image: {
     height: '100%',
@@ -76,7 +91,7 @@ const AnimeDrawer = ({
     title_synonyms: [],
     title_english: '',
     title_japanese: '',
-    picture: '',
+    pictures: [],
     synopsis: '',
     start_date: '',
     end_date: '',
@@ -117,7 +132,7 @@ const AnimeDrawer = ({
           title_synonyms: anime.alternative_titles.synonyms,
           title_english: anime.alternative_titles.english,
           title_japanese: anime.alternative_titles.japanese,
-          picture: anime.picture,
+          pictures: Array.from(new Set([anime.picture].concat(anime.pictures))),
           synopsis: anime.synopsis,
           start_date: DateToStr(anime.start_date),
           end_date: DateToStr(anime.end_date),
@@ -137,11 +152,24 @@ const AnimeDrawer = ({
           loading: false,
           error: '',
         });
+        setPictureState(0);
       })
       .catch((error) => {
         setAnimeState({ ...animeState, loading: false, error: error.response?.data?.message });
       });
   }, [anime_id]);
+
+  const [pictureState, setPictureState] = React.useState(0);
+
+  const handlePrevPicture = () => {
+    if (pictureState <= 0) return;
+    setPictureState(pictureState - 1);
+  };
+
+  const handleNextPicture = () => {
+    if (pictureState >= animeState.pictures.length - 1) return;
+    setPictureState(pictureState + 1);
+  };
 
   return (
     <Drawer open={open} anchor="right" variant="persistent" PaperProps={{ sx: style.drawer }}>
@@ -233,7 +261,29 @@ const AnimeDrawer = ({
               <Divider />
             </Grid>
             <Grid item xs={12} sx={style.imageArea}>
-              <img src={animeState.picture} alt={animeState.title} style={style.image} />
+              <img
+                src={animeState.pictures[pictureState]}
+                alt={animeState.title}
+                style={style.image}
+              />
+              <IconButton
+                onClick={handlePrevPicture}
+                disabled={pictureState <= 0}
+                sx={style.picturePrevButton}
+              >
+                <Tooltip placement="right" arrow title="Previous picture">
+                  <ArrowBackIosNewIcon />
+                </Tooltip>
+              </IconButton>
+              <IconButton
+                onClick={handleNextPicture}
+                disabled={pictureState >= animeState.pictures.length - 1}
+                sx={style.pictureNextButton}
+              >
+                <Tooltip placement="right" arrow title="Next picture">
+                  <ArrowForwardIosIcon />
+                </Tooltip>
+              </IconButton>
             </Grid>
             <Grid item xs={4}>
               <Divider>Rank</Divider>
