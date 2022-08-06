@@ -36,6 +36,14 @@ const style = {
       maxWidth: 'none',
     },
   },
+  statsTooltip: {
+    '& .MuiTooltip-tooltip': {
+      padding: 2,
+      background: theme.palette.background.paper,
+      border: `1px solid ${theme.palette.divider}`,
+      width: 160,
+    },
+  },
   imageArea: {
     maxHeight: 500,
     textAlign: 'center',
@@ -77,6 +85,13 @@ const AnimeDrawer = ({
     rank: 0,
     mean: 0,
     popularity: 0,
+    stats: {
+      watching: 0,
+      completed: 0,
+      on_hold: 0,
+      dropped: 0,
+      planned: 0,
+    },
     genres: [],
     loading: false,
     error: '',
@@ -111,6 +126,13 @@ const AnimeDrawer = ({
           rank: anime.rank,
           mean: anime.mean,
           popularity: anime.popularity,
+          stats: {
+            watching: anime.stats.status.watching,
+            completed: anime.stats.status.completed,
+            on_hold: anime.stats.status.on_hold,
+            dropped: anime.stats.status.dropped,
+            planned: anime.stats.status.planned,
+          },
           genres: anime.genres.map((g: Genre) => g.name),
           loading: false,
           error: '',
@@ -234,9 +256,49 @@ const AnimeDrawer = ({
             </Grid>
             <Grid item xs={4}>
               <Divider>Popularity</Divider>
-              <Typography variant="h6" align="center">
-                <b>#{animeState.popularity.toLocaleString()}</b>
-              </Typography>
+              <Tooltip
+                placement="bottom"
+                arrow
+                PopperProps={{ sx: style.statsTooltip }}
+                title={
+                  <Grid container spacing={1}>
+                    <Grid item xs={6}>
+                      Watching
+                    </Grid>
+                    <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                      {animeState.stats.watching.toLocaleString()}
+                    </Grid>
+                    <Grid item xs={6}>
+                      Completed
+                    </Grid>
+                    <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                      {animeState.stats.completed.toLocaleString()}
+                    </Grid>
+                    <Grid item xs={6}>
+                      On Hold
+                    </Grid>
+                    <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                      {animeState.stats.on_hold.toLocaleString()}
+                    </Grid>
+                    <Grid item xs={6}>
+                      Dropped
+                    </Grid>
+                    <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                      {animeState.stats.dropped.toLocaleString()}
+                    </Grid>
+                    <Grid item xs={6}>
+                      Planned
+                    </Grid>
+                    <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                      {animeState.stats.planned.toLocaleString()}
+                    </Grid>
+                  </Grid>
+                }
+              >
+                <Typography variant="h6" align="center">
+                  <b>#{animeState.popularity.toLocaleString()}</b>
+                </Typography>
+              </Tooltip>
             </Grid>
             <Grid item xs={6}>
               <Divider>Type</Divider>

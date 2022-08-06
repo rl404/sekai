@@ -11,6 +11,7 @@ export interface Anime {
   rank: number;
   mean: number;
   popularity: number;
+  stats: Stats;
   genres: Array<Genre>;
 }
 
@@ -24,6 +25,18 @@ export interface Date {
   year: number;
   month: number;
   day: number;
+}
+
+interface Stats {
+  status: StatsStatus;
+}
+
+interface StatsStatus {
+  watching: number;
+  completed: number;
+  on_hold: number;
+  dropped: number;
+  planned: number;
 }
 
 export interface Genre {
@@ -125,6 +138,7 @@ export interface AnimeDrawerData {
   rank: number;
   mean: number;
   popularity: number;
+  stats: StatsStatus;
   genres: Array<string>;
 
   loading: boolean;
