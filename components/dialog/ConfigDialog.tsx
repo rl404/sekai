@@ -166,7 +166,7 @@ const ConfigDialog = ({
     >
       <DialogTitle>
         <Grid container>
-          <Grid item>{config.username}'s Anime World </Grid>
+          <Grid item>{`${config.username}'s Anime World`}</Grid>
           <Grid item xs />
           <Grid item>
             <Tooltip placement="right" arrow title={`show ${formState.open ? 'less' : 'more'}`}>
