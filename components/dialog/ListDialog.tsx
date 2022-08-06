@@ -8,6 +8,7 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
+  Link,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -164,11 +165,15 @@ const ListDialog = ({
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d) => (
                   <TableRow hover key={d.id}>
-                    <TableCell
-                      onClick={() => showAnimeDrawer(d.anime_id)}
-                      sx={{ cursor: 'pointer' }}
-                    >
-                      {d.title}
+                    <TableCell>
+                      <Link
+                        color="inherit"
+                        underline="hover"
+                        sx={{ cursor: 'pointer' }}
+                        onClick={() => showAnimeDrawer(d.anime_id)}
+                      >
+                        {d.title}
+                      </Link>
                     </TableCell>
                     <TableCell align="center">
                       <StatusBadge status={d.status} />

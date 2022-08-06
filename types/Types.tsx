@@ -14,6 +14,7 @@ export interface Anime {
   popularity: number;
   stats: Stats;
   genres: Array<Genre>;
+  related: Array<Related>;
 }
 
 interface AlternativeTitle {
@@ -30,6 +31,13 @@ export interface Date {
 
 interface Stats {
   status: StatsStatus;
+}
+
+interface Related {
+  id: number;
+  title: string;
+  picture: string;
+  relation: string;
 }
 
 interface StatsStatus {
@@ -141,6 +149,7 @@ export interface AnimeDrawerData {
   popularity: number;
   stats: StatsStatus;
   genres: Array<string>;
+  related: Array<Related>;
 
   loading: boolean;
   error: string;

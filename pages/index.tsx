@@ -73,7 +73,7 @@ const Home: NextPage = () => {
   });
 
   const handleOpenAnimeDrawer = (anime_id: number) => {
-    if (!configState.showDetailOnClick) return;
+    if (!configState.showDetailOnClick && !listDialogState.open) return;
     setAnimeDrawerState({ ...animeDrawerState, open: true, anime_id: anime_id });
   };
 
@@ -181,7 +181,7 @@ const Home: NextPage = () => {
         open={animeDrawerState.open}
         anime_id={animeDrawerState.anime_id}
         onClose={handleCloseAnimeDrawer}
-        node={graphDataState.nodes.find((n) => n.anime_id === animeDrawerState.anime_id)}
+        nodes={graphDataState.nodes}
         nodeColor={graphNodeColorState}
       />
     </>

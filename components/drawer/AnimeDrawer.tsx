@@ -4,11 +4,16 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLefttIcon from '@mui/icons-material/ChevronLeft';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { AnimeDrawerData, Genre, GraphNode } from '../../types/Types';
+import { AnimeDrawerData, AnimeDrawerState, Genre, GraphNode } from '../../types/Types';
 import axios from 'axios';
 import { theme } from '../theme';
 import { DateToStr, PrintDate } from '../../utils/utils';
-import { AnimeStatusToStr, AnimeTypeToStr, UserAnimeStatus } from '../../utils/constant';
+import {
+  AnimeRelationToStr,
+  AnimeStatusToStr,
+  AnimeTypeToStr,
+  UserAnimeStatus,
+} from '../../utils/constant';
 
 const style = {
   statusCircle: {
@@ -67,6 +72,9 @@ const style = {
     height: '100%',
     maxWidth: '100%',
   },
+  statsTitle: {
+    color: theme.palette.grey[500],
+  },
   genreChip: {
     margin: 0.5,
   },
@@ -76,13 +84,13 @@ const AnimeDrawer = ({
   open,
   anime_id,
   onClose,
-  node,
+  nodes,
   nodeColor,
 }: {
   open: boolean;
   anime_id: number;
   onClose: any;
-  node: GraphNode | undefined;
+  nodes: Array<GraphNode>;
   nodeColor: any;
 }) => {
   const [animeState, setAnimeState] = React.useState<AnimeDrawerData>({
@@ -108,6 +116,7 @@ const AnimeDrawer = ({
       planned: 0,
     },
     genres: [],
+    related: [],
     loading: false,
     error: '',
   });
@@ -149,6 +158,7 @@ const AnimeDrawer = ({
             planned: anime.stats.status.planned,
           },
           genres: anime.genres.map((g: Genre) => g.name),
+          related: anime.related,
           loading: false,
           error: '',
         });
@@ -170,6 +180,21 @@ const AnimeDrawer = ({
     if (pictureState >= animeState.pictures.length - 1) return;
     setPictureState(pictureState + 1);
   };
+
+  const [animeDrawerState, setAnimeDrawerState] = React.useState<AnimeDrawerState>({
+    open: false,
+    anime_id: 0,
+  });
+
+  const handleOpenAnimeDrawer = (anime_id: number) => {
+    setAnimeDrawerState({ ...animeDrawerState, open: true, anime_id: anime_id });
+  };
+
+  const handleCloseAnimeDrawer = () => {
+    setAnimeDrawerState({ ...animeDrawerState, open: false, anime_id: 0 });
+  };
+
+  const node = nodes.find((n) => n.anime_id === anime_id);
 
   return (
     <Drawer open={open} anchor="right" variant="persistent" PaperProps={{ sx: style.drawer }}>
@@ -211,34 +236,38 @@ const AnimeDrawer = ({
                     animeState.title_japanese !== '') && (
                     <Grid container spacing={1}>
                       {animeState.title_synonyms.length > 0 && (
-                        <Grid item xs={12} container>
-                          <Grid item xs={3}>
+                        <>
+                          <Grid item xs={4} sx={{ ...style.statsTitle, textAlign: 'right' }}>
                             <Typography variant="subtitle2">Synonym</Typography>
                           </Grid>
-                          <Grid item xs>
-                            <Typography>{animeState.title_synonyms.join(', ')}</Typography>
+                          <Grid item xs={8} container spacing={1}>
+                            {animeState.title_synonyms.map((t) => (
+                              <Grid item xs={12} key={t}>
+                                <Typography>{t}</Typography>
+                              </Grid>
+                            ))}
                           </Grid>
-                        </Grid>
+                        </>
                       )}
                       {animeState.title_english !== '' && (
-                        <Grid item xs={12} container>
-                          <Grid item xs={3}>
+                        <>
+                          <Grid item xs={4} sx={{ ...style.statsTitle, textAlign: 'right' }}>
                             <Typography variant="subtitle2">English</Typography>
                           </Grid>
-                          <Grid item xs>
+                          <Grid item xs={8}>
                             <Typography>{animeState.title_english}</Typography>
                           </Grid>
-                        </Grid>
+                        </>
                       )}
                       {animeState.title_japanese !== '' && (
-                        <Grid item xs={12} container>
-                          <Grid item xs={3}>
+                        <>
+                          <Grid item xs={4} sx={{ ...style.statsTitle, textAlign: 'right' }}>
                             <Typography variant="subtitle2">Japanese</Typography>
                           </Grid>
-                          <Grid item xs>
+                          <Grid item xs={8}>
                             <Typography>{animeState.title_japanese}</Typography>
                           </Grid>
-                        </Grid>
+                        </>
                       )}
                     </Grid>
                   )
@@ -286,13 +315,13 @@ const AnimeDrawer = ({
               </IconButton>
             </Grid>
             <Grid item xs={4}>
-              <Divider>Rank</Divider>
+              <Divider sx={style.statsTitle}>Rank</Divider>
               <Typography variant="h6" align="center">
                 <b>#{animeState.rank.toLocaleString()}</b>
               </Typography>
             </Grid>
             <Grid item xs={4}>
-              <Divider>Score</Divider>
+              <Divider sx={style.statsTitle}>Score</Divider>
               <Tooltip
                 placement="bottom"
                 arrow
@@ -305,38 +334,38 @@ const AnimeDrawer = ({
               </Tooltip>
             </Grid>
             <Grid item xs={4}>
-              <Divider>Popularity</Divider>
+              <Divider sx={style.statsTitle}>Popularity</Divider>
               <Tooltip
                 placement="bottom"
                 arrow
                 PopperProps={{ sx: style.statsTooltip }}
                 title={
                   <Grid container spacing={1}>
-                    <Grid item xs={6}>
+                    <Grid item xs={6} sx={style.statsTitle}>
                       Watching
                     </Grid>
                     <Grid item xs={6} sx={{ textAlign: 'right' }}>
                       {animeState.stats.watching.toLocaleString()}
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={6} sx={style.statsTitle}>
                       Completed
                     </Grid>
                     <Grid item xs={6} sx={{ textAlign: 'right' }}>
                       {animeState.stats.completed.toLocaleString()}
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={6} sx={style.statsTitle}>
                       On Hold
                     </Grid>
                     <Grid item xs={6} sx={{ textAlign: 'right' }}>
                       {animeState.stats.on_hold.toLocaleString()}
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={6} sx={style.statsTitle}>
                       Dropped
                     </Grid>
                     <Grid item xs={6} sx={{ textAlign: 'right' }}>
                       {animeState.stats.dropped.toLocaleString()}
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={6} sx={style.statsTitle}>
                       Planned
                     </Grid>
                     <Grid item xs={6} sx={{ textAlign: 'right' }}>
@@ -351,13 +380,13 @@ const AnimeDrawer = ({
               </Tooltip>
             </Grid>
             <Grid item xs={6}>
-              <Divider>Type</Divider>
+              <Divider sx={style.statsTitle}>Type</Divider>
               <Typography variant="h6" align="center">
                 <b>{AnimeTypeToStr(animeState.type)}</b>
               </Typography>
             </Grid>
             <Grid item xs={6}>
-              <Divider>Status</Divider>
+              <Divider sx={style.statsTitle}>Status</Divider>
               <Tooltip
                 placement="bottom"
                 arrow
@@ -370,18 +399,69 @@ const AnimeDrawer = ({
               </Tooltip>
             </Grid>
             <Grid item xs={12} sx={{ textAlign: 'justify' }}>
-              <Divider sx={{ marginBottom: 1 }}>Synopsis</Divider>
+              <Divider sx={{ ...style.statsTitle, marginBottom: 1 }}>Synopsis</Divider>
               <Typography sx={{ whiteSpace: 'pre-line' }}>{animeState.synopsis}</Typography>
             </Grid>
             <Grid item xs={12} sx={{ textAlign: 'center' }}>
-              <Divider sx={{ marginBottom: 1 }}>Genres</Divider>
+              <Divider sx={{ ...style.statsTitle, marginBottom: 1 }}>Genres</Divider>
               {animeState.genres.map((g) => {
                 return <Chip size="small" label={g} key={g} sx={style.genreChip} />;
+              })}
+            </Grid>
+            <Grid item xs={12} container spacing={2}>
+              <Grid item xs={12}>
+                <Tooltip placement="left" arrow title={animeState.related.length.toLocaleString()}>
+                  <Divider sx={{ ...style.statsTitle, marginBottom: 1 }}>Related</Divider>
+                </Tooltip>
+              </Grid>
+              {Array.from(new Set(animeState.related.map((r) => r.relation))).map((r) => {
+                return (
+                  <React.Fragment key={r}>
+                    <Grid item xs={3} sx={{ ...style.statsTitle, textAlign: 'right' }}>
+                      <Tooltip
+                        placement="left"
+                        arrow
+                        title={animeState.related
+                          .filter((a) => a.relation === r)
+                          .length.toLocaleString()}
+                      >
+                        <span>{AnimeRelationToStr(r)}</span>
+                      </Tooltip>
+                    </Grid>
+                    <Grid item xs={9} container spacing={1}>
+                      {animeState.related
+                        .filter((a) => a.relation === r)
+                        .map((r) => {
+                          return (
+                            <Grid item xs={12} key={r.id}>
+                              <Link
+                                color="inherit"
+                                underline="hover"
+                                sx={{ cursor: 'pointer' }}
+                                onClick={() => handleOpenAnimeDrawer(r.id)}
+                              >
+                                {r.title}
+                              </Link>
+                            </Grid>
+                          );
+                        })}
+                    </Grid>
+                  </React.Fragment>
+                );
               })}
             </Grid>
           </>
         )}
       </Grid>
+      {animeDrawerState.open && (
+        <AnimeDrawer
+          open={animeDrawerState.open}
+          anime_id={animeDrawerState.anime_id}
+          onClose={handleCloseAnimeDrawer}
+          nodes={nodes}
+          nodeColor={nodeColor}
+        />
+      )}
     </Drawer>
   );
 };

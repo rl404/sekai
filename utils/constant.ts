@@ -97,3 +97,34 @@ export const AnimeRelation = {
   character: 'CHARACTER',
   other: 'OTHER',
 };
+
+export const AnimeRelationToStr = (relation: string): string => {
+  switch (relation) {
+    case AnimeRelation.sequel:
+      return 'Sequel';
+    case AnimeRelation.prequel:
+      return 'Prequel';
+    case AnimeRelation.alternative_setting:
+      return 'Alternative Setting';
+    case AnimeRelation.alternative_version:
+      return 'Alternative Version';
+    case AnimeRelation.side_story:
+      return 'Side Story';
+    case AnimeRelation.parent_story:
+      return 'Parent Story';
+    case AnimeRelation.summary:
+      return 'Summary';
+    case AnimeRelation.full_story:
+      return 'Full Story';
+    case AnimeRelation.spin_off:
+      return 'Spin Off';
+    case AnimeRelation.adaptation:
+      return 'Adaptation';
+    case AnimeRelation.character:
+      return 'Character';
+    case AnimeRelation.other:
+      return 'Other';
+    default:
+      return 'Unknown';
+  }
+};
