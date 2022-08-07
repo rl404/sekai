@@ -312,10 +312,15 @@ const ConfigDialog = ({
             </Grid>
           </DialogContent>
           <DialogContent>
-            <Grid container>
+            <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Button fullWidth onClick={openListDialog}>
                   Show Anime List
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button fullWidth onClick={() => window.location.reload()} color="error">
+                  Change username
                 </Button>
               </Grid>
             </Grid>
