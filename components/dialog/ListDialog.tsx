@@ -116,7 +116,7 @@ const ListDialog = ({
     <Dialog open={open} fullScreen TransitionComponent={Transition}>
       <DialogTitle>
         <Grid container>
-          <Grid item>{username}'s Anime List</Grid>
+          <Grid item>{`${username}'s Anime List`}</Grid>
           <Grid item xs />
           <Grid item>
             <IconButton onClick={onClose} size="small">

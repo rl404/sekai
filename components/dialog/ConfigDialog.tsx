@@ -154,9 +154,10 @@ const ConfigDialog = ({
     <Dialog
       open={open}
       PaperComponent={DraggablePaper}
-      PaperProps={{ sx: { overflow: 'visible', width: 270 } }}
+      PaperProps={{ sx: { overflow: 'visible' } }}
       hideBackdrop
       disableEnforceFocus
+      maxWidth="xs"
       style={{
         top: 5,
         left: 5,
@@ -165,17 +166,12 @@ const ConfigDialog = ({
       }}
     >
       <DialogTitle>
-        <Grid container>
-          <Grid item>{config.username}'s Anime World </Grid>
-          <Grid item xs />
-          <Grid item>
-            <Tooltip placement="right" arrow title={`show ${formState.open ? 'less' : 'more'}`}>
-              <IconButton onClick={handleToggleOpenForm} size="small">
-                {formState.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-              </IconButton>
-            </Tooltip>
-          </Grid>
-        </Grid>
+        {`${config.username}'s Anime World `}
+        <Tooltip placement="right" arrow title={`show ${formState.open ? 'less' : 'more'}`}>
+          <IconButton onClick={handleToggleOpenForm} size="small">
+            {formState.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </IconButton>
+        </Tooltip>
       </DialogTitle>
       {formState.open && (
         <>
@@ -316,10 +312,15 @@ const ConfigDialog = ({
             </Grid>
           </DialogContent>
           <DialogContent>
-            <Grid container>
+            <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Button fullWidth onClick={openListDialog}>
                   Show Anime List
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button fullWidth onClick={() => window.location.reload()} color="error">
+                  Change username
                 </Button>
               </Grid>
             </Grid>

@@ -33,7 +33,9 @@ const InitDialog = ({
     setFormState({ ...formState, username: e.target.value, error: '' });
   };
 
-  const onSubmit = async () => {
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const onSubmit = async (submitCount: number = 0) => {
     if (formState.username === '') {
       setFormState({ ...formState, error: 'required username' });
       return;
@@ -43,7 +45,24 @@ const InitDialog = ({
 
     await axios
       .get(`/api/user/${formState.username}/anime/relations`)
-      .then((resp) => {
+      .then(async (resp) => {
+        if (resp.status === 202) {
+          if (submitCount >= 2) {
+            setFormState({
+              ...formState,
+              loading: false,
+              error: 'invalid username or empty anime list',
+            });
+            return;
+          }
+
+          setFormState({ ...formState, loading: true, error: 'retrieving anime list...' });
+          await sleep(5000);
+          setFormState({ ...formState, loading: false, error: '' });
+          onSubmit(submitCount + 1);
+          return;
+        }
+
         const nodes = resp.data.data.nodes.map((n: UserAnimeRelationNode): GraphNode => {
           return {
             id: n.anime_id,
@@ -98,7 +117,7 @@ const InitDialog = ({
         setFormState({
           ...formState,
           loading: false,
-          error: error.response.data?.message,
+          error: !error.response ? error.message : error.response.data?.message,
         });
       });
   };
@@ -117,18 +136,14 @@ const InitDialog = ({
               value={formState.username}
               onChange={handleChangeUsername}
               disabled={formState.loading}
+              helperText={formState.error}
             />
           </Grid>
           <Grid item xs={3}>
-            <LoadingButton fullWidth onClick={onSubmit} loading={formState.loading}>
+            <LoadingButton fullWidth onClick={() => onSubmit(1)} loading={formState.loading}>
               Go
             </LoadingButton>
           </Grid>
-          {formState.error !== '' && (
-            <Grid item xs={12}>
-              {formState.error}
-            </Grid>
-          )}
         </Grid>
       </DialogContent>
     </Dialog>
