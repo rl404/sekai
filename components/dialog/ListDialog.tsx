@@ -63,6 +63,8 @@ const ListDialog = ({
   const [filterType, setFilterType] = React.useState('all');
   const [filterUserStatus, setFilterUserStatus] = React.useState('all');
 
+  var tableRef = React.useRef<null | HTMLDivElement>();
+
   const handleChangeOrder = (e: React.MouseEvent<unknown>, key: string) => {
     const isAsc = orderBy === key && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -71,36 +73,47 @@ const ListDialog = ({
 
   const handleChangePage = (e: unknown, page: number) => {
     setPage(page);
+    scrollTop();
   };
 
   const handleChangeRowsPerPage = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(e.target.value, 10));
     setPage(0);
+    scrollTop();
   };
 
   const handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
     setPage(0);
+    scrollTop();
   };
 
   const handleChangeFilterList = (e: SelectChangeEvent<string>) => {
     setFilterList(e.target.value);
     setPage(0);
+    scrollTop();
   };
 
   const handleChangeFilterStatus = (e: SelectChangeEvent<string>) => {
     setFilterStatus(e.target.value);
     setPage(0);
+    scrollTop();
   };
 
   const handleChangeFilterType = (e: SelectChangeEvent<string>) => {
     setFilterType(e.target.value);
     setPage(0);
+    scrollTop();
   };
 
   const handleChangeFilterUserStatus = (e: SelectChangeEvent<string>) => {
     setFilterUserStatus(e.target.value);
     setPage(0);
+    scrollTop();
+  };
+
+  const scrollTop = () => {
+    tableRef.current?.scrollTo(0, 0);
   };
 
   const headers: Array<TableHeader> = [
@@ -125,7 +138,7 @@ const ListDialog = ({
           </Grid>
         </Grid>
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent dividers ref={tableRef}>
         <TableContainer>
           <Table size="small">
             <TableHead>
