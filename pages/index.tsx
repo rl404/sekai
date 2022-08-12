@@ -70,6 +70,7 @@ const Home: NextPage = () => {
   const [animeDrawerState, setAnimeDrawerState] = React.useState<AnimeDrawerState>({
     open: false,
     anime_id: 0,
+    showExtendedRelation: false,
   });
 
   const handleOpenAnimeDrawer = (anime_id: number) => {
