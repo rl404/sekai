@@ -57,7 +57,7 @@ const ConfigDialog = ({
   setNodeColor,
   setShowDetailOnClick,
   setShowTitle,
-  setShowRelation,
+  setShowExtendedRelation,
   openListDialog,
   setSearch,
 }: {
@@ -68,7 +68,7 @@ const ConfigDialog = ({
   setNodeColor: (status: string, color: string) => void;
   setShowDetailOnClick: (v: boolean) => void;
   setShowTitle: (v: boolean) => void;
-  setShowRelation: (v: boolean) => void;
+  setShowExtendedRelation: (v: boolean) => void;
   openListDialog: () => void;
   setSearch: (v: string) => void;
 }) => {
@@ -92,7 +92,7 @@ const ConfigDialog = ({
 
     showDetails: config.showDetailOnClick,
     showTitle: config.showTitle,
-    showRelation: config.showRelation,
+    showExtendedRelation: config.showExtendedRelation,
   });
 
   const handleToggleOpenForm = () => {
@@ -158,9 +158,9 @@ const ConfigDialog = ({
     setShowTitle(e.target.checked);
   };
 
-  const handleShowRelation = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormState({ ...formState, showRelation: e.target.checked });
-    setShowRelation(e.target.checked);
+  const handleShowExtendedRelation = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormState({ ...formState, showExtendedRelation: e.target.checked });
+    setShowExtendedRelation(e.target.checked);
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -344,7 +344,7 @@ const ConfigDialog = ({
                       control={
                         <Checkbox
                           size="small"
-                          defaultChecked={formState.showDetails}
+                          defaultChecked={true}
                           value={formState.showDetails}
                           onChange={handleShowDetailCheckBox}
                         />
@@ -358,12 +358,29 @@ const ConfigDialog = ({
                     control={
                       <Checkbox
                         size="small"
-                        defaultChecked={formState.showTitle}
                         value={formState.showTitle}
                         onChange={handleShowTitle}
                       />
                     }
                   />
+                </Grid>
+                <Grid item xs={12}>
+                  <Tooltip
+                    placement="right"
+                    arrow
+                    title="Show all indirect anime relation when a node is hovered"
+                  >
+                    <FormControlLabel
+                      label="Show extended relation"
+                      control={
+                        <Checkbox
+                          size="small"
+                          value={formState.showExtendedRelation}
+                          onChange={handleShowExtendedRelation}
+                        />
+                      }
+                    />
+                  </Tooltip>
                 </Grid>
               </Grid>
             </DialogContent>

@@ -124,7 +124,7 @@ export interface ConfigState {
   username: string;
   showDetailOnClick: boolean;
   showTitle: boolean;
-  showRelation: boolean;
+  showExtendedRelation: boolean;
   search: string;
 }
 

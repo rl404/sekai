@@ -97,7 +97,7 @@ const Home: NextPage = () => {
     username: '',
     showDetailOnClick: true,
     showTitle: false,
-    showRelation: false,
+    showExtendedRelation: false,
     search: '',
   });
 
@@ -114,8 +114,8 @@ const Home: NextPage = () => {
     setConfigState({ ...configState, showTitle: v });
   };
 
-  const setShowRelation = (v: boolean) => {
-    setConfigState({ ...configState, showRelation: v });
+  const setShowExtendedRelation = (v: boolean) => {
+    setConfigState({ ...configState, showExtendedRelation: v });
   };
 
   const setSearch = (v: string) => {
@@ -149,7 +149,7 @@ const Home: NextPage = () => {
         nodeColor={graphNodeColorState}
         linkColor={graphLinkColorState}
         showTitle={configState.showTitle}
-        showRelation={configState.showRelation}
+        showExtendedRelation={configState.showExtendedRelation}
         showAnimeDrawer={handleOpenAnimeDrawer}
       />
 
@@ -171,7 +171,7 @@ const Home: NextPage = () => {
         }}
         setShowDetailOnClick={setShowDetailOnClick}
         setShowTitle={setShowTitle}
-        setShowRelation={setShowRelation}
+        setShowExtendedRelation={setShowExtendedRelation}
         openListDialog={handleOpenListDialog}
         setSearch={setSearch}
       />
