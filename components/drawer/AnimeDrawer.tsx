@@ -4,7 +4,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLefttIcon from '@mui/icons-material/ChevronLeft';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { AnimeDrawerData, AnimeDrawerState, Genre, GraphNode } from '../../types/Types';
+import { Anime, AnimeDrawerData, AnimeDrawerState, Genre, GraphNode } from '../../types/Types';
 import axios from 'axios';
 import { theme } from '../theme';
 import { DateToStr, PrintDate } from '../../utils/utils';
@@ -12,6 +12,8 @@ import {
   AnimeRelationToStr,
   AnimeStatusToStr,
   AnimeTypeToStr,
+  DayToStr,
+  SeasonToStr,
   UserAnimeStatus,
 } from '../../utils/constant';
 
@@ -47,12 +49,19 @@ const style = {
       border: `1px solid ${theme.palette.divider}`,
     },
   },
+  scoreTooltip: {
+    '& .MuiTooltip-tooltip': {
+      padding: 2,
+      background: theme.palette.background.paper,
+      border: `1px solid ${theme.palette.divider}`,
+    },
+  },
   dateTooltip: {
     '& .MuiTooltip-tooltip': {
       padding: 2,
       background: theme.palette.background.paper,
       border: `1px solid ${theme.palette.divider}`,
-      maxWidth: 'none',
+      width: 220,
     },
   },
   statsTooltip: {
@@ -115,6 +124,12 @@ const AnimeDrawer = ({
       dropped: 0,
       planned: 0,
     },
+    episode_count: 0,
+    episode_duration: '',
+    season: '',
+    season_year: 0,
+    broadcast_day: '',
+    broadcast_time: '',
     genres: [],
     related: [],
     loading: false,
@@ -132,7 +147,10 @@ const AnimeDrawer = ({
     axios
       .get(`/api/anime/${anime_id}`)
       .then((resp) => {
-        const anime = resp.data.data;
+        const anime: Anime = resp.data.data;
+
+        var episodeDuration = new Date(0);
+        episodeDuration.setSeconds(anime.episode.duration);
 
         setAnimeState({
           ...animeState,
@@ -142,7 +160,7 @@ const AnimeDrawer = ({
           title_english: anime.alternative_titles.english,
           title_japanese: anime.alternative_titles.japanese,
           pictures: Array.from(new Set([anime.picture].concat(anime.pictures))),
-          synopsis: anime.synopsis,
+          synopsis: anime.synopsis || '-',
           start_date: DateToStr(anime.start_date),
           end_date: DateToStr(anime.end_date),
           type: anime.type,
@@ -157,6 +175,12 @@ const AnimeDrawer = ({
             dropped: anime.stats.status.dropped,
             planned: anime.stats.status.planned,
           },
+          episode_count: anime.episode.count,
+          episode_duration: episodeDuration.toISOString().substring(11, 19),
+          season: anime.season?.season || '',
+          season_year: anime.season?.year || 0,
+          broadcast_day: anime.broadcast?.day || '',
+          broadcast_time: anime.broadcast?.time || '',
           genres: anime.genres.map((g: Genre) => g.name),
           related: anime.related,
           loading: false,
@@ -325,7 +349,7 @@ const AnimeDrawer = ({
               <Tooltip
                 placement="bottom"
                 arrow
-                PopperProps={{ sx: style.dateTooltip }}
+                PopperProps={{ sx: style.scoreTooltip }}
                 title={!node?.user_anime_status ? '' : `Your score: ${node?.user_anime_score}`}
               >
                 <Typography variant="h6" align="center">
@@ -388,10 +412,57 @@ const AnimeDrawer = ({
             <Grid item xs={6}>
               <Divider sx={style.statsTitle}>Status</Divider>
               <Tooltip
-                placement="bottom"
+                placement="left"
                 arrow
                 PopperProps={{ sx: style.dateTooltip }}
-                title={PrintDate(animeState.start_date, animeState.end_date)}
+                title={
+                  <Grid container spacing={1}>
+                    <Grid item xs={6} sx={style.statsTitle}>
+                      Episode Count
+                    </Grid>
+                    <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                      {animeState.episode_count.toLocaleString()}
+                    </Grid>
+                    <Grid item xs={6} sx={style.statsTitle}>
+                      Episode Duration
+                    </Grid>
+                    <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                      {animeState.episode_duration}
+                    </Grid>
+                    {animeState.season !== '' && (
+                      <>
+                        <Grid item xs={6} sx={style.statsTitle}>
+                          Season
+                        </Grid>
+                        <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                          {SeasonToStr(animeState.season)} {animeState.season_year}
+                        </Grid>
+                      </>
+                    )}
+                    {animeState.broadcast_day !== '' && (
+                      <>
+                        <Grid item xs={6} sx={style.statsTitle}>
+                          Broadcast
+                        </Grid>
+                        <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                          {DayToStr(animeState.broadcast_day)} {animeState.broadcast_time}
+                        </Grid>
+                      </>
+                    )}
+                    <Grid item xs={6} sx={style.statsTitle}>
+                      Start Date
+                    </Grid>
+                    <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                      {animeState.start_date || '-'}
+                    </Grid>
+                    <Grid item xs={6} sx={style.statsTitle}>
+                      End Date
+                    </Grid>
+                    <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                      {animeState.end_date || '-'}
+                    </Grid>
+                  </Grid>
+                }
               >
                 <Typography variant="h6" align="center">
                   <b>{AnimeStatusToStr(animeState.status)}</b>

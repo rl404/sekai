@@ -13,6 +13,9 @@ export interface Anime {
   mean: number;
   popularity: number;
   stats: Stats;
+  episode: Episode;
+  season: Season;
+  broadcast: Broadcast;
   genres: Array<Genre>;
   related: Array<Related>;
 }
@@ -31,6 +34,21 @@ export interface Date {
 
 interface Stats {
   status: StatsStatus;
+}
+
+interface Episode {
+  count: number;
+  duration: number;
+}
+
+interface Season {
+  season: string;
+  year: number;
+}
+
+interface Broadcast {
+  day: string;
+  time: string;
 }
 
 interface Related {
@@ -149,6 +167,12 @@ export interface AnimeDrawerData {
   mean: number;
   popularity: number;
   stats: StatsStatus;
+  episode_count: number;
+  episode_duration: string;
+  season: string;
+  season_year: number;
+  broadcast_day: string;
+  broadcast_time: string;
   genres: Array<string>;
   related: Array<Related>;
 
