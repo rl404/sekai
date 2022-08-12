@@ -125,6 +125,7 @@ export interface ConfigState {
   showDetailOnClick: boolean;
   showTitle: boolean;
   showRelation: boolean;
+  search: string;
 }
 
 export interface AnimeDrawerState {

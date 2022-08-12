@@ -6,6 +6,7 @@ const inactiveColor = 'rgba(255,255,255,0.1)';
 const activeColor = 'white';
 
 const ForceGraph = ({
+  search,
   graphData,
   nodeColor,
   linkColor,
@@ -13,6 +14,7 @@ const ForceGraph = ({
   showRelation,
   showAnimeDrawer,
 }: {
+  search: string;
   graphData: GraphData | any;
   nodeColor: any;
   linkColor: any;
@@ -67,6 +69,12 @@ const ForceGraph = ({
       nodeLabel=""
       nodeRelSize={10}
       nodeColor={(node: GraphNode | any) => {
+        if (search !== '') {
+          if (node.title.toLowerCase().includes(search)) {
+            return nodeColor[node.user_anime_status];
+          }
+          return inactiveColor;
+        }
         if (!hoverNode || highlightNodes.has(node)) {
           return nodeColor[node.user_anime_status];
         }
@@ -75,7 +83,7 @@ const ForceGraph = ({
       nodeCanvasObjectMode={() => 'before'}
       nodeCanvasObject={(node: GraphNode | any, ctx, _) => {
         if (!highlightNodes.has(node)) {
-          if (showTitle) {
+          if (showTitle && node.title.toLowerCase().includes(search)) {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillStyle = activeColor;

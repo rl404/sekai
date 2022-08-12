@@ -10,8 +10,10 @@ import {
   Grid,
   Grow,
   IconButton,
+  InputAdornment,
   Paper,
   PaperProps,
+  TextField,
   Tooltip,
 } from '@mui/material';
 import * as React from 'react';
@@ -24,6 +26,8 @@ import { SketchPicker } from 'react-color';
 import { TransitionProps } from '@mui/material/transitions';
 import { Resizable } from 'react-resizable';
 import 'react-resizable/css/styles.css';
+import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const style = {
   rectangle: {
@@ -55,6 +59,7 @@ const ConfigDialog = ({
   setShowTitle,
   setShowRelation,
   openListDialog,
+  setSearch,
 }: {
   open: boolean;
   onClose: any;
@@ -65,9 +70,12 @@ const ConfigDialog = ({
   setShowTitle: (v: boolean) => void;
   setShowRelation: (v: boolean) => void;
   openListDialog: () => void;
+  setSearch: (v: string) => void;
 }) => {
   const [formState, setFormState] = React.useState({
     open: false,
+
+    search: '',
 
     watchingNodeColor: nodeColor[UserAnimeStatus.watching],
     watchingNodeColorShow: false,
@@ -155,6 +163,16 @@ const ConfigDialog = ({
     setShowRelation(e.target.checked);
   };
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormState({ ...formState, search: e.target.value });
+    setSearch(e.target.value);
+  };
+
+  const clearSearch = () => {
+    setFormState({ ...formState, search: '' });
+    setSearch('');
+  };
+
   const [dialogWidth, setDialogWidth] = React.useState(270);
 
   return (
@@ -192,6 +210,29 @@ const ConfigDialog = ({
           <Collapse in={formState.open}>
             <DialogContent dividers>
               <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Anime Title"
+                    placeholder="naruto"
+                    size="small"
+                    fullWidth
+                    value={formState.search}
+                    onChange={handleSearch}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {formState.search === '' ? (
+                            <SearchIcon fontSize="small" />
+                          ) : (
+                            <IconButton size="small" onClick={clearSearch}>
+                              <ClearIcon fontSize="small" />
+                            </IconButton>
+                          )}
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
                 <Grid item xs={12}>
                   Status Colors
                 </Grid>

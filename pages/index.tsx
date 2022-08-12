@@ -98,6 +98,7 @@ const Home: NextPage = () => {
     showDetailOnClick: true,
     showTitle: false,
     showRelation: false,
+    search: '',
   });
 
   const setConfigUsername = (username: string) => {
@@ -115,6 +116,10 @@ const Home: NextPage = () => {
 
   const setShowRelation = (v: boolean) => {
     setConfigState({ ...configState, showRelation: v });
+  };
+
+  const setSearch = (v: string) => {
+    setConfigState({ ...configState, search: v });
   };
 
   const [listDialogState, setListDialogState] = React.useState<ListDialogState>({
@@ -139,6 +144,7 @@ const Home: NextPage = () => {
       </Head>
 
       <NoSSRForceGraph
+        search={configState.search}
         graphData={graphDataState}
         nodeColor={graphNodeColorState}
         linkColor={graphLinkColorState}
@@ -167,6 +173,7 @@ const Home: NextPage = () => {
         setShowTitle={setShowTitle}
         setShowRelation={setShowRelation}
         openListDialog={handleOpenListDialog}
+        setSearch={setSearch}
       />
 
       <ListDialog
