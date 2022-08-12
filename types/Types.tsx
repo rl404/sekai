@@ -51,7 +51,7 @@ interface Broadcast {
   time: string;
 }
 
-interface Related {
+export interface Related {
   id: number;
   title: string;
   picture: string;
@@ -149,6 +149,7 @@ export interface ConfigState {
 export interface AnimeDrawerState {
   open: boolean;
   anime_id: number;
+  showExtendedRelation: boolean;
 }
 
 export interface AnimeDrawerData {
@@ -175,6 +176,7 @@ export interface AnimeDrawerData {
   broadcast_time: string;
   genres: Array<string>;
   related: Array<Related>;
+  extended_related: Array<Related>;
 
   loading: boolean;
   error: string;

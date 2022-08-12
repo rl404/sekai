@@ -4,10 +4,17 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLefttIcon from '@mui/icons-material/ChevronLeft';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Anime, AnimeDrawerData, AnimeDrawerState, Genre, GraphNode } from '../../types/Types';
+import {
+  Anime,
+  AnimeDrawerData,
+  AnimeDrawerState,
+  Genre,
+  GraphNode,
+  Related,
+} from '../../types/Types';
 import axios from 'axios';
 import { theme } from '../theme';
-import { DateToStr, PrintDate } from '../../utils/utils';
+import { DateToStr } from '../../utils/utils';
 import {
   AnimeRelationToStr,
   AnimeStatusToStr,
@@ -16,6 +23,8 @@ import {
   SeasonToStr,
   UserAnimeStatus,
 } from '../../utils/constant';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const style = {
   statusCircle: {
@@ -132,9 +141,12 @@ const AnimeDrawer = ({
     broadcast_time: '',
     genres: [],
     related: [],
+    extended_related: [],
     loading: false,
     error: '',
   });
+
+  const node = nodes.find((n) => n.anime_id === anime_id);
 
   React.useEffect(() => {
     if (!anime_id || anime_id === 0) {
@@ -151,6 +163,19 @@ const AnimeDrawer = ({
 
         var episodeDuration = new Date(0);
         episodeDuration.setSeconds(anime.episode.duration);
+
+        var extendedRelated = new Set<GraphNode>();
+
+        const addExtendedRelated = (n: GraphNode) => {
+          extendedRelated.add(n);
+          n.neighbors.forEach((neighbor: GraphNode) => {
+            if (extendedRelated.has(neighbor)) return;
+            extendedRelated.add(neighbor);
+            addExtendedRelated(neighbor);
+          });
+        };
+
+        node && addExtendedRelated(node);
 
         setAnimeState({
           ...animeState,
@@ -183,6 +208,16 @@ const AnimeDrawer = ({
           broadcast_time: anime.broadcast?.time || '',
           genres: anime.genres.map((g: Genre) => g.name),
           related: anime.related,
+          extended_related: Array.from(extendedRelated)
+            .map((r: GraphNode): Related => {
+              return {
+                id: r.anime_id,
+                title: r.title,
+                picture: '',
+                relation: '',
+              };
+            })
+            .sort((a, b) => a.title.localeCompare(b.title)),
           loading: false,
           error: '',
         });
@@ -208,6 +243,7 @@ const AnimeDrawer = ({
   const [animeDrawerState, setAnimeDrawerState] = React.useState<AnimeDrawerState>({
     open: false,
     anime_id: 0,
+    showExtendedRelation: false,
   });
 
   const handleOpenAnimeDrawer = (anime_id: number) => {
@@ -218,7 +254,12 @@ const AnimeDrawer = ({
     setAnimeDrawerState({ ...animeDrawerState, open: false, anime_id: 0 });
   };
 
-  const node = nodes.find((n) => n.anime_id === anime_id);
+  const handleToggleShowExtendedRelation = () => {
+    setAnimeDrawerState({
+      ...animeDrawerState,
+      showExtendedRelation: !animeDrawerState.showExtendedRelation,
+    });
+  };
 
   return (
     <Drawer open={open} anchor="right" variant="persistent" PaperProps={{ sx: style.drawer }}>
@@ -520,6 +561,47 @@ const AnimeDrawer = ({
                   </React.Fragment>
                 );
               })}
+            </Grid>
+            <Grid item xs={12} container spacing={2}>
+              <Grid item xs={12}>
+                <Tooltip
+                  placement="left"
+                  arrow
+                  title={animeState.extended_related.length.toLocaleString()}
+                >
+                  <Divider
+                    sx={{ ...style.statsTitle, marginBottom: 1 }}
+                    onClick={handleToggleShowExtendedRelation}
+                  >
+                    {animeDrawerState.showExtendedRelation ? (
+                      <ExpandLessIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
+                    ) : (
+                      <ExpandMoreIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
+                    )}{' '}
+                    Extended Related{' '}
+                    {animeDrawerState.showExtendedRelation ? (
+                      <ExpandLessIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
+                    ) : (
+                      <ExpandMoreIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
+                    )}
+                  </Divider>
+                </Tooltip>
+              </Grid>
+              {animeDrawerState.showExtendedRelation &&
+                animeState.extended_related.map((r) => {
+                  return (
+                    <Grid item xs={12} key={r.id}>
+                      <Link
+                        color="inherit"
+                        underline="hover"
+                        sx={{ cursor: 'pointer' }}
+                        onClick={() => handleOpenAnimeDrawer(r.id)}
+                      >
+                        {r.title}
+                      </Link>
+                    </Grid>
+                  );
+                })}
             </Grid>
           </>
         )}
