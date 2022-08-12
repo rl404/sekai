@@ -13,6 +13,9 @@ export interface Anime {
   mean: number;
   popularity: number;
   stats: Stats;
+  episode: Episode;
+  season: Season;
+  broadcast: Broadcast;
   genres: Array<Genre>;
   related: Array<Related>;
 }
@@ -33,7 +36,22 @@ interface Stats {
   status: StatsStatus;
 }
 
-interface Related {
+interface Episode {
+  count: number;
+  duration: number;
+}
+
+interface Season {
+  season: string;
+  year: number;
+}
+
+interface Broadcast {
+  day: string;
+  time: string;
+}
+
+export interface Related {
   id: number;
   title: string;
   picture: string;
@@ -124,12 +142,14 @@ export interface ConfigState {
   username: string;
   showDetailOnClick: boolean;
   showTitle: boolean;
-  showRelation: boolean;
+  showExtendedRelation: boolean;
+  search: string;
 }
 
 export interface AnimeDrawerState {
   open: boolean;
   anime_id: number;
+  showExtendedRelation: boolean;
 }
 
 export interface AnimeDrawerData {
@@ -148,8 +168,15 @@ export interface AnimeDrawerData {
   mean: number;
   popularity: number;
   stats: StatsStatus;
+  episode_count: number;
+  episode_duration: string;
+  season: string;
+  season_year: number;
+  broadcast_day: string;
+  broadcast_time: string;
   genres: Array<string>;
   related: Array<Related>;
+  extended_related: Array<Related>;
 
   loading: boolean;
   error: string;

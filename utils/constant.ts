@@ -128,3 +128,59 @@ export const AnimeRelationToStr = (relation: string): string => {
       return 'Unknown';
   }
 };
+
+export const Season = {
+  winter: 'WINTER',
+  spring: 'SPRING',
+  summer: 'SUMMER',
+  fall: 'FALL',
+};
+
+export const SeasonToStr = (season: string): string => {
+  switch (season) {
+    case Season.winter:
+      return 'Winter';
+    case Season.spring:
+      return 'Spring';
+    case Season.summer:
+      return 'Summer';
+    case Season.fall:
+      return 'Fall';
+    default:
+      return '';
+  }
+};
+
+export const Day = {
+  monday: 'MONDAY',
+  tuesday: 'TUESDAY',
+  wednesday: 'WEDNESDAY',
+  thursday: 'THURSDAY',
+  friday: 'FRIDAY',
+  saturday: 'SATURDAY',
+  sunday: 'SUNDAY',
+  other: 'OTHER',
+};
+
+export const DayToStr = (day: string): string => {
+  switch (day) {
+    case Day.monday:
+      return 'Monday';
+    case Day.tuesday:
+      return 'Tuesday';
+    case Day.wednesday:
+      return 'Wednesday';
+    case Day.thursday:
+      return 'Thursday';
+    case Day.friday:
+      return 'Friday';
+    case Day.saturday:
+      return 'Saturday';
+    case Day.sunday:
+      return 'Sunday';
+    case Day.other:
+      return 'Other';
+    default:
+      return '';
+  }
+};

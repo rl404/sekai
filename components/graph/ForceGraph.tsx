@@ -6,18 +6,20 @@ const inactiveColor = 'rgba(255,255,255,0.1)';
 const activeColor = 'white';
 
 const ForceGraph = ({
+  search,
   graphData,
   nodeColor,
   linkColor,
   showTitle,
-  showRelation,
+  showExtendedRelation,
   showAnimeDrawer,
 }: {
+  search: string;
   graphData: GraphData | any;
   nodeColor: any;
   linkColor: any;
   showTitle: boolean;
-  showRelation: boolean;
+  showExtendedRelation: boolean;
   showAnimeDrawer: (anime_id: number) => void;
 }) => {
   const [highlightNodes, setHighlightNodes] = React.useState(new Set());
@@ -25,8 +27,8 @@ const ForceGraph = ({
   const [hoverNode, setHoverNode] = React.useState<GraphNode | null>(null);
 
   const updateHighlight = () => {
-    setHighlightNodes(highlightNodes);
-    setHighlightLinks(highlightLinks);
+    // setHighlightNodes(highlightNodes);
+    // setHighlightLinks(highlightLinks);
   };
 
   const handleNodeHover = (node: GraphNode | any) => {
@@ -34,13 +36,24 @@ const ForceGraph = ({
     highlightLinks.clear();
 
     if (node) {
-      highlightNodes.add(node);
-      node.neighbors.forEach((neighbor: GraphNode) => highlightNodes.add(neighbor));
-      node.links.forEach((link: GraphLink) => highlightLinks.add(link));
+      addRelatedNodes(node);
     }
 
     setHoverNode(node || null);
     updateHighlight();
+  };
+
+  const addRelatedNodes = (node: GraphNode) => {
+    highlightNodes.add(node);
+    node.neighbors.forEach((neighbor: GraphNode) => {
+      if (highlightNodes.has(neighbor)) return;
+      highlightNodes.add(neighbor);
+      showExtendedRelation && addRelatedNodes(neighbor);
+    });
+    node.links.forEach((link: GraphLink) => {
+      if (highlightLinks.has(link)) return;
+      highlightLinks.add(link);
+    });
   };
 
   const handleLinkHover = (link: GraphLink | any) => {
@@ -67,6 +80,12 @@ const ForceGraph = ({
       nodeLabel=""
       nodeRelSize={10}
       nodeColor={(node: GraphNode | any) => {
+        if (search !== '') {
+          if (node.title.toLowerCase().includes(search)) {
+            return nodeColor[node.user_anime_status];
+          }
+          return inactiveColor;
+        }
         if (!hoverNode || highlightNodes.has(node)) {
           return nodeColor[node.user_anime_status];
         }
@@ -75,9 +94,11 @@ const ForceGraph = ({
       nodeCanvasObjectMode={() => 'before'}
       nodeCanvasObject={(node: GraphNode | any, ctx, _) => {
         if (!highlightNodes.has(node)) {
-          if (showTitle) {
+          if (showTitle && node.title.toLowerCase().includes(search)) {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
+            ctx.strokeStyle = 'black';
+            ctx.strokeText(node.title, node.x, node.y + 15);
             ctx.fillStyle = activeColor;
             ctx.fillText(node.title, node.x, node.y + 15);
           }
@@ -91,6 +112,8 @@ const ForceGraph = ({
 
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
+        ctx.strokeStyle = 'black';
+        ctx.strokeText(node.title, node.x, node.y + 15);
         ctx.fillStyle = activeColor;
         ctx.fillText(node.title, node.x, node.y + 15);
       }}
@@ -111,23 +134,7 @@ const ForceGraph = ({
       linkCanvasObjectMode={() => 'after'}
       linkCanvasObject={(link: GraphLink | any, ctx, _) => {
         return;
-        if (!highlightLinks.has(link)) {
-          if (showRelation) {
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = activeColor;
-            ctx.fillText(
-              link.relation.toLowerCase().replace('_', ' '),
-              link.target.x > link.source.x
-                ? link.source.x + (link.source.x - link.target.x) / 2
-                : link.target.x + (link.source.x - link.target.x) / 2,
-              link.target.y > link.source.y
-                ? link.source.y + (link.source.y - link.target.y) / 2
-                : link.target.y + (link.source.y - link.target.y) / 2,
-            );
-          }
-          return;
-        }
+        if (!highlightLinks.has(link)) return;
 
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';

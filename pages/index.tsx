@@ -70,6 +70,7 @@ const Home: NextPage = () => {
   const [animeDrawerState, setAnimeDrawerState] = React.useState<AnimeDrawerState>({
     open: false,
     anime_id: 0,
+    showExtendedRelation: false,
   });
 
   const handleOpenAnimeDrawer = (anime_id: number) => {
@@ -97,7 +98,8 @@ const Home: NextPage = () => {
     username: '',
     showDetailOnClick: true,
     showTitle: false,
-    showRelation: false,
+    showExtendedRelation: false,
+    search: '',
   });
 
   const setConfigUsername = (username: string) => {
@@ -113,8 +115,12 @@ const Home: NextPage = () => {
     setConfigState({ ...configState, showTitle: v });
   };
 
-  const setShowRelation = (v: boolean) => {
-    setConfigState({ ...configState, showRelation: v });
+  const setShowExtendedRelation = (v: boolean) => {
+    setConfigState({ ...configState, showExtendedRelation: v });
+  };
+
+  const setSearch = (v: string) => {
+    setConfigState({ ...configState, search: v });
   };
 
   const [listDialogState, setListDialogState] = React.useState<ListDialogState>({
@@ -139,11 +145,12 @@ const Home: NextPage = () => {
       </Head>
 
       <NoSSRForceGraph
+        search={configState.search}
         graphData={graphDataState}
         nodeColor={graphNodeColorState}
         linkColor={graphLinkColorState}
         showTitle={configState.showTitle}
-        showRelation={configState.showRelation}
+        showExtendedRelation={configState.showExtendedRelation}
         showAnimeDrawer={handleOpenAnimeDrawer}
       />
 
@@ -165,8 +172,9 @@ const Home: NextPage = () => {
         }}
         setShowDetailOnClick={setShowDetailOnClick}
         setShowTitle={setShowTitle}
-        setShowRelation={setShowRelation}
+        setShowExtendedRelation={setShowExtendedRelation}
         openListDialog={handleOpenListDialog}
+        setSearch={setSearch}
       />
 
       <ListDialog
