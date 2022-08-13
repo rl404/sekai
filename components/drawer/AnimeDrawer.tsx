@@ -544,17 +544,27 @@ const AnimeDrawer = ({
                       {animeState.related
                         .filter((a) => a.relation === r)
                         .map((r) => {
+                          const n = nodes.find((n) => n.anime_id === r.id);
                           return (
-                            <Grid item xs={12} key={r.id}>
-                              <Link
-                                color="inherit"
-                                underline="hover"
-                                sx={{ cursor: 'pointer' }}
-                                onClick={() => handleOpenAnimeDrawer(r.id)}
-                              >
-                                {r.title}
-                              </Link>
-                            </Grid>
+                            <React.Fragment key={r.id}>
+                              <Grid item xs={1}>
+                                <StatusColor
+                                  status={n?.user_anime_status || ''}
+                                  color={nodeColor[n?.user_anime_status || ''] || ''}
+                                  sx={{ marginTop: 2 }}
+                                />
+                              </Grid>
+                              <Grid item xs={11}>
+                                <Link
+                                  color="inherit"
+                                  underline="hover"
+                                  sx={{ cursor: 'pointer' }}
+                                  onClick={() => handleOpenAnimeDrawer(r.id)}
+                                >
+                                  {r.title}
+                                </Link>
+                              </Grid>
+                            </React.Fragment>
                           );
                         })}
                     </Grid>
@@ -570,7 +580,7 @@ const AnimeDrawer = ({
                   title={animeState.extended_related.length.toLocaleString()}
                 >
                   <Divider
-                    sx={{ ...style.statsTitle, marginBottom: 1 }}
+                    sx={{ ...style.statsTitle, marginBottom: 1, cursor: 'pointer' }}
                     onClick={handleToggleShowExtendedRelation}
                   >
                     {animeDrawerState.showExtendedRelation ? (
@@ -589,17 +599,28 @@ const AnimeDrawer = ({
               </Grid>
               {animeDrawerState.showExtendedRelation &&
                 animeState.extended_related.map((r) => {
+                  const n = nodes.find((n) => n.anime_id === r.id);
                   return (
-                    <Grid item xs={12} key={r.id}>
-                      <Link
-                        color="inherit"
-                        underline="hover"
-                        sx={{ cursor: 'pointer' }}
-                        onClick={() => handleOpenAnimeDrawer(r.id)}
-                      >
-                        {r.title}
-                      </Link>
-                    </Grid>
+                    <React.Fragment key={r.id}>
+                      <Grid item xs={1} />
+                      <Grid item xs={1}>
+                        <StatusColor
+                          status={n?.user_anime_status || ''}
+                          color={nodeColor[n?.user_anime_status || ''] || ''}
+                          sx={{ marginTop: 2 }}
+                        />
+                      </Grid>
+                      <Grid item xs={10}>
+                        <Link
+                          color="inherit"
+                          underline="hover"
+                          sx={{ cursor: 'pointer' }}
+                          onClick={() => handleOpenAnimeDrawer(r.id)}
+                        >
+                          {r.title}
+                        </Link>
+                      </Grid>
+                    </React.Fragment>
                   );
                 })}
             </Grid>
@@ -621,42 +642,50 @@ const AnimeDrawer = ({
 
 export default AnimeDrawer;
 
-const StatusColor = ({ status, color }: { status: string; color: string }) => {
+const StatusColor = ({
+  status,
+  color,
+  sx,
+}: {
+  status: string;
+  color: string;
+  sx?: React.CSSProperties | undefined;
+}) => {
   switch (status) {
     case UserAnimeStatus.watching:
       return (
         <Tooltip placement="left" arrow title="You are watching this">
-          <div style={{ ...style.statusCircle, background: color }} />
+          <div style={{ ...style.statusCircle, ...sx, background: color }} />
         </Tooltip>
       );
     case UserAnimeStatus.completed:
       return (
         <Tooltip placement="left" arrow title="You have completed this">
-          <div style={{ ...style.statusCircle, background: color }} />
+          <div style={{ ...style.statusCircle, ...sx, background: color }} />
         </Tooltip>
       );
     case UserAnimeStatus.on_hold:
       return (
         <Tooltip placement="left" arrow title="You put this on hold">
-          <div style={{ ...style.statusCircle, background: color }} />
+          <div style={{ ...style.statusCircle, ...sx, background: color }} />
         </Tooltip>
       );
     case UserAnimeStatus.dropped:
       return (
         <Tooltip placement="left" arrow title="You have dropped this">
-          <div style={{ ...style.statusCircle, background: color }} />
+          <div style={{ ...style.statusCircle, ...sx, background: color }} />
         </Tooltip>
       );
     case UserAnimeStatus.planned:
       return (
         <Tooltip placement="left" arrow title="You are planning to watch this">
-          <div style={{ ...style.statusCircle, background: color }} />
+          <div style={{ ...style.statusCircle, ...sx, background: color }} />
         </Tooltip>
       );
     default:
       return (
         <Tooltip placement="left" arrow title="Not in your list">
-          <div style={{ ...style.statusCircle, background: color }} />
+          <div style={{ ...style.statusCircle, ...sx, background: color }} />
         </Tooltip>
       );
   }
