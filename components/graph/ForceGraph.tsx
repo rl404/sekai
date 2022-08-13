@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ForceGraph2D } from 'react-force-graph';
 import { GraphData, GraphLink, GraphNode } from '../../types/Types';
+import * as d3 from 'd3';
 
 const inactiveColor = 'rgba(255,255,255,0.1)';
 const activeColor = 'white';
@@ -23,6 +24,8 @@ const ForceGraph = ({
   showExtendedRelation: boolean;
   showAnimeDrawer: (anime_id: number) => void;
 }) => {
+  const graphRef = React.useRef();
+
   const [hoverNode, setHoverNode] = React.useState<GraphNode | null>(null);
   const [hoverNodes, setHoverNodes] = React.useState(new Set());
   const [hoverLinks, setHoverLinks] = React.useState(new Set());
@@ -85,10 +88,15 @@ const ForceGraph = ({
     });
   };
 
+  React.useEffect(() => {
+    const gr: any = graphRef.current;
+    gr.d3Force('collide', d3.forceCollide().radius(30));
+  }, []);
+
   return (
     <ForceGraph2D
+      ref={graphRef}
       graphData={graphData}
-      d3VelocityDecay={0.7}
       nodeLabel=""
       nodeRelSize={10}
       nodeColor={(node: GraphNode | any) => {
