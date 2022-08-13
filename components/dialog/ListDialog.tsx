@@ -32,11 +32,13 @@ import {
   AnimeStatus,
   AnimeStatusToStr,
   AnimeType,
+  AnimeTypeToStr,
   UserAnimeStatus,
   UserAnimeStatusStr,
 } from '../../utils/constant';
 import StatusBadge from '../badge/StatusBadge';
 import UserStatusBadge from '../badge/UserStatusBadge';
+import ClearIcon from '@mui/icons-material/Clear';
 
 type Order = 'asc' | 'desc';
 
@@ -84,6 +86,12 @@ const ListDialog = ({
 
   const handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
+    setPage(0);
+    scrollTop();
+  };
+
+  const handleResetSearch = () => {
+    setSearch('');
     setPage(0);
     scrollTop();
   };
@@ -232,7 +240,13 @@ const ListDialog = ({
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <SearchIcon />
+                    {search === '' ? (
+                      <SearchIcon fontSize="small" />
+                    ) : (
+                      <IconButton size="small" onClick={handleResetSearch}>
+                        <ClearIcon fontSize="small" />
+                      </IconButton>
+                    )}
                   </InputAdornment>
                 ),
               }}
@@ -268,7 +282,7 @@ const ListDialog = ({
                 <MenuItem value="all">All</MenuItem>
                 {Object.values(AnimeType).map((s) => (
                   <MenuItem value={s} key={s}>
-                    {s}
+                    {AnimeTypeToStr(s)}
                   </MenuItem>
                 ))}
               </Select>
