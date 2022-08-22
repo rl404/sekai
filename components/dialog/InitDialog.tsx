@@ -123,7 +123,16 @@ const InitDialog = ({
   };
 
   return (
-    <Dialog open={open}>
+    <Dialog
+      open={open}
+      hideBackdrop
+      disableEnforceFocus
+      style={{
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+      }}
+    >
       <DialogTitle>Welcome to Sekai</DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={2}>
