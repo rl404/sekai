@@ -36,6 +36,9 @@ const style = {
   },
   drawer: {
     width: 500,
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
     padding: 2,
     zIndex: 1301,
   },

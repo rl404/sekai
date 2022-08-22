@@ -306,7 +306,7 @@ const ListDialog = ({
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs>
+          <Grid item xs={12} sm>
             <TablePagination
               component="div"
               count={

@@ -28,6 +28,7 @@ import { Resizable } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import { theme } from '../theme';
 
 const style = {
   rectangle: {
@@ -182,9 +183,13 @@ const ConfigDialog = ({
       PaperProps={{ sx: { overflow: 'visible', width: dialogWidth, minWidth: 200 } }}
       hideBackdrop
       disableEnforceFocus
-      style={{
+      sx={{
         top: 5,
         left: 5,
+        [theme.breakpoints.down('md')]: {
+          left: '50%',
+          transform: 'translate(-50%, 0)',
+        },
         height: 'fit-content',
         width: 'fit-content',
       }}
