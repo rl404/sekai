@@ -196,6 +196,7 @@ const Home: NextPage = () => {
         onClose={handleCloseListDialog}
         username={configState.username}
         nodes={graphDataState.nodes}
+        nodeColor={graphNodeColorState}
         showAnimeDrawer={handleOpenAnimeDrawer}
       />
 
