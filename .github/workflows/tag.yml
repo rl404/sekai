@@ -1,0 +1,21 @@
+name: tag
+
+on: workflow_dispatch
+
+jobs:
+  tag:
+    name: Tag
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up Go environment
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+    - name: Check out code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Create tag
+      uses: mathieudutour/github-tag-action@v5.6
+      with:
+        github_token: ${{ secrets.CR_PAT }}
