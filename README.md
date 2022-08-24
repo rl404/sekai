@@ -1,34 +1,73 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Sekai
 
-## Getting Started
+<p align="center">
+    <img src="https://raw.githubusercontent.com/rl404/sekai/master/public/images/main.jpg"><br>
+    <a href='https://github.com/rl404/sekai/blob/master/gallery.md'><i>see more pictures</i></a>
+</p>
 
-First, run the development server:
+_Sekai_ is a website where you can see your anime world. How your anime relates with each other. Anime list data is taken from your [MyAnimeList](https://myanimelist.net/)'s anime list. So, make sure you have some anime in your anime list. Or you can see other people anime list.
 
-```bash
-npm run dev
-# or
-yarn dev
+Powered by my [akatsuki](https://github.com/rl404/akatsuki) as backend.
+
+
+## Features
+
+- Convert your anime list to [force-directed graph](https://en.wikipedia.org/wiki/Force-directed_graph_drawing).
+- Configurable graph.
+  - Search node by anime title.
+  - Node color by status.
+  - Show anime detail on click.
+  - Show anime title on graph.
+  - Show extended anime relation on hover.
+- Show anime details.
+- Show anime list in table.
+  - Filterable.
+    - Title.
+    - Already in your list or not.
+    - Airing status.
+    - Type.
+    - Your status.
+  - Sortable.
+    - Title.
+    - Airing status.
+    - Average score.
+    - Type.
+    - Your status.
+    - Your score.
+
+_More will be coming soon..._
+
+## Requirement
+
+- [NodeJS](https://nodejs.org/)
+- Backend API ([akatsuki](https://github.com/rl404/akatsuki))
+- [Docker](https://docker.com/) + [Docker compose](https://docs.docker.com/compose/)
+
+## Installation
+
+1. Clone the repo.
+```sh
+git clone https://github.com/rl404/sekai
 ```
+2. Rename `.env.sample` to `.env` and modify the value according to your setup.
+3. Install depedencies.
+```sh
+npm ci
+```
+4. Start.
+```sh
+npm run dev
+```
+5. [http://localhost:3000](http://localhost:3000) is ready.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Disclaimer
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+_Sekai_ is meant for educational purpose and personal usage only. Please use it responsibly according to MyAnimeList's [Terms Of Service](https://myanimelist.net/about/terms_of_use).
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+All data belong to their respective copyrights owners, _sekai_ does not have any affiliation with content providers.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## License
 
-## Learn More
+MIT License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Copyright (c) 2022 Axel
