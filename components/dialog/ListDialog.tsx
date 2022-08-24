@@ -199,13 +199,13 @@ const ListDialog = ({
                     <TableCell align="center">
                       <StatusBadge status={d.status} />
                     </TableCell>
-                    <TableCell align="center">{d.score}</TableCell>
-                    <TableCell align="center">{d.type}</TableCell>
+                    <TableCell align="center">{d.score.toFixed(2)}</TableCell>
+                    <TableCell align="center">{AnimeTypeToStr(d.type)}</TableCell>
                     <TableCell align="center">
                       <UserStatusBadge status={d.user_anime_status} />
                     </TableCell>
                     <TableCell align="center">
-                      {d.user_anime_status !== '' && d.user_anime_score}
+                      {d.user_anime_status !== '' && d.user_anime_score.toFixed(2)}
                     </TableCell>
                   </TableRow>
                 ))}

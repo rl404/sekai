@@ -403,10 +403,12 @@ const AnimeDrawer = ({
                 placement="bottom"
                 arrow
                 PopperProps={{ sx: style.scoreTooltip }}
-                title={!node?.user_anime_status ? '' : `Your score: ${node?.user_anime_score}`}
+                title={
+                  !node?.user_anime_status ? '' : `Your score: ${node?.user_anime_score.toFixed(2)}`
+                }
               >
                 <Typography variant="h6" align="center">
-                  <b>{animeState.mean.toLocaleString()}</b>
+                  <b>{animeState.mean.toFixed(2)}</b>
                 </Typography>
               </Tooltip>
             </Grid>
