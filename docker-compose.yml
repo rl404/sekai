@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  sekai:
+    container_name: sekai
+    image: rl404/sekai:latest
+    build: .
+    network_mode: host
+

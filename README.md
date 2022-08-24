@@ -41,7 +41,6 @@ _More will be coming soon..._
 
 - [NodeJS](https://nodejs.org/)
 - Backend API ([akatsuki](https://github.com/rl404/akatsuki))
-- [Docker](https://docker.com/) + [Docker compose](https://docs.docker.com/compose/)
 
 ## Installation
 
