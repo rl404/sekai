@@ -1,5 +1,16 @@
 import * as React from 'react';
-import { Chip, Divider, Drawer, Grid, IconButton, Link, Tooltip, Typography } from '@mui/material';
+import {
+  Chip,
+  Divider,
+  Drawer,
+  Grid,
+  IconButton,
+  Link,
+  Skeleton,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLefttIcon from '@mui/icons-material/ChevronLeft';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -36,6 +47,9 @@ const style = {
   },
   drawer: {
     width: 500,
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
     padding: 2,
     zIndex: 1301,
   },
@@ -285,9 +299,7 @@ const AnimeDrawer = ({
             {animeState.error}
           </Grid>
         ) : animeState.loading ? (
-          <Grid item xs={12}>
-            loading...
-          </Grid>
+          <SkeletonDrawer />
         ) : (
           <>
             <Grid item xs={12}>
@@ -391,10 +403,12 @@ const AnimeDrawer = ({
                 placement="bottom"
                 arrow
                 PopperProps={{ sx: style.scoreTooltip }}
-                title={!node?.user_anime_status ? '' : `Your score: ${node?.user_anime_score}`}
+                title={
+                  !node?.user_anime_status ? '' : `Your score: ${node?.user_anime_score.toFixed(2)}`
+                }
               >
                 <Typography variant="h6" align="center">
-                  <b>{animeState.mean.toLocaleString()}</b>
+                  <b>{animeState.mean.toFixed(2)}</b>
                 </Typography>
               </Tooltip>
             </Grid>
@@ -689,4 +703,109 @@ const StatusColor = ({
         </Tooltip>
       );
   }
+};
+
+const SkeletonDrawer = () => {
+  return (
+    <>
+      <Grid item xs={12}>
+        <Typography variant="h5" gutterBottom>
+          <Skeleton />
+        </Typography>
+        <Divider />
+      </Grid>
+      <Grid item xs={12}>
+        <Skeleton variant="rectangular" width={340} height={480} sx={{ margin: 'auto' }} />
+      </Grid>
+      <Grid item xs={4}>
+        <Divider>
+          <Skeleton width={50} />
+        </Divider>
+        <Typography variant="h6">
+          <Skeleton />
+        </Typography>
+      </Grid>
+      <Grid item xs={4}>
+        <Divider>
+          <Skeleton width={50} />
+        </Divider>
+        <Typography variant="h6">
+          <Skeleton />
+        </Typography>
+      </Grid>
+      <Grid item xs={4}>
+        <Divider>
+          <Skeleton width={50} />
+        </Divider>
+        <Typography variant="h6">
+          <Skeleton />
+        </Typography>
+      </Grid>
+      <Grid item xs={6}>
+        <Divider>
+          <Skeleton width={50} />
+        </Divider>
+        <Typography variant="h6">
+          <Skeleton />
+        </Typography>
+      </Grid>
+      <Grid item xs={6}>
+        <Divider>
+          <Skeleton width={50} />
+        </Divider>
+        <Typography variant="h6">
+          <Skeleton />
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Divider sx={{ marginBottom: 1 }}>
+          <Skeleton width={100} />
+        </Divider>
+        <Typography>
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+          <Skeleton width="60%" />
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Divider sx={{ marginBottom: 1 }}>
+          <Skeleton width={100} />
+        </Divider>
+        <Stack direction="row" spacing={2} justifyContent="center">
+          <Skeleton variant="rectangular" width={60} />
+          <Skeleton variant="rectangular" width={60} />
+          <Skeleton variant="rectangular" width={60} />
+        </Stack>
+      </Grid>
+      <Grid item xs={12} container spacing={2}>
+        <Grid item xs={12}>
+          <Divider>
+            <Skeleton width={100} />
+          </Divider>
+        </Grid>
+        <Grid item xs={3}>
+          <Skeleton variant="rectangular" />
+        </Grid>
+        <Grid item xs={9}>
+          <Skeleton variant="rectangular" width="50%" />
+        </Grid>
+        <Grid item xs={3} />
+        <Grid item xs={9}>
+          <Skeleton variant="rectangular" width="90%" />
+        </Grid>
+        <Grid item xs={3}>
+          <Skeleton variant="rectangular" />
+        </Grid>
+        <Grid item xs={9}>
+          <Skeleton variant="rectangular" width="70%" />
+        </Grid>
+        <Grid item xs={3} />
+        <Grid item xs={9}>
+          <Skeleton variant="rectangular" width="60%" />
+        </Grid>
+      </Grid>
+    </>
+  );
 };

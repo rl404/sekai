@@ -63,10 +63,11 @@ const ForceGraph = ({
   const handleNodeClick = (node: GraphNode | any) => {
     showAnimeDrawer(node.anime_id);
 
+    clickNodes.clear();
+    clickLinks.clear();
+
     if (clickNode === node) {
       setClickNode(null);
-      clickNodes.clear();
-      clickLinks.clear();
     } else {
       setClickNode(node);
       addRelatedClickNodes(node);
@@ -88,6 +89,12 @@ const ForceGraph = ({
     });
   };
 
+  const clearNodeClick = () => {
+    setClickNode(null);
+    clickNodes.clear();
+    clickLinks.clear();
+  };
+
   React.useEffect(() => {
     const gr: any = graphRef.current;
     gr.d3Force('collide', d3.forceCollide().radius(30));
@@ -97,6 +104,7 @@ const ForceGraph = ({
     <ForceGraph2D
       ref={graphRef}
       graphData={graphData}
+      onBackgroundClick={clearNodeClick}
       nodeLabel=""
       nodeRelSize={10}
       nodeColor={(node: GraphNode | any) => {

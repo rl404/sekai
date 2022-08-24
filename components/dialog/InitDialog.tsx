@@ -123,23 +123,38 @@ const InitDialog = ({
   };
 
   return (
-    <Dialog open={open}>
+    <Dialog
+      open={open}
+      hideBackdrop
+      disableEnforceFocus
+      fullWidth
+      maxWidth="xs"
+      style={{
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        height: 'fit-content',
+        width: '100%',
+      }}
+    >
       <DialogTitle>Welcome to Sekai</DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={2}>
-          <Grid item xs={9}>
+          <Grid item xs={12} sm={9}>
             <TextField
               label="MyAnimeList username"
               placeholder="rl404"
               size="small"
               fullWidth
+              autoFocus
               value={formState.username}
               onChange={handleChangeUsername}
               disabled={formState.loading}
               helperText={formState.error}
+              onKeyDown={(e) => e.key === 'Enter' && onSubmit(1)}
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={3}>
             <LoadingButton fullWidth onClick={() => onSubmit(1)} loading={formState.loading}>
               Go
             </LoadingButton>

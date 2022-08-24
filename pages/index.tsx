@@ -15,6 +15,16 @@ import {
 import AnimeDrawer from '../components/drawer/AnimeDrawer';
 import ConfigDialog from '../components/dialog/ConfigDialog';
 import ListDialog from '../components/dialog/ListDialog';
+import { IconButton } from '@mui/material';
+import GitHubIcon from '@mui/icons-material/GitHub';
+
+const style = {
+  githubIcon: {
+    position: 'absolute',
+    right: 10,
+    bottom: 10,
+  },
+};
 
 const NoSSRForceGraph = dynamic(() => import('../components/graph/ForceGraph'), {
   ssr: false,
@@ -154,6 +164,10 @@ const Home: NextPage = () => {
         showAnimeDrawer={handleOpenAnimeDrawer}
       />
 
+      <IconButton href="https://github.com/rl404/sekai" target={'_blank'} sx={style.githubIcon}>
+        <GitHubIcon />
+      </IconButton>
+
       <InitDialog
         open={initDialogState.open}
         onClose={handleCloseInitDialog}
@@ -182,6 +196,7 @@ const Home: NextPage = () => {
         onClose={handleCloseListDialog}
         username={configState.username}
         nodes={graphDataState.nodes}
+        nodeColor={graphNodeColorState}
         showAnimeDrawer={handleOpenAnimeDrawer}
       />
 
