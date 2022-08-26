@@ -57,7 +57,7 @@ const InitDialog = ({
           }
 
           setFormState({ ...formState, loading: true, error: 'retrieving anime list...' });
-          await sleep(5000);
+          await sleep(10000);
           setFormState({ ...formState, loading: false, error: '' });
           onSubmit(submitCount + 1);
           return;
