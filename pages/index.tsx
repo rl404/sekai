@@ -146,11 +146,21 @@ const Home: NextPage = () => {
     setListDialogState({ ...listDialogState, open: false });
   };
 
+  const title = 'Project Sekai';
+  const desc = 'Convert your MyAnimeList anime list to force-directed graph and see your anime world.';
+  const image = '/images/main.jpg';
+
   return (
     <>
       <Head>
-        <title>Project Sekai</title>
-        <meta name="description" content="Your anime world." />
+        <title>{title}</title>
+        <meta name="title" content={title} />
+        <meta name="description" content={desc} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={desc} />
+        <meta property="og:image" content={image} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={title} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
