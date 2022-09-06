@@ -65,7 +65,7 @@ const ListDialog = ({
   username: string;
   nodes: Array<GraphNode>;
   nodeColor: any;
-  showAnimeDrawer: (anime_id: number) => void;
+  showAnimeDrawer: (anime_id: number, force: boolean) => void;
 }) => {
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState('title');
@@ -164,15 +164,8 @@ const ListDialog = ({
             <TableHead>
               <TableRow>
                 {headers.map((h) => (
-                  <TableCell
-                    key={h.key}
-                    align={h.align || 'left'}
-                    onClick={(e) => handleChangeOrder(e, h.key)}
-                  >
-                    <TableSortLabel
-                      active={orderBy === h.key}
-                      direction={orderBy === h.key ? order : 'asc'}
-                    >
+                  <TableCell key={h.key} align={h.align || 'left'} onClick={(e) => handleChangeOrder(e, h.key)}>
+                    <TableSortLabel active={orderBy === h.key} direction={orderBy === h.key ? order : 'asc'}>
                       {h.label}
                     </TableSortLabel>
                   </TableCell>
@@ -185,15 +178,11 @@ const ListDialog = ({
                 .filter(
                   (d) =>
                     filterList === 'all' ||
-                    (filterList === 'list'
-                      ? d.user_anime_status !== ''
-                      : d.user_anime_status === ''),
+                    (filterList === 'list' ? d.user_anime_status !== '' : d.user_anime_status === ''),
                 )
                 .filter((d) => filterStatus === 'all' || d.status === filterStatus)
                 .filter((d) => filterType === 'all' || d.type === filterType)
-                .filter(
-                  (d) => filterUserStatus === 'all' || d.user_anime_status === filterUserStatus,
-                )
+                .filter((d) => filterUserStatus === 'all' || d.user_anime_status === filterUserStatus)
                 .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d) => (
@@ -203,7 +192,7 @@ const ListDialog = ({
                         color="inherit"
                         underline="hover"
                         sx={{ cursor: 'pointer' }}
-                        onClick={() => showAnimeDrawer(d.anime_id)}
+                        onClick={() => showAnimeDrawer(d.anime_id, true)}
                       >
                         {d.title}
                       </Link>
@@ -214,14 +203,9 @@ const ListDialog = ({
                     <TableCell align="center">{d.score.toFixed(2)}</TableCell>
                     <TableCell align="center">{AnimeTypeToStr(d.type)}</TableCell>
                     <TableCell align="center">
-                      <StatusColor
-                        status={d.user_anime_status}
-                        color={nodeColor[d.user_anime_status || ''] || ''}
-                      />
+                      <StatusColor status={d.user_anime_status} color={nodeColor[d.user_anime_status || ''] || ''} />
                     </TableCell>
-                    <TableCell align="center">
-                      {d.user_anime_status !== '' && d.user_anime_score.toFixed(2)}
-                    </TableCell>
+                    <TableCell align="center">{d.user_anime_status !== '' && d.user_anime_score.toFixed(2)}</TableCell>
                   </TableRow>
                 ))}
             </TableBody>
@@ -233,12 +217,7 @@ const ListDialog = ({
           <Grid item>
             <FormControl size="small">
               <InputLabel id="filterList-select">Show</InputLabel>
-              <Select
-                id="filterList-select"
-                label="Show"
-                value={filterList}
-                onChange={handleChangeFilterList}
-              >
+              <Select id="filterList-select" label="Show" value={filterList} onChange={handleChangeFilterList}>
                 <MenuItem value="all">All</MenuItem>
                 <MenuItem value="list">In my list</MenuItem>
                 <MenuItem value="-list">Not in my list</MenuItem>
@@ -270,12 +249,7 @@ const ListDialog = ({
           <Grid item>
             <FormControl size="small">
               <InputLabel id="filterStatus-select">Status</InputLabel>
-              <Select
-                id="filterStatus-select"
-                label="Status"
-                value={filterStatus}
-                onChange={handleChangeFilterStatus}
-              >
+              <Select id="filterStatus-select" label="Status" value={filterStatus} onChange={handleChangeFilterStatus}>
                 <MenuItem value="all">All</MenuItem>
                 {Object.values(AnimeStatus).map((s) => (
                   <MenuItem value={s} key={s}>
@@ -288,12 +262,7 @@ const ListDialog = ({
           <Grid item>
             <FormControl size="small">
               <InputLabel id="filterType-select">Type</InputLabel>
-              <Select
-                id="filterType-select"
-                label="Type"
-                value={filterType}
-                onChange={handleChangeFilterType}
-              >
+              <Select id="filterType-select" label="Type" value={filterType} onChange={handleChangeFilterType}>
                 <MenuItem value="all">All</MenuItem>
                 {Object.values(AnimeType).map((s) => (
                   <MenuItem value={s} key={s}>
@@ -330,15 +299,11 @@ const ListDialog = ({
                   .filter(
                     (d) =>
                       filterList === 'all' ||
-                      (filterList === 'list'
-                        ? d.user_anime_status !== ''
-                        : d.user_anime_status === ''),
+                      (filterList === 'list' ? d.user_anime_status !== '' : d.user_anime_status === ''),
                   )
                   .filter((d) => filterStatus === 'all' || d.status === filterStatus)
                   .filter((d) => filterType === 'all' || d.type === filterType)
-                  .filter(
-                    (d) => filterUserStatus === 'all' || d.user_anime_status === filterUserStatus,
-                  ).length
+                  .filter((d) => filterUserStatus === 'all' || d.user_anime_status === filterUserStatus).length
               }
               page={page}
               onPageChange={handleChangePage}
