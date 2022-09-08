@@ -8,7 +8,6 @@ import {
   DialogTitle,
   FormControlLabel,
   Grid,
-  Grow,
   IconButton,
   InputAdornment,
   Paper,
@@ -18,18 +17,19 @@ import {
 } from '@mui/material';
 import * as React from 'react';
 import Draggable from 'react-draggable';
-import { ConfigState, GraphData, ListDialogState } from '../../types/Types';
+import { ConfigState, GraphData, ListDialogState, StatsDialogState } from '../../types/Types';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { UserAnimeStatus } from '../../utils/constant';
 import { SketchPicker } from 'react-color';
-import { TransitionProps } from '@mui/material/transitions';
 import { Resizable } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import { theme } from '../theme';
 import ListDialog from './ListDialog';
+import StatsDialog from './StatsDialog';
+import GrowTransition from '../transition/GrowTransition';
 
 const style = {
   rectangle: {
@@ -192,6 +192,19 @@ const ConfigDialog = ({
     setListDialogState({ ...listDialogState, open: false });
   };
 
+  const [statsDialogState, setStatsDialogState] = React.useState<StatsDialogState>({
+    open: false,
+  });
+
+  const handleOpenStatsDialog = () => {
+    setStatsDialogState({ ...statsDialogState, open: true });
+    closeAnimeDrawer();
+  };
+
+  const handleCloseStatsDialog = () => {
+    setStatsDialogState({ ...statsDialogState, open: false });
+  };
+
   return (
     <>
       <Dialog
@@ -210,7 +223,7 @@ const ConfigDialog = ({
           height: 'fit-content',
           width: 'fit-content',
         }}
-        TransitionComponent={Transition}
+        TransitionComponent={GrowTransition}
         aria-labelledby="draggable-title"
       >
         <Resizable
@@ -404,6 +417,11 @@ const ConfigDialog = ({
                     </Button>
                   </Grid>
                   <Grid item xs={12}>
+                    <Button fullWidth onClick={handleOpenStatsDialog}>
+                      Show Stats
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12}>
                     <Button fullWidth onClick={() => window.location.reload()} color="error">
                       Change username
                     </Button>
@@ -414,6 +432,7 @@ const ConfigDialog = ({
           </>
         </Resizable>
       </Dialog>
+
       <ListDialog
         open={listDialogState.open}
         onClose={handleCloseListDialog}
@@ -421,6 +440,14 @@ const ConfigDialog = ({
         nodes={graphData.nodes}
         nodeColor={nodeColor}
         showAnimeDrawer={openAnimeDrawer}
+      />
+
+      <StatsDialog
+        open={statsDialogState.open}
+        onClose={handleCloseStatsDialog}
+        username={config.username}
+        nodes={graphData.nodes}
+        nodeColor={nodeColor}
       />
     </>
   );
@@ -455,12 +482,3 @@ const ColorPicker = ({
     </div>
   );
 };
-
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement;
-  },
-  ref: React.Ref<unknown>,
-) {
-  return <Grow ref={ref} {...props} />;
-});

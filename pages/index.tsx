@@ -4,17 +4,9 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import InitDialog from '../components/dialog/InitDialog';
 import { AnimeRelation, UserAnimeStatus } from '../utils/constant';
-import {
-  AnimeDrawerState,
-  ConfigDialogState,
-  ConfigState,
-  GraphData,
-  InitDialogState,
-  ListDialogState,
-} from '../types/Types';
+import { AnimeDrawerState, ConfigDialogState, ConfigState, GraphData, InitDialogState } from '../types/Types';
 import AnimeDrawer from '../components/drawer/AnimeDrawer';
 import ConfigDialog from '../components/dialog/ConfigDialog';
-import ListDialog from '../components/dialog/ListDialog';
 import { IconButton } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 

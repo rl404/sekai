@@ -12,7 +12,6 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Slide,
   Table,
   TableBody,
   TableCell,
@@ -26,7 +25,6 @@ import {
 } from '@mui/material';
 import * as React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { TransitionProps } from '@mui/material/transitions';
 import { GraphNode, TableHeader } from '../../types/Types';
 import SearchIcon from '@mui/icons-material/Search';
 import {
@@ -39,6 +37,7 @@ import {
 } from '../../utils/constant';
 import StatusBadge from '../badge/StatusBadge';
 import ClearIcon from '@mui/icons-material/Clear';
+import SlideTransition from '../transition/SlideTransition';
 
 const style = {
   statusCircle: {
@@ -146,7 +145,7 @@ const ListDialog = ({
   ];
 
   return (
-    <Dialog open={open} fullScreen TransitionComponent={Transition}>
+    <Dialog open={open} fullScreen TransitionComponent={SlideTransition}>
       <DialogTitle>
         <Grid container>
           <Grid item>{`${username}'s Anime List`}</Grid>
@@ -319,15 +318,6 @@ const ListDialog = ({
 };
 
 export default ListDialog;
-
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement;
-  },
-  ref: React.Ref<unknown>,
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const getComparator = (order: Order, orderBy: string): ((a: any, b: any) => number) => {
   return order === 'desc'

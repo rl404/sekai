@@ -184,3 +184,64 @@ export const DayToStr = (day: string): string => {
       return '';
   }
 };
+
+export const AnimeSource = {
+  original: 'ORIGINAL',
+  manga: 'MANGA',
+  koma_4_manga: '4_KOMA_MANGA',
+  web_manga: 'WEB_MANGA',
+  digital_manga: 'DIGITAL_MANGA',
+  novel: 'NOVEL',
+  light_novel: 'LIGHT_NOVEL',
+  visual_novel: 'VISUAL_NOVEL',
+  game: 'GAME',
+  card_game: 'CARD_GAME',
+  book: 'BOOK',
+  picture_book: 'PICTURE_BOOK',
+  radio: 'RADIO',
+  music: 'MUSIC',
+  other: 'OTHER',
+  web_novel: 'WEB_NOVEL',
+  mixed_media: 'MIXED_MEDIA',
+};
+
+export const AnimeSourceToStr = (source: string): string => {
+  switch (source) {
+    case AnimeSource.original:
+      return 'Original';
+    case AnimeSource.manga:
+      return 'Manga';
+    case AnimeSource.koma_4_manga:
+      return '4 Koma Manga';
+    case AnimeSource.web_manga:
+      return 'Web Manga';
+    case AnimeSource.digital_manga:
+      return 'Digital Manga';
+    case AnimeSource.novel:
+      return 'Novel';
+    case AnimeSource.light_novel:
+      return 'Light Novel';
+    case AnimeSource.visual_novel:
+      return 'Visual Novel';
+    case AnimeSource.game:
+      return 'Game';
+    case AnimeSource.card_game:
+      return 'Card Game';
+    case AnimeSource.book:
+      return 'Book';
+    case AnimeSource.picture_book:
+      return 'Picture Book';
+    case AnimeSource.radio:
+      return 'Radio';
+    case AnimeSource.music:
+      return 'Music';
+    case AnimeSource.other:
+      return 'Other';
+    case AnimeSource.web_novel:
+      return 'Web Novel';
+    case AnimeSource.mixed_media:
+      return 'Mixed Media';
+    default:
+      return '';
+  }
+};
