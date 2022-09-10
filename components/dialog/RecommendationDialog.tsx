@@ -74,8 +74,8 @@ const RecommendationDialog = ({
 
   links.forEach((l) => {
     if (l.relation === AnimeRelation.sequel || l.relation === AnimeRelation.prequel) {
-      const node1 = nodes.find((n) => n.anime_id === l.source);
-      const node2 = nodes.find((n) => n.anime_id === l.target);
+      const node1 = nodes.find((n) => n.anime_id === l.sourceID);
+      const node2 = nodes.find((n) => n.anime_id === l.targetID);
       if (node1 && node2) {
         if (
           node1.user_anime_status === UserAnimeStatus.completed &&
@@ -102,8 +102,8 @@ const RecommendationDialog = ({
       l.relation === AnimeRelation.spin_off ||
       l.relation === AnimeRelation.adaptation
     ) {
-      const node1 = nodes.find((n) => n.anime_id === l.source);
-      const node2 = nodes.find((n) => n.anime_id === l.target);
+      const node1 = nodes.find((n) => n.anime_id === l.sourceID);
+      const node2 = nodes.find((n) => n.anime_id === l.targetID);
       if (node1 && node2) {
         if (
           node1.user_anime_status === UserAnimeStatus.completed &&
@@ -123,8 +123,8 @@ const RecommendationDialog = ({
     }
 
     if (l.relation === AnimeRelation.summary || l.relation === AnimeRelation.full_story) {
-      const node1 = nodes.find((n) => n.anime_id === l.source);
-      const node2 = nodes.find((n) => n.anime_id === l.target);
+      const node1 = nodes.find((n) => n.anime_id === l.sourceID);
+      const node2 = nodes.find((n) => n.anime_id === l.targetID);
       if (node1 && node2) {
         if (
           node1.user_anime_status === UserAnimeStatus.completed &&
@@ -144,8 +144,8 @@ const RecommendationDialog = ({
     }
 
     if (l.relation === AnimeRelation.character || l.relation === AnimeRelation.other) {
-      const node1 = nodes.find((n) => n.anime_id === l.source);
-      const node2 = nodes.find((n) => n.anime_id === l.target);
+      const node1 = nodes.find((n) => n.anime_id === l.sourceID);
+      const node2 = nodes.find((n) => n.anime_id === l.targetID);
       if (node1 && node2) {
         if (
           node1.user_anime_status === UserAnimeStatus.completed &&

@@ -82,7 +82,9 @@ const InitDialog = ({
         const links = resp.data.data.links.map((l: UserAnimeRelationLink): GraphLink => {
           const link = {
             source: l.anime_id1,
+            sourceID: l.anime_id1,
             target: l.anime_id2,
+            targetID: l.anime_id2,
             relation: l.relation,
           };
 

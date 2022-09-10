@@ -135,7 +135,9 @@ export interface GraphNode {
 }
 
 export interface GraphLink {
+  sourceID: number;
   source: number;
+  targetID: number;
   target: number;
   relation: string;
 }
