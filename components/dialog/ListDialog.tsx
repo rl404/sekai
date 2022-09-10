@@ -160,9 +160,85 @@ const ListDialog = ({
       }}
     >
       <DialogTitle>
-        <Grid container>
+        <Grid container spacing={2}>
           <Grid item>{`${username}'s Anime List`}</Grid>
           <Grid item xs />
+          <Grid item>
+            <FormControl size="small" sx={{ minWidth: 100 }}>
+              <InputLabel id="filterList-select">Show</InputLabel>
+              <Select id="filterList-select" label="Show" value={filterList} onChange={handleChangeFilterList}>
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="list">In my list</MenuItem>
+                <MenuItem value="-list">Not in my list</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <TextField
+              label="Anime Title"
+              placeholder="naruto"
+              size="small"
+              value={search}
+              onChange={handleChangeSearch}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {search === '' ? (
+                      <SearchIcon fontSize="small" />
+                    ) : (
+                      <IconButton size="small" onClick={handleResetSearch}>
+                        <ClearIcon fontSize="small" />
+                      </IconButton>
+                    )}
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          <Grid item>
+            <FormControl size="small" sx={{ minWidth: 100 }}>
+              <InputLabel id="filterStatus-select">Status</InputLabel>
+              <Select id="filterStatus-select" label="Status" value={filterStatus} onChange={handleChangeFilterStatus}>
+                <MenuItem value="all">All</MenuItem>
+                {Object.values(AnimeStatus).map((s) => (
+                  <MenuItem value={s} key={s}>
+                    {AnimeStatusToStr(s)}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <FormControl size="small" sx={{ minWidth: 100 }}>
+              <InputLabel id="filterType-select">Type</InputLabel>
+              <Select id="filterType-select" label="Type" value={filterType} onChange={handleChangeFilterType}>
+                <MenuItem value="all">All</MenuItem>
+                {Object.values(AnimeType).map((s) => (
+                  <MenuItem value={s} key={s}>
+                    {AnimeTypeToStr(s)}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <FormControl size="small" sx={{ minWidth: 100 }}>
+              <InputLabel id="filterUserStatus-select">Your Status</InputLabel>
+              <Select
+                id="filterUserStatus-select"
+                label="Your Status"
+                value={filterUserStatus}
+                onChange={handleChangeFilterUserStatus}
+              >
+                <MenuItem value="all">All</MenuItem>
+                {Object.values(UserAnimeStatus).map((s) => (
+                  <MenuItem value={s} key={s}>
+                    {UserAnimeStatusStr(s)}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
           <Grid item>
             <IconButton onClick={onClose} size="small">
               <CloseIcon />
@@ -236,106 +312,26 @@ const ListDialog = ({
         </TableContainer>
       </DialogContent>
       <DialogActions sx={{ padding: '16px 24px' }}>
-        <Grid container spacing={2}>
-          <Grid item>
-            <FormControl size="small">
-              <InputLabel id="filterList-select">Show</InputLabel>
-              <Select id="filterList-select" label="Show" value={filterList} onChange={handleChangeFilterList}>
-                <MenuItem value="all">All</MenuItem>
-                <MenuItem value="list">In my list</MenuItem>
-                <MenuItem value="-list">Not in my list</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item>
-            <TextField
-              label="Anime Title"
-              placeholder="naruto"
-              size="small"
-              value={search}
-              onChange={handleChangeSearch}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    {search === '' ? (
-                      <SearchIcon fontSize="small" />
-                    ) : (
-                      <IconButton size="small" onClick={handleResetSearch}>
-                        <ClearIcon fontSize="small" />
-                      </IconButton>
-                    )}
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item>
-            <FormControl size="small">
-              <InputLabel id="filterStatus-select">Status</InputLabel>
-              <Select id="filterStatus-select" label="Status" value={filterStatus} onChange={handleChangeFilterStatus}>
-                <MenuItem value="all">All</MenuItem>
-                {Object.values(AnimeStatus).map((s) => (
-                  <MenuItem value={s} key={s}>
-                    {AnimeStatusToStr(s)}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item>
-            <FormControl size="small">
-              <InputLabel id="filterType-select">Type</InputLabel>
-              <Select id="filterType-select" label="Type" value={filterType} onChange={handleChangeFilterType}>
-                <MenuItem value="all">All</MenuItem>
-                {Object.values(AnimeType).map((s) => (
-                  <MenuItem value={s} key={s}>
-                    {AnimeTypeToStr(s)}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item>
-            <FormControl size="small">
-              <InputLabel id="filterUserStatus-select">Your Status</InputLabel>
-              <Select
-                id="filterUserStatus-select"
-                label="Your Status"
-                value={filterUserStatus}
-                onChange={handleChangeFilterUserStatus}
-              >
-                <MenuItem value="all">All</MenuItem>
-                {Object.values(UserAnimeStatus).map((s) => (
-                  <MenuItem value={s} key={s}>
-                    {UserAnimeStatusStr(s)}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm>
-            <TablePagination
-              component="div"
-              count={
-                nodes
-                  .filter((d) => (search ? d.title.toLowerCase().includes(search) : true))
-                  .filter(
-                    (d) =>
-                      filterList === 'all' ||
-                      (filterList === 'list' ? d.user_anime_status !== '' : d.user_anime_status === ''),
-                  )
-                  .filter((d) => filterStatus === 'all' || d.status === filterStatus)
-                  .filter((d) => filterType === 'all' || d.type === filterType)
-                  .filter((d) => filterUserStatus === 'all' || d.user_anime_status === filterUserStatus).length
-              }
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPageOptions={[10, 20, 50, 100]}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Grid>
-        </Grid>
+        <TablePagination
+          component="div"
+          count={
+            nodes
+              .filter((d) => (search ? d.title.toLowerCase().includes(search) : true))
+              .filter(
+                (d) =>
+                  filterList === 'all' ||
+                  (filterList === 'list' ? d.user_anime_status !== '' : d.user_anime_status === ''),
+              )
+              .filter((d) => filterStatus === 'all' || d.status === filterStatus)
+              .filter((d) => filterType === 'all' || d.type === filterType)
+              .filter((d) => filterUserStatus === 'all' || d.user_anime_status === filterUserStatus).length
+          }
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPageOptions={[10, 20, 50, 100]}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </DialogActions>
     </Dialog>
   );
