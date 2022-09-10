@@ -17,7 +17,13 @@ import {
 } from '@mui/material';
 import * as React from 'react';
 import Draggable from 'react-draggable';
-import { ConfigState, GraphData, ListDialogState, StatsDialogState } from '../../types/Types';
+import {
+  ConfigState,
+  GraphData,
+  ListDialogState,
+  RecommendationDialogState,
+  StatsDialogState,
+} from '../../types/Types';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { UserAnimeStatus } from '../../utils/constant';
@@ -30,6 +36,7 @@ import { theme } from '../theme';
 import ListDialog from './ListDialog';
 import StatsDialog from './StatsDialog';
 import GrowTransition from '../transition/GrowTransition';
+import RecommendationDialog from './RecommendationDialog';
 
 const style = {
   rectangle: {
@@ -203,6 +210,19 @@ const ConfigDialog = ({
 
   const handleCloseStatsDialog = () => {
     setStatsDialogState({ ...statsDialogState, open: false });
+  };
+
+  const [recommendationDialogState, setRecommendationDialogState] = React.useState<RecommendationDialogState>({
+    open: false,
+  });
+
+  const handleOpenRecommendationDialog = () => {
+    setRecommendationDialogState({ ...recommendationDialogState, open: true });
+    closeAnimeDrawer();
+  };
+
+  const handleCloseRecommendationDialog = () => {
+    setRecommendationDialogState({ ...recommendationDialogState, open: false });
   };
 
   return (
@@ -422,6 +442,11 @@ const ConfigDialog = ({
                     </Button>
                   </Grid>
                   <Grid item xs={12}>
+                    <Button fullWidth onClick={handleOpenRecommendationDialog}>
+                      Show Recommendations
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12}>
                     <Button fullWidth onClick={() => window.location.reload()} color="error">
                       Change username
                     </Button>
@@ -448,6 +473,16 @@ const ConfigDialog = ({
         username={config.username}
         nodes={graphData.nodes}
         nodeColor={nodeColor}
+      />
+
+      <RecommendationDialog
+        open={recommendationDialogState.open}
+        onClose={handleCloseRecommendationDialog}
+        username={config.username}
+        nodes={graphData.nodes}
+        links={graphData.links}
+        nodeColor={nodeColor}
+        showAnimeDrawer={openAnimeDrawer}
       />
     </>
   );

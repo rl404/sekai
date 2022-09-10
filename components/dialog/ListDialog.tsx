@@ -170,7 +170,7 @@ const ListDialog = ({
           </Grid>
         </Grid>
       </DialogTitle>
-      <DialogContent dividers ref={tableRef} sx={{ background: theme.palette.background.default }}>
+      <DialogContent dividers ref={tableRef}>
         <TableContainer>
           <Table size="small">
             <TableHead>

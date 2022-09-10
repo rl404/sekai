@@ -152,6 +152,10 @@ export interface StatsDialogState {
   open: boolean;
 }
 
+export interface RecommendationDialogState {
+  open: boolean;
+}
+
 export interface ConfigDialogState {
   open: boolean;
 }
