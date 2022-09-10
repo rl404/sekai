@@ -34,6 +34,23 @@ Powered by my [akatsuki](https://github.com/rl404/akatsuki) as backend.
     - Type.
     - Your status.
     - Your score.
+- Show your anime stats.
+  - Total anime count.
+    - By status.
+    - By type.
+    - By source.
+    - By year and score.
+    - By season.
+    - By episode count and score.
+    - By episode duration and score.
+- Show your anime recommendations with score filter.
+  - Sequel or prequel.
+  - Side story or alternative story.
+  - On hold.
+  - Planned and already aired.
+  - Summary and Full story.
+  - Other relation.
+  - Mismatched episode count.
 
 _More will be coming soon..._
 

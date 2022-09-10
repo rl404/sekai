@@ -35,3 +35,12 @@
 ## Anime List
 
 ![anime list](https://raw.githubusercontent.com/rl404/sekai/master/public/images/list.jpg)
+
+## Anime Stats
+
+![anime stats](https://raw.githubusercontent.com/rl404/sekai/master/public/images/stats.jpg)
+
+## Anime Recommendation
+
+![anime recommendation1](https://raw.githubusercontent.com/rl404/sekai/master/public/images/recommendation1.jpg)
+![anime recommendation2](https://raw.githubusercontent.com/rl404/sekai/master/public/images/recommendation2.jpg)

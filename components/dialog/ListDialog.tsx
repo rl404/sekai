@@ -12,7 +12,6 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Slide,
   Table,
   TableBody,
   TableCell,
@@ -26,7 +25,6 @@ import {
 } from '@mui/material';
 import * as React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { TransitionProps } from '@mui/material/transitions';
 import { GraphNode, TableHeader } from '../../types/Types';
 import SearchIcon from '@mui/icons-material/Search';
 import {
@@ -39,6 +37,8 @@ import {
 } from '../../utils/constant';
 import StatusBadge from '../badge/StatusBadge';
 import ClearIcon from '@mui/icons-material/Clear';
+import SlideTransition from '../transition/SlideTransition';
+import { theme } from '../theme';
 
 const style = {
   statusCircle: {
@@ -49,6 +49,8 @@ const style = {
     margin: 'auto',
   },
 };
+
+const borderColor = '1px solid ' + theme.palette.divider;
 
 type Order = 'asc' | 'desc';
 
@@ -65,7 +67,7 @@ const ListDialog = ({
   username: string;
   nodes: Array<GraphNode>;
   nodeColor: any;
-  showAnimeDrawer: (anime_id: number) => void;
+  showAnimeDrawer: (anime_id: number, force: boolean) => void;
 }) => {
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState('title');
@@ -146,99 +148,25 @@ const ListDialog = ({
   ];
 
   return (
-    <Dialog open={open} fullScreen TransitionComponent={Transition}>
+    <Dialog
+      open={open}
+      fullScreen
+      TransitionComponent={SlideTransition}
+      PaperProps={{
+        style: {
+          backgroundImage: 'radial-gradient(rgb(65, 65, 65) 0.5px, #121212 0.5px)',
+          backgroundSize: '15px 15px',
+        },
+      }}
+    >
       <DialogTitle>
-        <Grid container>
+        <Grid container spacing={2}>
           <Grid item>{`${username}'s Anime List`}</Grid>
           <Grid item xs />
           <Grid item>
-            <IconButton onClick={onClose} size="small">
-              <CloseIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-      </DialogTitle>
-      <DialogContent dividers ref={tableRef}>
-        <TableContainer>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                {headers.map((h) => (
-                  <TableCell
-                    key={h.key}
-                    align={h.align || 'left'}
-                    onClick={(e) => handleChangeOrder(e, h.key)}
-                  >
-                    <TableSortLabel
-                      active={orderBy === h.key}
-                      direction={orderBy === h.key ? order : 'asc'}
-                    >
-                      {h.label}
-                    </TableSortLabel>
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {nodes
-                .filter((d) => search === '' || d.title.toLowerCase().includes(search))
-                .filter(
-                  (d) =>
-                    filterList === 'all' ||
-                    (filterList === 'list'
-                      ? d.user_anime_status !== ''
-                      : d.user_anime_status === ''),
-                )
-                .filter((d) => filterStatus === 'all' || d.status === filterStatus)
-                .filter((d) => filterType === 'all' || d.type === filterType)
-                .filter(
-                  (d) => filterUserStatus === 'all' || d.user_anime_status === filterUserStatus,
-                )
-                .sort(getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((d) => (
-                  <TableRow hover key={d.id}>
-                    <TableCell>
-                      <Link
-                        color="inherit"
-                        underline="hover"
-                        sx={{ cursor: 'pointer' }}
-                        onClick={() => showAnimeDrawer(d.anime_id)}
-                      >
-                        {d.title}
-                      </Link>
-                    </TableCell>
-                    <TableCell align="center">
-                      <StatusBadge status={d.status} />
-                    </TableCell>
-                    <TableCell align="center">{d.score.toFixed(2)}</TableCell>
-                    <TableCell align="center">{AnimeTypeToStr(d.type)}</TableCell>
-                    <TableCell align="center">
-                      <StatusColor
-                        status={d.user_anime_status}
-                        color={nodeColor[d.user_anime_status || ''] || ''}
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      {d.user_anime_status !== '' && d.user_anime_score.toFixed(2)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </DialogContent>
-      <DialogActions sx={{ padding: '16px 24px' }}>
-        <Grid container spacing={2}>
-          <Grid item>
-            <FormControl size="small">
+            <FormControl size="small" sx={{ minWidth: 100 }}>
               <InputLabel id="filterList-select">Show</InputLabel>
-              <Select
-                id="filterList-select"
-                label="Show"
-                value={filterList}
-                onChange={handleChangeFilterList}
-              >
+              <Select id="filterList-select" label="Show" value={filterList} onChange={handleChangeFilterList}>
                 <MenuItem value="all">All</MenuItem>
                 <MenuItem value="list">In my list</MenuItem>
                 <MenuItem value="-list">Not in my list</MenuItem>
@@ -268,14 +196,9 @@ const ListDialog = ({
             />
           </Grid>
           <Grid item>
-            <FormControl size="small">
+            <FormControl size="small" sx={{ minWidth: 100 }}>
               <InputLabel id="filterStatus-select">Status</InputLabel>
-              <Select
-                id="filterStatus-select"
-                label="Status"
-                value={filterStatus}
-                onChange={handleChangeFilterStatus}
-              >
+              <Select id="filterStatus-select" label="Status" value={filterStatus} onChange={handleChangeFilterStatus}>
                 <MenuItem value="all">All</MenuItem>
                 {Object.values(AnimeStatus).map((s) => (
                   <MenuItem value={s} key={s}>
@@ -286,14 +209,9 @@ const ListDialog = ({
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl size="small">
+            <FormControl size="small" sx={{ minWidth: 100 }}>
               <InputLabel id="filterType-select">Type</InputLabel>
-              <Select
-                id="filterType-select"
-                label="Type"
-                value={filterType}
-                onChange={handleChangeFilterType}
-              >
+              <Select id="filterType-select" label="Type" value={filterType} onChange={handleChangeFilterType}>
                 <MenuItem value="all">All</MenuItem>
                 {Object.values(AnimeType).map((s) => (
                   <MenuItem value={s} key={s}>
@@ -304,7 +222,7 @@ const ListDialog = ({
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl size="small">
+            <FormControl size="small" sx={{ minWidth: 100 }}>
               <InputLabel id="filterUserStatus-select">Your Status</InputLabel>
               <Select
                 id="filterUserStatus-select"
@@ -321,48 +239,105 @@ const ListDialog = ({
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm>
-            <TablePagination
-              component="div"
-              count={
-                nodes
-                  .filter((d) => (search ? d.title.toLowerCase().includes(search) : true))
-                  .filter(
-                    (d) =>
-                      filterList === 'all' ||
-                      (filterList === 'list'
-                        ? d.user_anime_status !== ''
-                        : d.user_anime_status === ''),
-                  )
-                  .filter((d) => filterStatus === 'all' || d.status === filterStatus)
-                  .filter((d) => filterType === 'all' || d.type === filterType)
-                  .filter(
-                    (d) => filterUserStatus === 'all' || d.user_anime_status === filterUserStatus,
-                  ).length
-              }
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPageOptions={[10, 20, 50, 100]}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+          <Grid item>
+            <IconButton onClick={onClose} size="small">
+              <CloseIcon />
+            </IconButton>
           </Grid>
         </Grid>
+      </DialogTitle>
+      <DialogContent dividers ref={tableRef}>
+        <TableContainer>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                {headers.map((h) => (
+                  <TableCell
+                    key={h.key}
+                    align={h.align || 'left'}
+                    onClick={(e) => handleChangeOrder(e, h.key)}
+                    sx={{ borderBottom: borderColor }}
+                  >
+                    <TableSortLabel active={orderBy === h.key} direction={orderBy === h.key ? order : 'asc'}>
+                      {h.label}
+                    </TableSortLabel>
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {nodes
+                .filter((d) => search === '' || d.title.toLowerCase().includes(search))
+                .filter(
+                  (d) =>
+                    filterList === 'all' ||
+                    (filterList === 'list' ? d.user_anime_status !== '' : d.user_anime_status === ''),
+                )
+                .filter((d) => filterStatus === 'all' || d.status === filterStatus)
+                .filter((d) => filterType === 'all' || d.type === filterType)
+                .filter((d) => filterUserStatus === 'all' || d.user_anime_status === filterUserStatus)
+                .sort(getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((d) => (
+                  <TableRow hover key={d.id}>
+                    <TableCell sx={{ borderBottom: borderColor }}>
+                      <Link
+                        color="inherit"
+                        underline="hover"
+                        sx={{ cursor: 'pointer' }}
+                        onClick={() => showAnimeDrawer(d.anime_id, true)}
+                      >
+                        {d.title}
+                      </Link>
+                    </TableCell>
+                    <TableCell align="center" sx={{ borderBottom: borderColor }}>
+                      <StatusBadge status={d.status} />
+                    </TableCell>
+                    <TableCell align="center" sx={{ borderBottom: borderColor }}>
+                      {d.score.toFixed(2)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ borderBottom: borderColor }}>
+                      {AnimeTypeToStr(d.type)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ borderBottom: borderColor }}>
+                      <StatusColor status={d.user_anime_status} color={nodeColor[d.user_anime_status || ''] || ''} />
+                    </TableCell>
+                    <TableCell align="center" sx={{ borderBottom: borderColor }}>
+                      {d.user_anime_status !== '' && d.user_anime_score.toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </DialogContent>
+      <DialogActions sx={{ padding: '16px 24px' }}>
+        <TablePagination
+          component="div"
+          count={
+            nodes
+              .filter((d) => (search ? d.title.toLowerCase().includes(search) : true))
+              .filter(
+                (d) =>
+                  filterList === 'all' ||
+                  (filterList === 'list' ? d.user_anime_status !== '' : d.user_anime_status === ''),
+              )
+              .filter((d) => filterStatus === 'all' || d.status === filterStatus)
+              .filter((d) => filterType === 'all' || d.type === filterType)
+              .filter((d) => filterUserStatus === 'all' || d.user_anime_status === filterUserStatus).length
+          }
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPageOptions={[10, 20, 50, 100]}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </DialogActions>
     </Dialog>
   );
 };
 
 export default ListDialog;
-
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement;
-  },
-  ref: React.Ref<unknown>,
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const getComparator = (order: Order, orderBy: string): ((a: any, b: any) => number) => {
   return order === 'desc'

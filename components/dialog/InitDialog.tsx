@@ -2,13 +2,7 @@ import * as React from 'react';
 import { Dialog, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import axios from 'axios';
-import {
-  GraphData,
-  GraphLink,
-  GraphNode,
-  UserAnimeRelationLink,
-  UserAnimeRelationNode,
-} from '../../types/Types';
+import { GraphData, GraphLink, GraphNode, UserAnimeRelationLink, UserAnimeRelationNode } from '../../types/Types';
 
 const InitDialog = ({
   open,
@@ -71,8 +65,15 @@ const InitDialog = ({
             status: n.status,
             type: n.type,
             score: n.score,
+            source: n.source,
+            start_year: n.start_year,
+            episode_count: n.episode_count,
+            episode_duration: n.episode_duration,
+            season: n.season,
+            season_year: n.season_year,
             user_anime_status: n.user_anime_status,
             user_anime_score: n.user_anime_score,
+            user_episode_count: n.user_episode_count,
             neighbors: [],
             links: [],
           };
@@ -81,7 +82,9 @@ const InitDialog = ({
         const links = resp.data.data.links.map((l: UserAnimeRelationLink): GraphLink => {
           const link = {
             source: l.anime_id1,
+            sourceID: l.anime_id1,
             target: l.anime_id2,
+            targetID: l.anime_id2,
             relation: l.relation,
           };
 

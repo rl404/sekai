@@ -92,8 +92,15 @@ export interface UserAnimeRelationNode {
   status: string;
   score: number;
   type: string;
+  source: string;
+  start_year: number;
+  episode_count: number;
+  episode_duration: number;
+  season: string;
+  season_year: number;
   user_anime_status: string;
   user_anime_score: number;
+  user_episode_count: number;
 }
 
 export interface UserAnimeRelationLink {
@@ -114,14 +121,23 @@ export interface GraphNode {
   status: string;
   score: number;
   type: string;
+  source: string;
+  start_year: number;
+  episode_count: number;
+  episode_duration: number;
+  season: string;
+  season_year: number;
   user_anime_status: string;
   user_anime_score: number;
+  user_episode_count: number;
   neighbors: Array<GraphNode>;
   links: Array<GraphLink>;
 }
 
 export interface GraphLink {
+  sourceID: number;
   source: number;
+  targetID: number;
   target: number;
   relation: string;
 }
@@ -131,6 +147,14 @@ export interface InitDialogState {
 }
 
 export interface ListDialogState {
+  open: boolean;
+}
+
+export interface StatsDialogState {
+  open: boolean;
+}
+
+export interface RecommendationDialogState {
   open: boolean;
 }
 

@@ -4,17 +4,9 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import InitDialog from '../components/dialog/InitDialog';
 import { AnimeRelation, UserAnimeStatus } from '../utils/constant';
-import {
-  AnimeDrawerState,
-  ConfigDialogState,
-  ConfigState,
-  GraphData,
-  InitDialogState,
-  ListDialogState,
-} from '../types/Types';
+import { AnimeDrawerState, ConfigDialogState, ConfigState, GraphData, InitDialogState } from '../types/Types';
 import AnimeDrawer from '../components/drawer/AnimeDrawer';
 import ConfigDialog from '../components/dialog/ConfigDialog';
-import ListDialog from '../components/dialog/ListDialog';
 import { IconButton } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
@@ -83,8 +75,8 @@ const Home: NextPage = () => {
     showExtendedRelation: false,
   });
 
-  const handleOpenAnimeDrawer = (anime_id: number) => {
-    if (!configState.showDetailOnClick && !listDialogState.open) return;
+  const handleOpenAnimeDrawer = (anime_id: number, force: boolean = false) => {
+    if (!configState.showDetailOnClick && !force) return;
     setAnimeDrawerState({ ...animeDrawerState, open: true, anime_id: anime_id });
   };
 
@@ -98,10 +90,6 @@ const Home: NextPage = () => {
 
   const handleOpenConfigDialog = () => {
     setConfigDialogState({ ...configDialogState, open: true });
-  };
-
-  const handleCloseConfigDialog = () => {
-    setConfigDialogState({ ...configDialogState, open: false });
   };
 
   const [configState, setConfigState] = React.useState<ConfigState>({
@@ -131,19 +119,6 @@ const Home: NextPage = () => {
 
   const setSearch = (v: string) => {
     setConfigState({ ...configState, search: v });
-  };
-
-  const [listDialogState, setListDialogState] = React.useState<ListDialogState>({
-    open: false,
-  });
-
-  const handleOpenListDialog = () => {
-    setListDialogState({ ...listDialogState, open: true });
-    handleCloseAnimeDrawer();
-  };
-
-  const handleCloseListDialog = () => {
-    setListDialogState({ ...listDialogState, open: false });
   };
 
   const title = 'Project Sekai';
@@ -188,8 +163,8 @@ const Home: NextPage = () => {
 
       <ConfigDialog
         open={configDialogState.open}
-        onClose={handleCloseConfigDialog}
         config={configState}
+        graphData={graphDataState}
         nodeColor={graphNodeColorState}
         setNodeColor={(status, color) => {
           setGraphNodeColorState({ ...graphNodeColorState, [status]: color });
@@ -197,17 +172,9 @@ const Home: NextPage = () => {
         setShowDetailOnClick={setShowDetailOnClick}
         setShowTitle={setShowTitle}
         setShowExtendedRelation={setShowExtendedRelation}
-        openListDialog={handleOpenListDialog}
+        openAnimeDrawer={handleOpenAnimeDrawer}
+        closeAnimeDrawer={handleCloseAnimeDrawer}
         setSearch={setSearch}
-      />
-
-      <ListDialog
-        open={listDialogState.open}
-        onClose={handleCloseListDialog}
-        username={configState.username}
-        nodes={graphDataState.nodes}
-        nodeColor={graphNodeColorState}
-        showAnimeDrawer={handleOpenAnimeDrawer}
       />
 
       <AnimeDrawer
