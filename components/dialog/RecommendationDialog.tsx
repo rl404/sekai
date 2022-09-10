@@ -61,6 +61,12 @@ const RecommendationDialog = ({
     setMinScore(e.target.value);
   };
 
+  const [hideInList, setHideInList] = React.useState(false);
+
+  const toggleHideInList = () => {
+    setHideInList(!hideInList);
+  };
+
   var sequelPrequel = new Set<GraphNode>();
   var sideStory = new Set<GraphNode>();
   var summaryFull = new Set<GraphNode>();
@@ -164,6 +170,7 @@ const RecommendationDialog = ({
       (n: GraphNode) =>
         n.score >= minScore && n.user_anime_status !== UserAnimeStatus.completed && n.status === AnimeStatus.finished,
     )
+    .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
 
   const missingSideStory = Array.from(sideStory)
@@ -171,6 +178,7 @@ const RecommendationDialog = ({
       (n: GraphNode) =>
         n.score >= minScore && n.user_anime_status !== UserAnimeStatus.completed && n.status === AnimeStatus.finished,
     )
+    .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
 
   const onHold = nodes
@@ -178,6 +186,7 @@ const RecommendationDialog = ({
       (n) =>
         n.score >= minScore && n.user_anime_status === UserAnimeStatus.on_hold && n.status === AnimeStatus.finished,
     )
+    .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
 
   const plannedAired = nodes
@@ -185,6 +194,7 @@ const RecommendationDialog = ({
       (n) =>
         n.score >= minScore && n.user_anime_status === UserAnimeStatus.planned && n.status === AnimeStatus.finished,
     )
+    .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
 
   const summary = Array.from(summaryFull)
@@ -192,6 +202,7 @@ const RecommendationDialog = ({
       (n) =>
         n.score >= minScore && n.user_anime_status !== UserAnimeStatus.completed && n.status === AnimeStatus.finished,
     )
+    .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
 
   const other = Array.from(otherChar)
@@ -199,10 +210,12 @@ const RecommendationDialog = ({
       (n) =>
         n.score >= minScore && n.user_anime_status !== UserAnimeStatus.completed && n.status === AnimeStatus.finished,
     )
+    .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
 
   const mismatchEpisode = nodes
     .filter((n) => n.user_anime_status === UserAnimeStatus.completed && n.episode_count !== n.user_episode_count)
+    .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
 
   return (
@@ -221,6 +234,13 @@ const RecommendationDialog = ({
         <Grid container spacing={2}>
           <Grid item>{`${username}'s Recommendations`}</Grid>
           <Grid item xs />
+          <Grid item>
+            <Tooltip title={hideInList ? 'includes already in list' : 'hide already in list'} placement="left" arrow>
+              <IconButton onClick={toggleHideInList} size="small">
+                {hideInList ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </IconButton>
+            </Tooltip>
+          </Grid>
           <Grid item>
             <FormControl size="small" sx={{ width: 100 }}>
               <InputLabel id="filterScore-select">Min Score</InputLabel>
@@ -373,16 +393,6 @@ const RecommendationGrid = ({
     setOpen(!open);
   };
 
-  const [hideInList, setHideInList] = React.useState(false);
-
-  const toggleHideInList = () => {
-    setHideInList(!hideInList);
-  };
-
-  if (hideInList) {
-    data = data.filter((d) => d.user_anime_status === '');
-  }
-
   return (
     <Grid container spacing={2}>
       <Grid item xs={10} lg={11}>
@@ -391,20 +401,11 @@ const RecommendationGrid = ({
         </Divider>
       </Grid>
       <Grid item xs={2} lg={1}>
-        <Stack direction="row" spacing={1} justifyContent="flex-end">
-          {open && (
-            <Tooltip title={hideInList ? 'includes already in list' : 'hide already in list'} placement="left" arrow>
-              <IconButton onClick={toggleHideInList} size="small">
-                {hideInList ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
-              </IconButton>
-            </Tooltip>
-          )}
-          <Tooltip title={open ? 'hide list' : 'show list'} placement="left" arrow>
-            <IconButton onClick={toggleOpen} size="small">
-              {open ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
-            </IconButton>
-          </Tooltip>
-        </Stack>
+        <Tooltip title={open ? 'hide list' : 'show list'} placement="left" arrow>
+          <IconButton onClick={toggleOpen} size="small">
+            {open ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
+          </IconButton>
+        </Tooltip>
       </Grid>
       {open &&
         (data.length === 0 ? (
