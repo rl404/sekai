@@ -270,7 +270,7 @@ const RecommendationDialog = ({
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12} md={6} xl={4}>
             <RecommendationGrid
-              title="Missing Sequel or Prequel"
+              title="Sequel or Prequel"
               data={missingSequelPrequel}
               nodeColor={nodeColor}
               showAnimeDrawer={showAnimeDrawer}
@@ -278,7 +278,7 @@ const RecommendationDialog = ({
           </Grid>
           <Grid item xs={12} sm={12} md={6} xl={4}>
             <RecommendationGrid
-              title="Missing Side Story or Alternative Story"
+              title="Side Story or Alternative Story"
               data={missingSideStory}
               nodeColor={nodeColor}
               showAnimeDrawer={showAnimeDrawer}
