@@ -28,6 +28,8 @@ import RadarChart from '../chart/RadarChart';
 import BarLineChart from '../chart/BarLineChart';
 import ScatterChart from '../chart/ScatterChart';
 import PieChart from '../chart/PieChart';
+import MiniBarChart from '../chart/MiniBarChart';
+import MiniAreaChart from '../chart/MiniAreaChart';
 
 const StatsDialog = ({
   open,
@@ -231,7 +233,23 @@ const StatsDialog = ({
       <DialogContent dividers>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={3}>
-            <StatsCard title="Total Anime" value={inList.length.toLocaleString()} />
+            <StatsCard
+              title="Total Anime"
+              value={inList.length.toLocaleString()}
+              chart={
+                <MiniBarChart
+                  data={Object.keys(byYear)
+                    .map((k) => {
+                      return {
+                        label: k,
+                        value: byYear[k].count,
+                        color: nodeColor[k],
+                      };
+                    })
+                    .filter((d) => d.value > 0)}
+                />
+              }
+            />
           </Grid>
           <Grid item xs={6} sm={3}>
             <StatsCard
@@ -240,6 +258,19 @@ const StatsDialog = ({
                 nonZeroScore.reduce((total, next) => total + next.user_anime_score, 0) / nonZeroScore.length
               ).toFixed(2)}
               tooltip={`from ${nonZeroScore.length.toLocaleString()} rated anime`}
+              chart={
+                <MiniAreaChart
+                  data={Object.keys(byYear)
+                    .map((k) => {
+                      return {
+                        label: k,
+                        value: byYear[k].sumScore / byYear[k].countScore,
+                        color: nodeColor[k],
+                      };
+                    })
+                    .filter((d) => d.value > 0)}
+                />
+              }
             />
           </Grid>
           <Grid item xs={6} sm={3}>
@@ -247,6 +278,19 @@ const StatsDialog = ({
               title="Total Episodes"
               value={nodes.reduce((total, next) => total + next.user_episode_count, 0).toLocaleString()}
               tooltip="sum of watched episodes"
+              chart={
+                <MiniAreaChart
+                  data={Object.keys(byEpisodeCount)
+                    .map((k) => {
+                      return {
+                        label: k,
+                        value: byEpisodeCount[k].sumScore / byEpisodeCount[k].countScore,
+                        color: nodeColor[k],
+                      };
+                    })
+                    .filter((d) => d.value > 0)}
+                />
+              }
             />
           </Grid>
           <Grid item xs={6} sm={3}>
@@ -258,6 +302,19 @@ const StatsDialog = ({
               )
                 .toFixed(2)
                 .toLocaleString()}
+              chart={
+                <MiniAreaChart
+                  data={Object.keys(byEpisodeDuration)
+                    .map((k) => {
+                      return {
+                        label: k,
+                        value: byEpisodeDuration[k].sumScore / byEpisodeDuration[k].countScore,
+                        color: nodeColor[k],
+                      };
+                    })
+                    .filter((d) => d.value > 0)}
+                />
+              }
             />
           </Grid>
           <Grid item xs={12} sm={12} md={6}>
@@ -377,12 +434,30 @@ const style = {
   statsTitle: {
     color: theme.palette.grey[500],
   },
+  statsChart: {
+    position: 'absolute' as 'absolute',
+    top: 0,
+    width: '100%',
+    height: '100%',
+    opacity: 0.1,
+  },
 };
 
-const StatsCard = ({ title, value, tooltip = '' }: { title: string; value: string; tooltip?: string }) => {
+const StatsCard = ({
+  title,
+  value,
+  tooltip = '',
+  chart,
+}: {
+  title: string;
+  value: string;
+  tooltip?: string;
+  chart?: React.ReactNode;
+}) => {
   return (
-    <Card>
-      <CardContent sx={{ textAlign: 'center' }}>
+    <Card sx={{ position: 'relative' }}>
+      {chart && <div style={style.statsChart}>{chart}</div>}
+      <CardContent sx={{ textAlign: 'center', position: 'relative' }}>
         <Typography gutterBottom sx={style.statsTitle}>
           {title}
         </Typography>

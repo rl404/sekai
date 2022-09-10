@@ -1,4 +1,14 @@
-import { ResponsiveContainer, BarChart as BChart, CartesianGrid, XAxis, YAxis, Bar, Cell, Tooltip } from 'recharts';
+import {
+  ResponsiveContainer,
+  BarChart as BChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Bar,
+  Cell,
+  Tooltip,
+  LabelList,
+} from 'recharts';
 import { theme } from '../theme';
 import ChartTooltip from './ChartTooltip';
 
@@ -21,7 +31,7 @@ const BarChart = ({ data, config }: { data: Array<BarChartData>; config?: BarCha
         <XAxis dataKey="label" stroke={theme.palette.grey[500]} />
         <YAxis stroke={theme.palette.grey[500]} />
         <Bar dataKey="value" name={config?.valueName}>
-          {/* <LabelList formatter={(a: number) => a.toLocaleString()} position="top" /> */}
+          <LabelList formatter={(a: number) => a.toLocaleString()} position="top" />
           {data.map((v, i) => (
             <Cell key={`cell-${i}`} fill={v.color || 'white'} />
           ))}
