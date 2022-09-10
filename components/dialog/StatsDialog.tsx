@@ -82,31 +82,55 @@ const StatsDialog = ({
     [UserAnimeStatus.planned]: 0,
   };
 
-  const byEpisodeCount: { [type: string]: { count: number; sumScore: number; countScore: number } } = {
-    '1': { count: 0, sumScore: 0, countScore: 0 },
-    '2-6': { count: 0, sumScore: 0, countScore: 0 },
-    '7-13': { count: 0, sumScore: 0, countScore: 0 },
-    '14-26': { count: 0, sumScore: 0, countScore: 0 },
-    '27-52': { count: 0, sumScore: 0, countScore: 0 },
-    '53-100': { count: 0, sumScore: 0, countScore: 0 },
-    '101+': { count: 0, sumScore: 0, countScore: 0 },
-    '?': { count: 0, sumScore: 0, countScore: 0 },
+  const byEpisodeCount: {
+    [type: string]: {
+      count: number;
+      globalSumScore: number;
+      globalCountScore: number;
+      sumScore: number;
+      countScore: number;
+    };
+  } = {
+    '1': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '2-6': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '7-13': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '14-26': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '27-52': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '53-100': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '101+': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '?': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
   };
 
-  const byEpisodeDuration: { [type: string]: { count: number; sumScore: number; countScore: number } } = {
-    '< 1': { count: 0, sumScore: 0, countScore: 0 },
-    '1-5': { count: 0, sumScore: 0, countScore: 0 },
-    '6-10': { count: 0, sumScore: 0, countScore: 0 },
-    '11-15': { count: 0, sumScore: 0, countScore: 0 },
-    '15-30': { count: 0, sumScore: 0, countScore: 0 },
-    '31-60': { count: 0, sumScore: 0, countScore: 0 },
-    '61-120': { count: 0, sumScore: 0, countScore: 0 },
-    '121+': { count: 0, sumScore: 0, countScore: 0 },
-    '?': { count: 0, sumScore: 0, countScore: 0 },
+  const byEpisodeDuration: {
+    [type: string]: {
+      count: number;
+      globalSumScore: number;
+      globalCountScore: number;
+      sumScore: number;
+      countScore: number;
+    };
+  } = {
+    '< 1': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '1-5': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '6-10': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '11-15': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '15-30': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '31-60': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '61-120': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '121+': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
+    '?': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 },
   };
 
   const bySeason: { [season: string]: number } = {};
-  const byYear: { [year: string]: { count: number; sumScore: number; countScore: number } } = {};
+  const byYear: {
+    [year: string]: {
+      count: number;
+      globalSumScore: number;
+      globalCountScore: number;
+      sumScore: number;
+      countScore: number;
+    };
+  } = {};
 
   var minYear = -1;
   var maxYear = new Date().getFullYear();
@@ -130,6 +154,8 @@ const StatsDialog = ({
       byEpisodeCount[episodeCountKey].count++;
       n.user_anime_score > 0 && (byEpisodeCount[episodeCountKey].sumScore += n.user_anime_score);
       n.user_anime_score > 0 && byEpisodeCount[episodeCountKey].countScore++;
+      n.score > 0 && (byEpisodeCount[episodeCountKey].globalSumScore += n.score);
+      n.score > 0 && byEpisodeCount[episodeCountKey].globalCountScore++;
 
       var episodeDurationKey = '?';
       if (n.episode_duration > 0) {
@@ -147,6 +173,8 @@ const StatsDialog = ({
       byEpisodeDuration[episodeDurationKey].count++;
       n.user_anime_score > 0 && (byEpisodeDuration[episodeDurationKey].sumScore += n.user_anime_score);
       n.user_anime_score > 0 && byEpisodeDuration[episodeDurationKey].countScore++;
+      n.score > 0 && (byEpisodeDuration[episodeDurationKey].globalSumScore += n.score);
+      n.score > 0 && byEpisodeDuration[episodeDurationKey].globalCountScore++;
 
       if (n.season !== '') {
         const seasonYearKey = n.season + '-' + n.season_year;
@@ -159,10 +187,13 @@ const StatsDialog = ({
         if (n.start_year > maxYear) maxYear = n.start_year;
 
         const year = n.start_year.toString();
-        !byYear[year] && (byYear[year] = { count: 0, sumScore: 0, countScore: 0 });
+        !byYear[year] &&
+          (byYear[year] = { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 });
         byYear[year].count++;
         n.user_anime_score > 0 && (byYear[year].sumScore += n.user_anime_score);
         n.user_anime_score > 0 && byYear[year].countScore++;
+        n.score > 0 && (byYear[year].globalSumScore += n.score);
+        n.score > 0 && byYear[year].globalCountScore++;
       }
     });
 
@@ -170,7 +201,7 @@ const StatsDialog = ({
   for (var i = minYear; i <= maxYear; i++) {
     const year = i.toString();
     if (!byYear[year]) {
-      byYear[year] = { count: 0, sumScore: 0, countScore: 0 };
+      byYear[year] = { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0 };
     }
   }
 
@@ -270,12 +301,13 @@ const StatsDialog = ({
           <Grid item xs={12} sm={12} md={6}>
             <ChartCard title="Anime by Episode Count & Score">
               <BarLineChart
-                config={{ valueBarName: 'count', valueLineName: 'score' }}
+                config={{ valueBarName: 'count', valueLine1Name: 'user score', valueLine2Name: 'global score' }}
                 data={Object.keys(byEpisodeCount).map((k) => {
                   return {
                     label: k,
                     valueBar: byEpisodeCount[k].count,
-                    valueLine: byEpisodeCount[k].sumScore / byEpisodeCount[k].countScore,
+                    valueLine1: byEpisodeCount[k].sumScore / byEpisodeCount[k].countScore,
+                    valueLine2: byEpisodeCount[k].globalSumScore / byEpisodeCount[k].globalCountScore,
                   };
                 })}
               />
@@ -284,12 +316,13 @@ const StatsDialog = ({
           <Grid item xs={12} sm={12} md={6}>
             <ChartCard title="Anime by Episode Duration (minutes) & Score">
               <BarLineChart
-                config={{ valueBarName: 'count', valueLineName: 'score' }}
+                config={{ valueBarName: 'count', valueLine1Name: 'user score', valueLine2Name: 'global score' }}
                 data={Object.keys(byEpisodeDuration).map((k) => {
                   return {
                     label: k,
                     valueBar: byEpisodeDuration[k].count,
-                    valueLine: byEpisodeDuration[k].sumScore / byEpisodeDuration[k].countScore,
+                    valueLine1: byEpisodeDuration[k].sumScore / byEpisodeDuration[k].countScore,
+                    valueLine2: byEpisodeDuration[k].globalSumScore / byEpisodeDuration[k].globalCountScore,
                   };
                 })}
               />
@@ -301,7 +334,8 @@ const StatsDialog = ({
               <BarLineChart
                 config={{
                   valueBarName: 'count',
-                  valueLineName: 'score',
+                  valueLine1Name: 'user score',
+                  valueLine2Name: 'global score',
                   useBrush: true,
                   brushIndex: Object.keys(byYear).length > 10 ? Object.keys(byYear).length - 10 : 0,
                 }}
@@ -309,7 +343,8 @@ const StatsDialog = ({
                   return {
                     label: k,
                     valueBar: byYear[k].count,
-                    valueLine: byYear[k].sumScore / byYear[k].countScore,
+                    valueLine1: byYear[k].sumScore / byYear[k].countScore,
+                    valueLine2: byYear[k].globalSumScore / byYear[k].globalCountScore,
                   };
                 })}
               />

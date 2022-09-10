@@ -15,21 +15,23 @@ import ChartTooltip from './ChartTooltip';
 
 interface BarLineChartData {
   label: string;
-  valueLine: number;
   valueBar: number;
+  valueLine1: number;
+  valueLine2: number;
   color?: string;
 }
 
 interface BarLineChartConfig {
-  valueLineName: string;
   valueBarName: string;
+  valueLine1Name: string;
+  valueLine2Name: string;
   useBrush?: boolean;
   brushIndex?: number;
 }
 
 const BarLineChart = ({ data, config }: { data: Array<BarLineChartData>; config?: BarLineChartConfig }) => {
-  var minScore = Math.min(...data.filter((o) => o.valueLine > 0).map((o) => o.valueLine));
-  var maxScore = Math.max(...data.filter((o) => o.valueLine > 0).map((o) => o.valueLine));
+  var minScore = Math.min(...data.filter((o) => o.valueLine1 > 0).map((o) => o.valueLine1));
+  var maxScore = Math.max(...data.filter((o) => o.valueLine1 > 0).map((o) => o.valueLine1));
 
   if (minScore - 0.5 > 0) minScore -= 0.5;
   if (maxScore + 0.5 <= 10) maxScore += 0.5;
@@ -57,7 +59,8 @@ const BarLineChart = ({ data, config }: { data: Array<BarLineChartData>; config?
             <Cell key={`cell-${i}`} fill={v.color || 'white'} />
           ))}
         </Bar>
-        <Line yAxisId="right" dataKey="valueLine" stroke="#2196f3" name={config?.valueLineName} />
+        <Line yAxisId="right" dataKey="valueLine1" stroke="#2196f3" name={config?.valueLine1Name} />
+        <Line yAxisId="right" dataKey="valueLine2" stroke="#4caf50" name={config?.valueLine2Name} />
       </ComposedChart>
     </ResponsiveContainer>
   );
