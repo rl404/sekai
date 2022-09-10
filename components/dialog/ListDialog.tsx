@@ -38,6 +38,7 @@ import {
 import StatusBadge from '../badge/StatusBadge';
 import ClearIcon from '@mui/icons-material/Clear';
 import SlideTransition from '../transition/SlideTransition';
+import { theme } from '../theme';
 
 const style = {
   statusCircle: {
@@ -48,6 +49,8 @@ const style = {
     margin: 'auto',
   },
 };
+
+const borderColor = '1px solid ' + theme.palette.divider;
 
 type Order = 'asc' | 'desc';
 
@@ -145,7 +148,17 @@ const ListDialog = ({
   ];
 
   return (
-    <Dialog open={open} fullScreen TransitionComponent={SlideTransition}>
+    <Dialog
+      open={open}
+      fullScreen
+      TransitionComponent={SlideTransition}
+      PaperProps={{
+        style: {
+          backgroundImage: 'radial-gradient(rgb(65, 65, 65) 0.5px, #121212 0.5px)',
+          backgroundSize: '15px 15px',
+        },
+      }}
+    >
       <DialogTitle>
         <Grid container>
           <Grid item>{`${username}'s Anime List`}</Grid>
@@ -157,13 +170,18 @@ const ListDialog = ({
           </Grid>
         </Grid>
       </DialogTitle>
-      <DialogContent dividers ref={tableRef}>
+      <DialogContent dividers ref={tableRef} sx={{ background: theme.palette.background.default }}>
         <TableContainer>
           <Table size="small">
             <TableHead>
               <TableRow>
                 {headers.map((h) => (
-                  <TableCell key={h.key} align={h.align || 'left'} onClick={(e) => handleChangeOrder(e, h.key)}>
+                  <TableCell
+                    key={h.key}
+                    align={h.align || 'left'}
+                    onClick={(e) => handleChangeOrder(e, h.key)}
+                    sx={{ borderBottom: borderColor }}
+                  >
                     <TableSortLabel active={orderBy === h.key} direction={orderBy === h.key ? order : 'asc'}>
                       {h.label}
                     </TableSortLabel>
@@ -186,7 +204,7 @@ const ListDialog = ({
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((d) => (
                   <TableRow hover key={d.id}>
-                    <TableCell>
+                    <TableCell sx={{ borderBottom: borderColor }}>
                       <Link
                         color="inherit"
                         underline="hover"
@@ -196,15 +214,21 @@ const ListDialog = ({
                         {d.title}
                       </Link>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" sx={{ borderBottom: borderColor }}>
                       <StatusBadge status={d.status} />
                     </TableCell>
-                    <TableCell align="center">{d.score.toFixed(2)}</TableCell>
-                    <TableCell align="center">{AnimeTypeToStr(d.type)}</TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" sx={{ borderBottom: borderColor }}>
+                      {d.score.toFixed(2)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ borderBottom: borderColor }}>
+                      {AnimeTypeToStr(d.type)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ borderBottom: borderColor }}>
                       <StatusColor status={d.user_anime_status} color={nodeColor[d.user_anime_status || ''] || ''} />
                     </TableCell>
-                    <TableCell align="center">{d.user_anime_status !== '' && d.user_anime_score.toFixed(2)}</TableCell>
+                    <TableCell align="center" sx={{ borderBottom: borderColor }}>
+                      {d.user_anime_status !== '' && d.user_anime_score.toFixed(2)}
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>

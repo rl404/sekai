@@ -175,7 +175,17 @@ const StatsDialog = ({
   }
 
   return (
-    <Dialog open={open} fullScreen TransitionComponent={SlideTransition}>
+    <Dialog
+      open={open}
+      fullScreen
+      TransitionComponent={SlideTransition}
+      PaperProps={{
+        style: {
+          backgroundImage: 'radial-gradient(rgb(65, 65, 65) 0.5px, #121212 0.5px)',
+          backgroundSize: '15px 15px',
+        },
+      }}
+    >
       <DialogTitle>
         <Grid container>
           <Grid item>{`${username}'s Stats`}</Grid>
