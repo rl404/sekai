@@ -38,6 +38,7 @@ const style = {
     color: theme.palette.grey[500],
   },
 };
+
 const RecommendationDialog = ({
   open,
   onClose,
