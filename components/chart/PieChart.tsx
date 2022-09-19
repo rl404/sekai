@@ -1,5 +1,7 @@
 import { ResponsiveContainer, PieChart as PChart, Pie, Sector, SectorProps } from 'recharts';
 import * as React from 'react';
+import { GraphNode } from '../../types/Types';
+import ChartNodeDialog from '../dialog/ChartNodeDialog';
 
 interface PieChartData {
   label: string;
@@ -9,29 +11,62 @@ interface PieChartData {
 
 interface PieChartConfig {
   valueName: string;
+  nodeColor: any;
+  showAnimeDrawer: (anime_id: number, force: boolean) => void;
 }
 
-const PieChart = ({ data, config }: { data: Array<PieChartData>; config?: PieChartConfig }) => {
+const PieChart = ({ data, config }: { data: Array<PieChartData>; config: PieChartConfig }) => {
   const [activeIndex, setActiveIndex] = React.useState(0);
 
   const onHover = (_: any, i: number) => {
     setActiveIndex(i);
   };
 
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const [dialogTitle, setDialogTitle] = React.useState('');
+  const [dialogData, setdialogData] = React.useState<Array<GraphNode>>([]);
+
+  const handleClick = (d: any) => {
+    if (!d) return;
+    setDialogTitle(`${d.label} (${d.nodes.length.toLocaleString()})`);
+    setdialogData(d.nodes.sort((a: GraphNode, b: GraphNode) => a.title.localeCompare(b.title)));
+    handleOpenDialog();
+  };
+
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <PChart margin={{ top: 15, right: 10, left: 0, bottom: 15 }}>
-        <Pie
-          data={data}
-          dataKey="value"
-          innerRadius={70}
-          activeIndex={activeIndex}
-          activeShape={PieActiveShape}
-          onMouseEnter={onHover}
-          name={config?.valueName}
-        />
-      </PChart>
-    </ResponsiveContainer>
+    <>
+      <ResponsiveContainer width="100%" height="100%">
+        <PChart margin={{ top: 15, right: 10, left: 0, bottom: 15 }}>
+          <Pie
+            data={data}
+            dataKey="value"
+            innerRadius={70}
+            activeIndex={activeIndex}
+            activeShape={PieActiveShape}
+            onMouseEnter={onHover}
+            onClick={handleClick}
+            name={config.valueName}
+          />
+        </PChart>
+      </ResponsiveContainer>
+      <ChartNodeDialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        title={dialogTitle}
+        nodes={dialogData}
+        nodeColor={config.nodeColor}
+        showAnimeDrawer={config.showAnimeDrawer}
+      />
+    </>
   );
 };
 

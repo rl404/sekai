@@ -1,28 +1,10 @@
 import * as React from 'react';
-import {
-  Chip,
-  Divider,
-  Drawer,
-  Grid,
-  IconButton,
-  Link,
-  Skeleton,
-  Stack,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { Chip, Divider, Drawer, Grid, IconButton, Link, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLefttIcon from '@mui/icons-material/ChevronLeft';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import {
-  Anime,
-  AnimeDrawerData,
-  AnimeDrawerState,
-  Genre,
-  GraphNode,
-  Related,
-} from '../../types/Types';
+import { Anime, AnimeDrawerData, AnimeDrawerState, Genre, GraphNode, Related } from '../../types/Types';
 import axios from 'axios';
 import { theme } from '../theme';
 import { DateToStr } from '../../utils/utils';
@@ -78,6 +60,12 @@ const style = {
       background: theme.palette.background.paper,
       border: `1px solid ${theme.palette.divider}`,
     },
+  },
+  scoreGreen: {
+    color: theme.palette.success.main,
+  },
+  scoreRed: {
+    color: theme.palette.error.main,
   },
   dateTooltip: {
     '& .MuiTooltip-tooltip': {
@@ -281,9 +269,7 @@ const AnimeDrawer = ({
         <Grid item xs={12} container>
           <Grid item>
             <Tooltip title="Close" placement="right" arrow>
-              <IconButton onClick={onClose}>
-                {open ? <ChevronRightIcon /> : <ChevronLefttIcon />}
-              </IconButton>
+              <IconButton onClick={onClose}>{open ? <ChevronRightIcon /> : <ChevronLefttIcon />}</IconButton>
             </Tooltip>
           </Grid>
           <Grid item xs />
@@ -367,16 +353,8 @@ const AnimeDrawer = ({
               <Divider />
             </Grid>
             <Grid item xs={12} sx={style.imageArea}>
-              <img
-                src={animeState.pictures[pictureState]}
-                alt={animeState.title}
-                style={style.image}
-              />
-              <IconButton
-                onClick={handlePrevPicture}
-                disabled={pictureState <= 0}
-                sx={style.picturePrevButton}
-              >
+              <img src={animeState.pictures[pictureState]} alt={animeState.title} style={style.image} />
+              <IconButton onClick={handlePrevPicture} disabled={pictureState <= 0} sx={style.picturePrevButton}>
                 <Tooltip placement="right" arrow title="Previous picture">
                   <ArrowBackIosNewIcon />
                 </Tooltip>
@@ -404,7 +382,19 @@ const AnimeDrawer = ({
                 arrow
                 PopperProps={{ sx: style.scoreTooltip }}
                 title={
-                  !node?.user_anime_status ? '' : `Your score: ${node?.user_anime_score.toFixed(2)}`
+                  !node?.user_anime_status ? (
+                    ''
+                  ) : (
+                    <>
+                      Your score: {node?.user_anime_score.toFixed(2)}{' '}
+                      {node?.score > 0 && node?.user_anime_score > 0 && (
+                        <span style={node.user_anime_score > node.score ? style.scoreGreen : style.scoreRed}>
+                          ({node.user_anime_score > node.score ? `+` : ''}
+                          {(node.user_anime_score - node.score).toFixed(2)})
+                        </span>
+                      )}
+                    </>
+                  )
                 }
               >
                 <Typography variant="h6" align="center">
@@ -547,9 +537,7 @@ const AnimeDrawer = ({
                       <Tooltip
                         placement="left"
                         arrow
-                        title={animeState.related
-                          .filter((a) => a.relation === r)
-                          .length.toLocaleString()}
+                        title={animeState.related.filter((a) => a.relation === r).length.toLocaleString()}
                       >
                         <span>{AnimeRelationToStr(r)}</span>
                       </Tooltip>
@@ -588,11 +576,7 @@ const AnimeDrawer = ({
             </Grid>
             <Grid item xs={12} container spacing={2}>
               <Grid item xs={12}>
-                <Tooltip
-                  placement="left"
-                  arrow
-                  title={animeState.extended_related.length.toLocaleString()}
-                >
+                <Tooltip placement="left" arrow title={animeState.extended_related.length.toLocaleString()}>
                   <Divider
                     sx={{ ...style.statsTitle, marginBottom: 1, cursor: 'pointer' }}
                     onClick={handleToggleShowExtendedRelation}

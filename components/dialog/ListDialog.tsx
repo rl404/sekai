@@ -48,6 +48,12 @@ const style = {
     border: '1px solid white',
     margin: 'auto',
   },
+  scoreGreen: {
+    color: theme.palette.success.main,
+  },
+  scoreRed: {
+    color: theme.palette.error.main,
+  },
 };
 
 const borderColor = '1px solid ' + theme.palette.divider;
@@ -69,6 +75,13 @@ const ListDialog = ({
   nodeColor: any;
   showAnimeDrawer: (anime_id: number, force: boolean) => void;
 }) => {
+  nodes = nodes.map((n) => {
+    return {
+      ...n,
+      diff: n.score > 0 && n.user_anime_score > 0 && n.user_anime_score - n.score,
+    };
+  });
+
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState('title');
   const [page, setPage] = React.useState(0);
@@ -85,6 +98,7 @@ const ListDialog = ({
     const isAsc = orderBy === key && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(key);
+    setPage(0);
   };
 
   const handleChangePage = (e: unknown, page: number) => {
@@ -141,10 +155,11 @@ const ListDialog = ({
   const headers: Array<TableHeader> = [
     { key: 'title', label: 'Title' },
     { key: 'status', label: 'Status', align: 'center' },
-    { key: 'score', label: 'Score', align: 'center' },
+    { key: 'score', label: 'Global Score', align: 'center' },
     { key: 'type', label: 'Type', align: 'center' },
     { key: 'user_anime_status', label: 'Your Status', align: 'center' },
     { key: 'user_anime_score', label: 'Your Score', align: 'center' },
+    { key: 'diff', label: 'Score Difference', align: 'center' },
   ];
 
   return (
@@ -304,6 +319,14 @@ const ListDialog = ({
                     </TableCell>
                     <TableCell align="center" sx={{ borderBottom: borderColor }}>
                       {d.user_anime_status !== '' && d.user_anime_score.toFixed(2)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ borderBottom: borderColor }}>
+                      {d.score > 0 && d.user_anime_score > 0 && (
+                        <span style={d.user_anime_score - d.score > 0 ? style.scoreGreen : style.scoreRed}>
+                          {d.user_anime_score - d.score > 0 && '+'}
+                          {(d.user_anime_score - d.score).toFixed(2)}
+                        </span>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

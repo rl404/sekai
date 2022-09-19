@@ -35,7 +35,7 @@ Powered by my [akatsuki](https://github.com/rl404/akatsuki) as backend.
     - Your status.
     - Your score.
 - Show your anime stats.
-  - Total anime count.
+  - Total anime count & list.
     - By status.
     - By type.
     - By source.
@@ -51,6 +51,7 @@ Powered by my [akatsuki](https://github.com/rl404/akatsuki) as backend.
   - Summary and Full story.
   - Other relation.
   - Mismatched episode count.
+  - Completed by no score.
 
 _More will be coming soon..._
 

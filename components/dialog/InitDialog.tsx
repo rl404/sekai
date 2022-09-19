@@ -125,6 +125,10 @@ const InitDialog = ({
       });
   };
 
+  React.useEffect(() => {
+    axios.get(`/api`);
+  }, []);
+
   return (
     <Dialog
       open={open}

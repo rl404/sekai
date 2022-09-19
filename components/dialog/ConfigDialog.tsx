@@ -473,6 +473,7 @@ const ConfigDialog = ({
         username={config.username}
         nodes={graphData.nodes}
         nodeColor={nodeColor}
+        showAnimeDrawer={openAnimeDrawer}
       />
 
       <RecommendationDialog
