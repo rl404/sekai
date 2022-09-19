@@ -169,7 +169,9 @@ const RecommendationDialog = ({
   const missingSequelPrequel = Array.from(sequelPrequel)
     .filter(
       (n: GraphNode) =>
-        n.score >= minScore && n.user_anime_status !== UserAnimeStatus.completed && n.status === AnimeStatus.finished,
+        n.score >= minScore &&
+        n.user_anime_status !== UserAnimeStatus.completed &&
+        (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing),
     )
     .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
@@ -177,7 +179,9 @@ const RecommendationDialog = ({
   const missingSideStory = Array.from(sideStory)
     .filter(
       (n: GraphNode) =>
-        n.score >= minScore && n.user_anime_status !== UserAnimeStatus.completed && n.status === AnimeStatus.finished,
+        n.score >= minScore &&
+        n.user_anime_status !== UserAnimeStatus.completed &&
+        (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing),
     )
     .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
@@ -185,7 +189,9 @@ const RecommendationDialog = ({
   const onHold = nodes
     .filter(
       (n) =>
-        n.score >= minScore && n.user_anime_status === UserAnimeStatus.on_hold && n.status === AnimeStatus.finished,
+        n.score >= minScore &&
+        n.user_anime_status === UserAnimeStatus.on_hold &&
+        (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing),
     )
     .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
@@ -193,7 +199,9 @@ const RecommendationDialog = ({
   const plannedAired = nodes
     .filter(
       (n) =>
-        n.score >= minScore && n.user_anime_status === UserAnimeStatus.planned && n.status === AnimeStatus.finished,
+        n.score >= minScore &&
+        n.user_anime_status === UserAnimeStatus.planned &&
+        (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing),
     )
     .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
@@ -201,7 +209,9 @@ const RecommendationDialog = ({
   const summary = Array.from(summaryFull)
     .filter(
       (n) =>
-        n.score >= minScore && n.user_anime_status !== UserAnimeStatus.completed && n.status === AnimeStatus.finished,
+        n.score >= minScore &&
+        n.user_anime_status !== UserAnimeStatus.completed &&
+        (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing),
     )
     .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
@@ -209,7 +219,9 @@ const RecommendationDialog = ({
   const other = Array.from(otherChar)
     .filter(
       (n) =>
-        n.score >= minScore && n.user_anime_status !== UserAnimeStatus.completed && n.status === AnimeStatus.finished,
+        n.score >= minScore &&
+        n.user_anime_status !== UserAnimeStatus.completed &&
+        (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing),
     )
     .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
