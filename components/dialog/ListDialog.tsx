@@ -98,6 +98,7 @@ const ListDialog = ({
     const isAsc = orderBy === key && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(key);
+    setPage(0);
   };
 
   const handleChangePage = (e: unknown, page: number) => {
