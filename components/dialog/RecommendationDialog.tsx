@@ -219,6 +219,11 @@ const RecommendationDialog = ({
     .filter((n) => !hideInList || n.user_anime_status === '')
     .sort((a, b) => a.title.localeCompare(b.title));
 
+  const completedZero = nodes
+    .filter((n) => n.user_anime_status === UserAnimeStatus.completed && n.user_anime_score === 0)
+    .filter((n) => !hideInList || n.user_anime_status === '')
+    .sort((a, b) => a.title.localeCompare(b.title));
+
   return (
     <Dialog
       open={open}
@@ -316,6 +321,14 @@ const RecommendationDialog = ({
             <RecommendationGrid
               title="Mismatched Episode Count"
               data={mismatchEpisode}
+              nodeColor={nodeColor}
+              showAnimeDrawer={showAnimeDrawer}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} xl={4}>
+            <RecommendationGrid
+              title="Completed but No Score"
+              data={completedZero}
               nodeColor={nodeColor}
               showAnimeDrawer={showAnimeDrawer}
             />
