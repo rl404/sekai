@@ -11,7 +11,6 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Stack,
   Tooltip,
 } from '@mui/material';
 import * as React from 'react';
@@ -25,6 +24,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import StatusCircle from '../circle/StatusCircle';
 
 const style = {
   statusCircle: {
@@ -353,55 +353,6 @@ const RecommendationDialog = ({
 
 export default RecommendationDialog;
 
-const StatusColor = ({
-  status,
-  color,
-  sx,
-}: {
-  status: string;
-  color: string;
-  sx?: React.CSSProperties | undefined;
-}) => {
-  switch (status) {
-    case UserAnimeStatus.watching:
-      return (
-        <Tooltip placement="left" arrow title="You are watching this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.completed:
-      return (
-        <Tooltip placement="left" arrow title="You have completed this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.on_hold:
-      return (
-        <Tooltip placement="left" arrow title="You put this on hold">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.dropped:
-      return (
-        <Tooltip placement="left" arrow title="You have dropped this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.planned:
-      return (
-        <Tooltip placement="left" arrow title="You are planning to watch this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    default:
-      return (
-        <Tooltip placement="left" arrow title="Not in your list">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-  }
-};
-
 const RecommendationGrid = ({
   title,
   data,
@@ -447,7 +398,7 @@ const RecommendationGrid = ({
           data.map((n) => (
             <React.Fragment key={n.anime_id}>
               <Grid item xs={1}>
-                <StatusColor status={n.user_anime_status} color={nodeColor[n.user_anime_status]} />
+                <StatusCircle status={n.user_anime_status} color={nodeColor[n.user_anime_status]} />
               </Grid>
               <Grid item xs={11}>
                 <Link

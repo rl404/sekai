@@ -39,6 +39,7 @@ import StatusBadge from '../badge/StatusBadge';
 import ClearIcon from '@mui/icons-material/Clear';
 import SlideTransition from '../transition/SlideTransition';
 import { theme } from '../theme';
+import StatusCircle from '../circle/StatusCircle';
 
 const style = {
   statusCircle: {
@@ -315,7 +316,7 @@ const ListDialog = ({
                       {AnimeTypeToStr(d.type)}
                     </TableCell>
                     <TableCell align="center" sx={{ borderBottom: borderColor }}>
-                      <StatusColor status={d.user_anime_status} color={nodeColor[d.user_anime_status || ''] || ''} />
+                      <StatusCircle status={d.user_anime_status} color={nodeColor[d.user_anime_status || ''] || ''} />
                     </TableCell>
                     <TableCell align="center" sx={{ borderBottom: borderColor }}>
                       {d.user_anime_status !== '' && d.user_anime_score.toFixed(2)}
@@ -372,49 +373,4 @@ const descendingComparator = (a: any, b: any, orderBy: string): number => {
   if (b[orderBy] < a[orderBy]) return -1;
   if (b[orderBy] > a[orderBy]) return 1;
   return 0;
-};
-
-const StatusColor = ({
-  status,
-  color,
-  sx,
-}: {
-  status: string;
-  color: string;
-  sx?: React.CSSProperties | undefined;
-}) => {
-  switch (status) {
-    case UserAnimeStatus.watching:
-      return (
-        <Tooltip placement="left" arrow title="You are watching this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.completed:
-      return (
-        <Tooltip placement="left" arrow title="You have completed this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.on_hold:
-      return (
-        <Tooltip placement="left" arrow title="You put this on hold">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.dropped:
-      return (
-        <Tooltip placement="left" arrow title="You have dropped this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.planned:
-      return (
-        <Tooltip placement="left" arrow title="You are planning to watch this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    default:
-      return null;
-  }
 };

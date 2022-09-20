@@ -18,6 +18,7 @@ import {
 } from '../../utils/constant';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import StatusCircle from '../circle/StatusCircle';
 
 const style = {
   statusCircle: {
@@ -274,7 +275,7 @@ const AnimeDrawer = ({
           </Grid>
           <Grid item xs />
           <Grid item>
-            <StatusColor
+            <StatusCircle
               status={node?.user_anime_status || ''}
               color={nodeColor[node?.user_anime_status || ''] || ''}
             />
@@ -550,7 +551,7 @@ const AnimeDrawer = ({
                           return (
                             <React.Fragment key={r.id}>
                               <Grid item xs={1}>
-                                <StatusColor
+                                <StatusCircle
                                   status={n?.user_anime_status || ''}
                                   color={nodeColor[n?.user_anime_status || ''] || ''}
                                   sx={{ marginTop: 2 }}
@@ -602,7 +603,7 @@ const AnimeDrawer = ({
                     <React.Fragment key={r.id}>
                       <Grid item xs={1} />
                       <Grid item xs={1}>
-                        <StatusColor
+                        <StatusCircle
                           status={n?.user_anime_status || ''}
                           color={nodeColor[n?.user_anime_status || ''] || ''}
                           sx={{ marginTop: 2 }}
@@ -639,55 +640,6 @@ const AnimeDrawer = ({
 };
 
 export default AnimeDrawer;
-
-const StatusColor = ({
-  status,
-  color,
-  sx,
-}: {
-  status: string;
-  color: string;
-  sx?: React.CSSProperties | undefined;
-}) => {
-  switch (status) {
-    case UserAnimeStatus.watching:
-      return (
-        <Tooltip placement="left" arrow title="You are watching this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.completed:
-      return (
-        <Tooltip placement="left" arrow title="You have completed this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.on_hold:
-      return (
-        <Tooltip placement="left" arrow title="You put this on hold">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.dropped:
-      return (
-        <Tooltip placement="left" arrow title="You have dropped this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.planned:
-      return (
-        <Tooltip placement="left" arrow title="You are planning to watch this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    default:
-      return (
-        <Tooltip placement="left" arrow title="Not in your list">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-  }
-};
 
 const SkeletonDrawer = () => {
   return (
