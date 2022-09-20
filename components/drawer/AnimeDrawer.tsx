@@ -163,9 +163,8 @@ const AnimeDrawer = ({
         var extendedRelated = new Set<GraphNode>();
 
         const addExtendedRelated = (n: GraphNode) => {
-          extendedRelated.add(n);
           n.neighbors.forEach((neighbor: GraphNode) => {
-            if (extendedRelated.has(neighbor)) return;
+            if (extendedRelated.has(neighbor) || neighbor.anime_id === anime.id) return;
             extendedRelated.add(neighbor);
             addExtendedRelated(neighbor);
           });
