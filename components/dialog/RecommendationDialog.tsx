@@ -14,7 +14,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import * as React from 'react';
-import { GraphLink, GraphNode } from '../../types/Types';
+import { AnimeDrawerState, GraphLink, GraphNode } from '../../types/Types';
 import CloseIcon from '@mui/icons-material/Close';
 import SlideTransition from '../transition/SlideTransition';
 import { theme } from '../theme';
@@ -25,6 +25,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import StatusCircle from '../circle/StatusCircle';
+import AnimeDrawer from '../drawer/AnimeDrawer';
 
 const style = {
   statusCircle: {
@@ -46,7 +47,6 @@ const RecommendationDialog = ({
   nodes = [],
   links = [],
   nodeColor,
-  showAnimeDrawer,
 }: {
   open: boolean;
   onClose: () => void;
@@ -54,8 +54,20 @@ const RecommendationDialog = ({
   nodes: Array<GraphNode>;
   links: Array<GraphLink>;
   nodeColor: any;
-  showAnimeDrawer: (anime_id: number, force: boolean) => void;
 }) => {
+  const [animeDrawerState, setAnimeDrawerState] = React.useState<AnimeDrawerState>({
+    open: false,
+    anime_id: 0,
+  });
+
+  const handleCloseAnimeDrawer = () => {
+    setAnimeDrawerState({ open: false, anime_id: 0 });
+  };
+
+  const handleOpenAnimeDrawer = (anime_id: number) => {
+    setAnimeDrawerState({ open: true, anime_id: anime_id });
+  };
+
   const [minScore, setMinScore] = React.useState(7);
 
   const handleChangeScore = (e: SelectChangeEvent<any>) => {
@@ -237,117 +249,131 @@ const RecommendationDialog = ({
     .sort((a, b) => a.title.localeCompare(b.title));
 
   return (
-    <Dialog
-      open={open}
-      fullScreen
-      TransitionComponent={SlideTransition}
-      PaperProps={{
-        style: {
-          backgroundImage: 'radial-gradient(rgb(65, 65, 65) 0.5px, #121212 0.5px)',
-          backgroundSize: '15px 15px',
-        },
-      }}
-    >
-      <DialogTitle>
-        <Grid container spacing={2}>
-          <Grid item>{`${username}'s Recommendations`}</Grid>
-          <Grid item xs />
-          <Grid item>
-            <Tooltip title={hideInList ? 'includes already in list' : 'hide already in list'} placement="left" arrow>
-              <IconButton onClick={toggleHideInList} size="small">
-                {hideInList ? <VisibilityOffIcon /> : <VisibilityIcon />}
+    <>
+      <Dialog
+        open={open}
+        fullScreen
+        TransitionComponent={SlideTransition}
+        PaperProps={{
+          style: {
+            backgroundImage: 'radial-gradient(rgb(65, 65, 65) 0.5px, #121212 0.5px)',
+            backgroundSize: '15px 15px',
+          },
+        }}
+      >
+        <DialogTitle>
+          <Grid container spacing={2}>
+            <Grid item>{`${username}'s Recommendations`}</Grid>
+            <Grid item xs />
+            <Grid item>
+              <Tooltip title={hideInList ? 'includes already in list' : 'hide already in list'} placement="left" arrow>
+                <IconButton onClick={toggleHideInList} size="small">
+                  {hideInList ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <FormControl size="small" sx={{ width: 100 }}>
+                <InputLabel id="filterScore-select">Min Score</InputLabel>
+                <Select id="filterScore-select" label="Min Score" value={minScore} onChange={handleChangeScore}>
+                  <MenuItem value="0">All</MenuItem>
+                  {Array(11)
+                    .fill(0)
+                    .map(
+                      (_, i) =>
+                        i > 0 && (
+                          <MenuItem value={i} key={i}>
+                            {i}
+                          </MenuItem>
+                        ),
+                    )}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={onClose} size="small">
+                <CloseIcon />
               </IconButton>
-            </Tooltip>
+            </Grid>
           </Grid>
-          <Grid item>
-            <FormControl size="small" sx={{ width: 100 }}>
-              <InputLabel id="filterScore-select">Min Score</InputLabel>
-              <Select id="filterScore-select" label="Min Score" value={minScore} onChange={handleChangeScore}>
-                <MenuItem value="0">All</MenuItem>
-                {Array(11)
-                  .fill(0)
-                  .map(
-                    (_, i) =>
-                      i > 0 && (
-                        <MenuItem value={i} key={i}>
-                          {i}
-                        </MenuItem>
-                      ),
-                  )}
-              </Select>
-            </FormControl>
+        </DialogTitle>
+        <DialogContent dividers>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12} md={6} xl={4}>
+              <RecommendationGrid
+                title="Sequel or Prequel"
+                data={missingSequelPrequel}
+                nodeColor={nodeColor}
+                showAnimeDrawer={handleOpenAnimeDrawer}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} xl={4}>
+              <RecommendationGrid
+                title="Side Story or Alternative Story"
+                data={missingSideStory}
+                nodeColor={nodeColor}
+                showAnimeDrawer={handleOpenAnimeDrawer}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} xl={4}>
+              <RecommendationGrid
+                title="On Hold"
+                data={onHold}
+                nodeColor={nodeColor}
+                showAnimeDrawer={handleOpenAnimeDrawer}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} xl={4}>
+              <RecommendationGrid
+                title="Planned & Already Aired"
+                data={plannedAired}
+                nodeColor={nodeColor}
+                showAnimeDrawer={handleOpenAnimeDrawer}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} xl={4}>
+              <RecommendationGrid
+                title="Summary or Full Story"
+                data={summary}
+                nodeColor={nodeColor}
+                showAnimeDrawer={handleOpenAnimeDrawer}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} xl={4}>
+              <RecommendationGrid
+                title="Other Relation"
+                data={other}
+                nodeColor={nodeColor}
+                showAnimeDrawer={handleOpenAnimeDrawer}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} xl={4}>
+              <RecommendationGrid
+                title="Mismatched Episode Count"
+                data={mismatchEpisode}
+                nodeColor={nodeColor}
+                showAnimeDrawer={handleOpenAnimeDrawer}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} xl={4}>
+              <RecommendationGrid
+                title="Completed but No Score"
+                data={completedZero}
+                nodeColor={nodeColor}
+                showAnimeDrawer={handleOpenAnimeDrawer}
+              />
+            </Grid>
           </Grid>
-          <Grid item>
-            <IconButton onClick={onClose} size="small">
-              <CloseIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-      </DialogTitle>
-      <DialogContent dividers>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={12} md={6} xl={4}>
-            <RecommendationGrid
-              title="Sequel or Prequel"
-              data={missingSequelPrequel}
-              nodeColor={nodeColor}
-              showAnimeDrawer={showAnimeDrawer}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} xl={4}>
-            <RecommendationGrid
-              title="Side Story or Alternative Story"
-              data={missingSideStory}
-              nodeColor={nodeColor}
-              showAnimeDrawer={showAnimeDrawer}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} xl={4}>
-            <RecommendationGrid title="On Hold" data={onHold} nodeColor={nodeColor} showAnimeDrawer={showAnimeDrawer} />
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} xl={4}>
-            <RecommendationGrid
-              title="Planned & Already Aired"
-              data={plannedAired}
-              nodeColor={nodeColor}
-              showAnimeDrawer={showAnimeDrawer}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} xl={4}>
-            <RecommendationGrid
-              title="Summary or Full Story"
-              data={summary}
-              nodeColor={nodeColor}
-              showAnimeDrawer={showAnimeDrawer}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} xl={4}>
-            <RecommendationGrid
-              title="Other Relation"
-              data={other}
-              nodeColor={nodeColor}
-              showAnimeDrawer={showAnimeDrawer}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} xl={4}>
-            <RecommendationGrid
-              title="Mismatched Episode Count"
-              data={mismatchEpisode}
-              nodeColor={nodeColor}
-              showAnimeDrawer={showAnimeDrawer}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} xl={4}>
-            <RecommendationGrid
-              title="Completed but No Score"
-              data={completedZero}
-              nodeColor={nodeColor}
-              showAnimeDrawer={showAnimeDrawer}
-            />
-          </Grid>
-        </Grid>
-      </DialogContent>
-    </Dialog>
+        </DialogContent>
+      </Dialog>
+      <AnimeDrawer
+        open={animeDrawerState.open}
+        anime_id={animeDrawerState.anime_id}
+        onClose={handleCloseAnimeDrawer}
+        nodes={nodes}
+        nodeColor={nodeColor}
+      />
+    </>
   );
 };
 
@@ -362,7 +388,7 @@ const RecommendationGrid = ({
   title: string;
   data: Array<GraphNode>;
   nodeColor: any;
-  showAnimeDrawer: (anime_id: number, force: boolean) => void;
+  showAnimeDrawer: (anime_id: number) => void;
 }) => {
   const [open, setOpen] = React.useState(false);
 
@@ -405,7 +431,7 @@ const RecommendationGrid = ({
                   color="inherit"
                   underline="hover"
                   sx={{ cursor: 'pointer' }}
-                  onClick={() => showAnimeDrawer(n.id, true)}
+                  onClick={() => showAnimeDrawer(n.id)}
                 >
                   {n.title}
                 </Link>

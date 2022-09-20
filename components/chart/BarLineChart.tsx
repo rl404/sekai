@@ -31,7 +31,7 @@ interface BarLineChartConfig {
   useBrush?: boolean;
   brushIndex?: number;
   nodeColor: any;
-  showAnimeDrawer: (anime_id: number, force: boolean) => void;
+  showAnimeDrawer: (anime_id: number) => void;
 }
 
 const BarLineChart = ({ data, config }: { data: Array<BarLineChartData>; config: BarLineChartConfig }) => {

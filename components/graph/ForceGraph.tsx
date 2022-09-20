@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { ForceGraph2D } from 'react-force-graph';
-import { GraphData, GraphLink, GraphNode } from '../../types/Types';
+import { AnimeDrawerState, GraphData, GraphLink, GraphNode } from '../../types/Types';
 import * as d3 from 'd3';
+import AnimeDrawer from '../drawer/AnimeDrawer';
 
 const inactiveColor = 'rgba(255,255,255,0.1)';
 const activeColor = 'white';
@@ -12,19 +13,28 @@ const ForceGraph = ({
   graphData,
   nodeColor,
   linkColor,
+  showDetail,
   showTitle,
   showExtendedRelation,
-  showAnimeDrawer,
 }: {
   search: string;
   graphData: GraphData | any;
   nodeColor: any;
   linkColor: any;
+  showDetail: boolean;
   showTitle: boolean;
   showExtendedRelation: boolean;
-  showAnimeDrawer: (anime_id: number) => void;
 }) => {
   const graphRef = React.useRef();
+
+  const [animeDrawerState, setAnimeDrawerState] = React.useState<AnimeDrawerState>({
+    open: false,
+    anime_id: 0,
+  });
+
+  const handleCloseAnimeDrawer = () => {
+    setAnimeDrawerState({ open: false, anime_id: 0 });
+  };
 
   const [hoverNode, setHoverNode] = React.useState<GraphNode | null>(null);
   const [hoverNodes, setHoverNodes] = React.useState(new Set());
@@ -61,7 +71,7 @@ const ForceGraph = ({
   };
 
   const handleNodeClick = (node: GraphNode | any) => {
-    showAnimeDrawer(node.anime_id);
+    showDetail && setAnimeDrawerState({ open: true, anime_id: node.anime_id });
 
     clickNodes.clear();
     clickLinks.clear();
@@ -100,92 +110,107 @@ const ForceGraph = ({
     gr.d3Force('collide', d3.forceCollide().radius(30));
   }, []);
 
+  React.useEffect(() => {
+    if (!showDetail && animeDrawerState.open) {
+      handleCloseAnimeDrawer();
+    }
+  }, [showDetail]);
+
   return (
-    <ForceGraph2D
-      ref={graphRef}
-      graphData={graphData}
-      onBackgroundClick={clearNodeClick}
-      nodeLabel=""
-      nodeRelSize={10}
-      nodeColor={(node: GraphNode | any) => {
-        if (hoverNode) {
-          if (hoverNodes.has(node)) {
-            return nodeColor[node.user_anime_status];
+    <>
+      <ForceGraph2D
+        ref={graphRef}
+        graphData={graphData}
+        onBackgroundClick={clearNodeClick}
+        nodeLabel=""
+        nodeRelSize={10}
+        nodeColor={(node: GraphNode | any) => {
+          if (hoverNode) {
+            if (hoverNodes.has(node)) {
+              return nodeColor[node.user_anime_status];
+            }
+            return inactiveColor;
           }
-          return inactiveColor;
-        }
 
-        if (clickNode) {
-          if (clickNodes.has(node)) {
-            return nodeColor[node.user_anime_status];
+          if (clickNode) {
+            if (clickNodes.has(node)) {
+              return nodeColor[node.user_anime_status];
+            }
+            return inactiveColor;
           }
-          return inactiveColor;
-        }
 
-        if (search !== '') {
-          if (node.title.toLowerCase().includes(search)) {
-            return nodeColor[node.user_anime_status];
+          if (search !== '') {
+            if (node.title.toLowerCase().includes(search)) {
+              return nodeColor[node.user_anime_status];
+            }
+            return inactiveColor;
           }
-          return inactiveColor;
-        }
 
-        return nodeColor[node.user_anime_status];
-      }}
-      nodeCanvasObjectMode={() => 'before'}
-      nodeCanvasObject={(node: GraphNode | any, ctx: CanvasRenderingContext2D, _) => {
-        if (hoverNode) {
-          if (hoverNodes.has(node)) {
-            drawNodeBorder(node, ctx, hoverNode === node);
-            return drawText(node, ctx);
+          return nodeColor[node.user_anime_status];
+        }}
+        nodeCanvasObjectMode={() => 'before'}
+        nodeCanvasObject={(node: GraphNode | any, ctx: CanvasRenderingContext2D, _) => {
+          if (hoverNode) {
+            if (hoverNodes.has(node)) {
+              drawNodeBorder(node, ctx, hoverNode === node);
+              return drawText(node, ctx);
+            }
+            return;
           }
-          return;
-        }
 
-        if (clickNode) {
-          if (clickNodes.has(node)) {
-            drawNodeBorder(node, ctx, clickNode === node);
-            return drawText(node, ctx);
+          if (clickNode) {
+            if (clickNodes.has(node)) {
+              drawNodeBorder(node, ctx, clickNode === node);
+              return drawText(node, ctx);
+            }
+            return;
           }
-          return;
-        }
 
-        if (search !== '') {
-          if (node.title.toLowerCase().includes(search)) {
-            drawNodeBorder(node, ctx);
-            return drawText(node, ctx);
+          if (search !== '') {
+            if (node.title.toLowerCase().includes(search)) {
+              drawNodeBorder(node, ctx);
+              return drawText(node, ctx);
+            }
+            return;
           }
-          return;
-        }
 
-        showTitle && drawText(node, ctx);
-      }}
-      onNodeHover={handleNodeHover}
-      onNodeDragEnd={(node) => {
-        node.fx = node.x;
-        node.fy = node.y;
-      }}
-      onNodeClick={handleNodeClick}
-      linkLabel="relation"
-      linkColor={(link: GraphLink | any) => {
-        if (hoverNode) {
-          if (hoverLinks.has(link)) {
-            return activeColor;
+          showTitle && drawText(node, ctx);
+        }}
+        onNodeHover={handleNodeHover}
+        onNodeDragEnd={(node) => {
+          node.fx = node.x;
+          node.fy = node.y;
+        }}
+        onNodeClick={handleNodeClick}
+        linkLabel="relation"
+        linkColor={(link: GraphLink | any) => {
+          if (hoverNode) {
+            if (hoverLinks.has(link)) {
+              return activeColor;
+            }
+            return inactiveColor;
           }
-          return inactiveColor;
-        }
 
-        if (clickNode) {
-          if (clickLinks.has(link)) {
-            return activeColor;
+          if (clickNode) {
+            if (clickLinks.has(link)) {
+              return activeColor;
+            }
+            return inactiveColor;
           }
-          return inactiveColor;
-        }
 
-        return linkColor[link.relation];
-      }}
-      linkCurvature={0.1}
-      linkDirectionalArrowLength={10}
-    />
+          return linkColor[link.relation];
+        }}
+        linkCurvature={0.1}
+        linkDirectionalArrowLength={10}
+      />
+      <AnimeDrawer
+        open={animeDrawerState.open}
+        anime_id={animeDrawerState.anime_id}
+        onClose={handleCloseAnimeDrawer}
+        nodes={graphData.nodes}
+        nodeColor={nodeColor}
+      />
+    </>
   );
 };
 
@@ -200,11 +225,7 @@ const drawText = (node: GraphNode | any, ctx: CanvasRenderingContext2D) => {
   ctx.fillText(node.title, node.x, node.y + 15);
 };
 
-const drawNodeBorder = (
-  node: GraphNode | any,
-  ctx: CanvasRenderingContext2D,
-  isMain: boolean = false,
-) => {
+const drawNodeBorder = (node: GraphNode | any, ctx: CanvasRenderingContext2D, isMain: boolean = false) => {
   if (isMain) {
     ctx.beginPath();
     ctx.arc(node.x, node.y, 10 * 1.3, 0, 2 * Math.PI, false);

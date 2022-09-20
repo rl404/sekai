@@ -8,14 +8,7 @@ import { Anime, AnimeDrawerData, AnimeDrawerState, Genre, GraphNode, Related } f
 import axios from 'axios';
 import { theme } from '../theme';
 import { DateToStr } from '../../utils/utils';
-import {
-  AnimeRelationToStr,
-  AnimeStatusToStr,
-  AnimeTypeToStr,
-  DayToStr,
-  SeasonToStr,
-  UserAnimeStatus,
-} from '../../utils/constant';
+import { AnimeRelationToStr, AnimeStatusToStr, AnimeTypeToStr, DayToStr, SeasonToStr } from '../../utils/constant';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import StatusCircle from '../circle/StatusCircle';
@@ -225,6 +218,8 @@ const AnimeDrawer = ({
           error: '',
         });
         setPictureState(0);
+        setShowExtendedRelation(false);
+        handleCloseAnimeDrawer();
       })
       .catch((error) => {
         setAnimeState({ ...animeState, loading: false, error: error.response?.data?.message });
@@ -246,7 +241,6 @@ const AnimeDrawer = ({
   const [animeDrawerState, setAnimeDrawerState] = React.useState<AnimeDrawerState>({
     open: false,
     anime_id: 0,
-    showExtendedRelation: false,
   });
 
   const handleOpenAnimeDrawer = (anime_id: number) => {
@@ -257,11 +251,10 @@ const AnimeDrawer = ({
     setAnimeDrawerState({ ...animeDrawerState, open: false, anime_id: 0 });
   };
 
+  const [showExtendedRelation, setShowExtendedRelation] = React.useState(false);
+
   const handleToggleShowExtendedRelation = () => {
-    setAnimeDrawerState({
-      ...animeDrawerState,
-      showExtendedRelation: !animeDrawerState.showExtendedRelation,
-    });
+    setShowExtendedRelation(!showExtendedRelation);
   };
 
   return (
@@ -278,6 +271,7 @@ const AnimeDrawer = ({
             <StatusCircle
               status={node?.user_anime_status || ''}
               color={nodeColor[node?.user_anime_status || ''] || ''}
+              sx={{ marginTop: 10 }}
             />
           </Grid>
         </Grid>
@@ -582,13 +576,13 @@ const AnimeDrawer = ({
                     sx={{ ...style.statsTitle, marginBottom: 1, cursor: 'pointer' }}
                     onClick={handleToggleShowExtendedRelation}
                   >
-                    {animeDrawerState.showExtendedRelation ? (
+                    {showExtendedRelation ? (
                       <ExpandLessIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
                     ) : (
                       <ExpandMoreIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
                     )}{' '}
                     Extended Related{' '}
-                    {animeDrawerState.showExtendedRelation ? (
+                    {showExtendedRelation ? (
                       <ExpandLessIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
                     ) : (
                       <ExpandMoreIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
@@ -596,7 +590,7 @@ const AnimeDrawer = ({
                   </Divider>
                 </Tooltip>
               </Grid>
-              {animeDrawerState.showExtendedRelation &&
+              {showExtendedRelation &&
                 animeState.extended_related.map((r) => {
                   const n = nodes.find((n) => n.anime_id === r.id);
                   return (

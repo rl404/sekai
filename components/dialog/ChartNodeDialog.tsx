@@ -16,7 +16,7 @@ const ChartNodeDialog = ({
   title: string;
   nodes: Array<GraphNode>;
   nodeColor: any;
-  showAnimeDrawer: (anime_id: number, force: boolean) => void;
+  showAnimeDrawer: (anime_id: number) => void;
 }) => {
   return (
     <Dialog open={open} onClose={onClose}>
@@ -34,7 +34,7 @@ const ChartNodeDialog = ({
                     color="inherit"
                     underline="hover"
                     sx={{ cursor: 'pointer' }}
-                    onClick={() => showAnimeDrawer(n.id, true)}
+                    onClick={() => showAnimeDrawer(n.id)}
                   >
                     {n.title}
                   </Link>
