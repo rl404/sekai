@@ -451,30 +451,36 @@ const ConfigDialog = ({
         </Resizable>
       </Dialog>
 
-      <ListDialog
-        open={listDialogState.open}
-        onClose={handleCloseListDialog}
-        username={config.username}
-        nodes={graphData.nodes}
-        nodeColor={nodeColor}
-      />
+      {listDialogState.open && (
+        <ListDialog
+          open={listDialogState.open}
+          onClose={handleCloseListDialog}
+          username={config.username}
+          nodes={graphData.nodes}
+          nodeColor={nodeColor}
+        />
+      )}
 
-      <StatsDialog
-        open={statsDialogState.open}
-        onClose={handleCloseStatsDialog}
-        username={config.username}
-        nodes={graphData.nodes}
-        nodeColor={nodeColor}
-      />
+      {statsDialogState.open && (
+        <StatsDialog
+          open={statsDialogState.open}
+          onClose={handleCloseStatsDialog}
+          username={config.username}
+          nodes={graphData.nodes}
+          nodeColor={nodeColor}
+        />
+      )}
 
-      <RecommendationDialog
-        open={recommendationDialogState.open}
-        onClose={handleCloseRecommendationDialog}
-        username={config.username}
-        nodes={graphData.nodes}
-        links={graphData.links}
-        nodeColor={nodeColor}
-      />
+      {recommendationDialogState.open && (
+        <RecommendationDialog
+          open={recommendationDialogState.open}
+          onClose={handleCloseRecommendationDialog}
+          username={config.username}
+          nodes={graphData.nodes}
+          links={graphData.links}
+          nodeColor={nodeColor}
+        />
+      )}
     </>
   );
 };
