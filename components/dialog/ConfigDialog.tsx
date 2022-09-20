@@ -68,8 +68,6 @@ const ConfigDialog = ({
   setShowTitle,
   setShowExtendedRelation,
   setSearch,
-  openAnimeDrawer,
-  closeAnimeDrawer,
 }: {
   open: boolean;
   config: ConfigState;
@@ -80,8 +78,6 @@ const ConfigDialog = ({
   setShowTitle: (v: boolean) => void;
   setShowExtendedRelation: (v: boolean) => void;
   setSearch: (v: string) => void;
-  openAnimeDrawer: (anime_id: number, force: boolean) => void;
-  closeAnimeDrawer: () => void;
 }) => {
   const [formState, setFormState] = React.useState({
     open: false,
@@ -192,7 +188,6 @@ const ConfigDialog = ({
 
   const handleOpenListDialog = () => {
     setListDialogState({ ...listDialogState, open: true });
-    closeAnimeDrawer();
   };
 
   const handleCloseListDialog = () => {
@@ -205,7 +200,6 @@ const ConfigDialog = ({
 
   const handleOpenStatsDialog = () => {
     setStatsDialogState({ ...statsDialogState, open: true });
-    closeAnimeDrawer();
   };
 
   const handleCloseStatsDialog = () => {
@@ -218,7 +212,6 @@ const ConfigDialog = ({
 
   const handleOpenRecommendationDialog = () => {
     setRecommendationDialogState({ ...recommendationDialogState, open: true });
-    closeAnimeDrawer();
   };
 
   const handleCloseRecommendationDialog = () => {
@@ -458,33 +451,36 @@ const ConfigDialog = ({
         </Resizable>
       </Dialog>
 
-      <ListDialog
-        open={listDialogState.open}
-        onClose={handleCloseListDialog}
-        username={config.username}
-        nodes={graphData.nodes}
-        nodeColor={nodeColor}
-        showAnimeDrawer={openAnimeDrawer}
-      />
+      {listDialogState.open && (
+        <ListDialog
+          open={listDialogState.open}
+          onClose={handleCloseListDialog}
+          username={config.username}
+          nodes={graphData.nodes}
+          nodeColor={nodeColor}
+        />
+      )}
 
-      <StatsDialog
-        open={statsDialogState.open}
-        onClose={handleCloseStatsDialog}
-        username={config.username}
-        nodes={graphData.nodes}
-        nodeColor={nodeColor}
-        showAnimeDrawer={openAnimeDrawer}
-      />
+      {statsDialogState.open && (
+        <StatsDialog
+          open={statsDialogState.open}
+          onClose={handleCloseStatsDialog}
+          username={config.username}
+          nodes={graphData.nodes}
+          nodeColor={nodeColor}
+        />
+      )}
 
-      <RecommendationDialog
-        open={recommendationDialogState.open}
-        onClose={handleCloseRecommendationDialog}
-        username={config.username}
-        nodes={graphData.nodes}
-        links={graphData.links}
-        nodeColor={nodeColor}
-        showAnimeDrawer={openAnimeDrawer}
-      />
+      {recommendationDialogState.open && (
+        <RecommendationDialog
+          open={recommendationDialogState.open}
+          onClose={handleCloseRecommendationDialog}
+          username={config.username}
+          nodes={graphData.nodes}
+          links={graphData.links}
+          nodeColor={nodeColor}
+        />
+      )}
     </>
   );
 };

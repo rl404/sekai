@@ -25,7 +25,7 @@ interface BarChartData {
 interface BarChartConfig {
   valueName: string;
   nodeColor: any;
-  showAnimeDrawer: (anime_id: number, force: boolean) => void;
+  showAnimeDrawer: (anime_id: number) => void;
 }
 
 const BarChart = ({ data, config }: { data: Array<BarChartData>; config: BarChartConfig }) => {

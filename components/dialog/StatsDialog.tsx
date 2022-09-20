@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import * as React from 'react';
-import { GraphNode } from '../../types/Types';
+import { AnimeDrawerState, GraphNode } from '../../types/Types';
 import CloseIcon from '@mui/icons-material/Close';
 import SlideTransition from '../transition/SlideTransition';
 import {
@@ -30,6 +30,7 @@ import ScatterChart from '../chart/ScatterChart';
 import PieChart from '../chart/PieChart';
 import MiniBarChart from '../chart/MiniBarChart';
 import MiniAreaChart from '../chart/MiniAreaChart';
+import AnimeDrawer from '../drawer/AnimeDrawer';
 
 const StatsDialog = ({
   open,
@@ -37,15 +38,26 @@ const StatsDialog = ({
   username,
   nodes = [],
   nodeColor,
-  showAnimeDrawer,
 }: {
   open: boolean;
   onClose: () => void;
   username: string;
   nodes: Array<GraphNode>;
   nodeColor: any;
-  showAnimeDrawer: (anime_id: number, force: boolean) => void;
 }) => {
+  const [animeDrawerState, setAnimeDrawerState] = React.useState<AnimeDrawerState>({
+    open: false,
+    anime_id: 0,
+  });
+
+  const handleCloseAnimeDrawer = () => {
+    setAnimeDrawerState({ open: false, anime_id: 0 });
+  };
+
+  const handleOpenAnimeDrawer = (anime_id: number) => {
+    setAnimeDrawerState({ open: true, anime_id: anime_id });
+  };
+
   const inList = nodes.filter((n) => n.user_anime_status !== '');
   const nonZeroScore = nodes.filter((n) => n.user_anime_score !== 0);
 
@@ -216,256 +228,265 @@ const StatsDialog = ({
   }
 
   return (
-    <Dialog
-      open={open}
-      fullScreen
-      TransitionComponent={SlideTransition}
-      PaperProps={{
-        style: {
-          backgroundImage: 'radial-gradient(rgb(65, 65, 65) 0.5px, #121212 0.5px)',
-          backgroundSize: '15px 15px',
-        },
-      }}
-    >
-      <DialogTitle>
-        <Grid container>
-          <Grid item>{`${username}'s Stats`}</Grid>
-          <Grid item xs />
-          <Grid item>
-            <IconButton onClick={onClose} size="small">
-              <CloseIcon />
-            </IconButton>
+    <>
+      <Dialog
+        open={open}
+        fullScreen
+        TransitionComponent={SlideTransition}
+        PaperProps={{
+          style: {
+            backgroundImage: 'radial-gradient(rgb(65, 65, 65) 0.5px, #121212 0.5px)',
+            backgroundSize: '15px 15px',
+          },
+        }}
+      >
+        <DialogTitle>
+          <Grid container>
+            <Grid item>{`${username}'s Stats`}</Grid>
+            <Grid item xs />
+            <Grid item>
+              <IconButton onClick={onClose} size="small">
+                <CloseIcon />
+              </IconButton>
+            </Grid>
           </Grid>
-        </Grid>
-      </DialogTitle>
-      <DialogContent dividers>
-        <Grid container spacing={2}>
-          <Grid item xs={6} sm={3}>
-            <StatsCard
-              title="Total Anime"
-              value={inList.length.toLocaleString()}
-              chart={
-                <MiniBarChart
-                  data={Object.keys(byYear)
-                    .map((k) => {
-                      return {
-                        label: k,
-                        value: byYear[k].count,
-                        color: nodeColor[k],
-                      };
-                    })
-                    .filter((d) => d.value > 0)}
-                />
-              }
-            />
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <StatsCard
-              title="Average Score"
-              value={(
-                nonZeroScore.reduce((total, next) => total + next.user_anime_score, 0) / nonZeroScore.length
-              ).toFixed(2)}
-              tooltip={`from ${nonZeroScore.length.toLocaleString()} rated anime`}
-              chart={
-                <MiniAreaChart
-                  data={Object.keys(byYear)
-                    .map((k) => {
-                      return {
-                        label: k,
-                        value: byYear[k].sumScore / byYear[k].countScore,
-                        color: nodeColor[k],
-                      };
-                    })
-                    .filter((d) => d.value > 0)}
-                />
-              }
-            />
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <StatsCard
-              title="Total Episodes"
-              value={nodes.reduce((total, next) => total + next.user_episode_count, 0).toLocaleString()}
-              tooltip="sum of watched episodes"
-              chart={
-                <MiniAreaChart
-                  data={Object.keys(byEpisodeCount)
-                    .map((k) => {
-                      return {
-                        label: k,
-                        value: byEpisodeCount[k].sumScore / byEpisodeCount[k].countScore,
-                        color: nodeColor[k],
-                      };
-                    })
-                    .filter((d) => d.value > 0)}
-                />
-              }
-            />
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <StatsCard
-              title="Total Duration (days)"
-              value={(
-                nodes.reduce((total, next) => total + next.user_episode_count * next.episode_duration, 0) /
-                (60 * 60 * 24)
-              )
-                .toFixed(2)
-                .toLocaleString()}
-              chart={
-                <MiniAreaChart
-                  data={Object.keys(byEpisodeDuration)
-                    .map((k) => {
-                      return {
-                        label: k,
-                        value: byEpisodeDuration[k].sumScore / byEpisodeDuration[k].countScore,
-                        color: nodeColor[k],
-                      };
-                    })
-                    .filter((d) => d.value > 0)}
-                />
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={6}>
-            <ChartCard title="Anime by Status">
-              <BarChart
-                config={{ valueName: 'count', nodeColor: nodeColor, showAnimeDrawer: showAnimeDrawer }}
-                data={Object.keys(byStatus).map((k) => {
-                  return {
-                    label: UserAnimeStatusStr(k),
-                    value: byStatus[k],
-                    color: nodeColor[k],
-                    nodes: nodes.filter((n) => n.user_anime_status === k),
-                  };
-                })}
+        </DialogTitle>
+        <DialogContent dividers>
+          <Grid container spacing={2}>
+            <Grid item xs={6} sm={3}>
+              <StatsCard
+                title="Total Anime"
+                value={inList.length.toLocaleString()}
+                chart={
+                  <MiniBarChart
+                    data={Object.keys(byYear)
+                      .map((k) => {
+                        return {
+                          label: k,
+                          value: byYear[k].count,
+                          color: nodeColor[k],
+                        };
+                      })
+                      .filter((d) => d.value > 0)}
+                  />
+                }
               />
-            </ChartCard>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <ChartCard title="Anime by Type">
-              <RadarChart
-                config={{ valueName: 'count', nodeColor: nodeColor, showAnimeDrawer: showAnimeDrawer }}
-                data={Object.keys(byType)
-                  .map((k) => {
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <StatsCard
+                title="Average Score"
+                value={(
+                  nonZeroScore.reduce((total, next) => total + next.user_anime_score, 0) / nonZeroScore.length
+                ).toFixed(2)}
+                tooltip={`from ${nonZeroScore.length.toLocaleString()} rated anime`}
+                chart={
+                  <MiniAreaChart
+                    data={Object.keys(byYear)
+                      .map((k) => {
+                        return {
+                          label: k,
+                          value: byYear[k].sumScore / byYear[k].countScore,
+                          color: nodeColor[k],
+                        };
+                      })
+                      .filter((d) => d.value > 0)}
+                  />
+                }
+              />
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <StatsCard
+                title="Total Episodes"
+                value={nodes.reduce((total, next) => total + next.user_episode_count, 0).toLocaleString()}
+                tooltip="sum of watched episodes"
+                chart={
+                  <MiniAreaChart
+                    data={Object.keys(byEpisodeCount)
+                      .map((k) => {
+                        return {
+                          label: k,
+                          value: byEpisodeCount[k].sumScore / byEpisodeCount[k].countScore,
+                          color: nodeColor[k],
+                        };
+                      })
+                      .filter((d) => d.value > 0)}
+                  />
+                }
+              />
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <StatsCard
+                title="Total Duration (days)"
+                value={(
+                  nodes.reduce((total, next) => total + next.user_episode_count * next.episode_duration, 0) /
+                  (60 * 60 * 24)
+                )
+                  .toFixed(2)
+                  .toLocaleString()}
+                chart={
+                  <MiniAreaChart
+                    data={Object.keys(byEpisodeDuration)
+                      .map((k) => {
+                        return {
+                          label: k,
+                          value: byEpisodeDuration[k].sumScore / byEpisodeDuration[k].countScore,
+                          color: nodeColor[k],
+                        };
+                      })
+                      .filter((d) => d.value > 0)}
+                  />
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={6}>
+              <ChartCard title="Anime by Status">
+                <BarChart
+                  config={{ valueName: 'count', nodeColor: nodeColor, showAnimeDrawer: handleOpenAnimeDrawer }}
+                  data={Object.keys(byStatus).map((k) => {
                     return {
-                      label: AnimeTypeToStr(k),
-                      value: byType[k],
-                      nodes: nodes.filter((n) => n.user_anime_status !== '' && n.type == k),
+                      label: UserAnimeStatusStr(k),
+                      value: byStatus[k],
+                      color: nodeColor[k],
+                      nodes: nodes.filter((n) => n.user_anime_status === k),
                     };
-                  })
-                  .sort((a, b) => b.value - a.value)}
-              />
-            </ChartCard>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <ChartCard title="Anime by Source">
-              <PieChart
-                config={{ valueName: 'count', nodeColor: nodeColor, showAnimeDrawer: showAnimeDrawer }}
-                data={Object.keys(bySource)
-                  .map((k) => {
+                  })}
+                />
+              </ChartCard>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <ChartCard title="Anime by Type">
+                <RadarChart
+                  config={{ valueName: 'count', nodeColor: nodeColor, showAnimeDrawer: handleOpenAnimeDrawer }}
+                  data={Object.keys(byType)
+                    .map((k) => {
+                      return {
+                        label: AnimeTypeToStr(k),
+                        value: byType[k],
+                        nodes: nodes.filter((n) => n.user_anime_status !== '' && n.type == k),
+                      };
+                    })
+                    .sort((a, b) => b.value - a.value)}
+                />
+              </ChartCard>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <ChartCard title="Anime by Source">
+                <PieChart
+                  config={{ valueName: 'count', nodeColor: nodeColor, showAnimeDrawer: handleOpenAnimeDrawer }}
+                  data={Object.keys(bySource)
+                    .map((k) => {
+                      return {
+                        label: AnimeSourceToStr(k),
+                        value: bySource[k],
+                        nodes: nodes.filter((n) => n.user_anime_status !== '' && n.source == k),
+                      };
+                    })
+                    .sort((a, b) => b.value - a.value)}
+                />
+              </ChartCard>
+            </Grid>
+            <Grid item xs={12} sm={12} md={6}>
+              <ChartCard title="Anime by Episode Count & Score">
+                <BarLineChart
+                  config={{
+                    valueBarName: 'count',
+                    valueLine1Name: 'user score',
+                    valueLine2Name: 'global score',
+                    nodeColor: nodeColor,
+                    showAnimeDrawer: handleOpenAnimeDrawer,
+                  }}
+                  data={Object.keys(byEpisodeCount).map((k) => {
                     return {
-                      label: AnimeSourceToStr(k),
-                      value: bySource[k],
-                      nodes: nodes.filter((n) => n.user_anime_status !== '' && n.source == k),
+                      label: k,
+                      valueBar: byEpisodeCount[k].count,
+                      valueLine1: byEpisodeCount[k].sumScore / byEpisodeCount[k].countScore,
+                      valueLine2: byEpisodeCount[k].globalSumScore / byEpisodeCount[k].globalCountScore,
+                      nodes: byEpisodeCount[k].nodes,
                     };
-                  })
-                  .sort((a, b) => b.value - a.value)}
-              />
-            </ChartCard>
-          </Grid>
-          <Grid item xs={12} sm={12} md={6}>
-            <ChartCard title="Anime by Episode Count & Score">
-              <BarLineChart
-                config={{
-                  valueBarName: 'count',
-                  valueLine1Name: 'user score',
-                  valueLine2Name: 'global score',
-                  nodeColor: nodeColor,
-                  showAnimeDrawer: showAnimeDrawer,
-                }}
-                data={Object.keys(byEpisodeCount).map((k) => {
-                  return {
-                    label: k,
-                    valueBar: byEpisodeCount[k].count,
-                    valueLine1: byEpisodeCount[k].sumScore / byEpisodeCount[k].countScore,
-                    valueLine2: byEpisodeCount[k].globalSumScore / byEpisodeCount[k].globalCountScore,
-                    nodes: byEpisodeCount[k].nodes,
-                  };
-                })}
-              />
-            </ChartCard>
-          </Grid>
-          <Grid item xs={12} sm={12} md={6}>
-            <ChartCard title="Anime by Episode Duration (minutes) & Score">
-              <BarLineChart
-                config={{
-                  valueBarName: 'count',
-                  valueLine1Name: 'user score',
-                  valueLine2Name: 'global score',
-                  nodeColor: nodeColor,
-                  showAnimeDrawer: showAnimeDrawer,
-                }}
-                data={Object.keys(byEpisodeDuration).map((k) => {
-                  return {
-                    label: k,
-                    valueBar: byEpisodeDuration[k].count,
-                    valueLine1: byEpisodeDuration[k].sumScore / byEpisodeDuration[k].countScore,
-                    valueLine2: byEpisodeDuration[k].globalSumScore / byEpisodeDuration[k].globalCountScore,
-                    nodes: byEpisodeDuration[k].nodes,
-                  };
-                })}
-              />
-            </ChartCard>
-          </Grid>
+                  })}
+                />
+              </ChartCard>
+            </Grid>
+            <Grid item xs={12} sm={12} md={6}>
+              <ChartCard title="Anime by Episode Duration (minutes) & Score">
+                <BarLineChart
+                  config={{
+                    valueBarName: 'count',
+                    valueLine1Name: 'user score',
+                    valueLine2Name: 'global score',
+                    nodeColor: nodeColor,
+                    showAnimeDrawer: handleOpenAnimeDrawer,
+                  }}
+                  data={Object.keys(byEpisodeDuration).map((k) => {
+                    return {
+                      label: k,
+                      valueBar: byEpisodeDuration[k].count,
+                      valueLine1: byEpisodeDuration[k].sumScore / byEpisodeDuration[k].countScore,
+                      valueLine2: byEpisodeDuration[k].globalSumScore / byEpisodeDuration[k].globalCountScore,
+                      nodes: byEpisodeDuration[k].nodes,
+                    };
+                  })}
+                />
+              </ChartCard>
+            </Grid>
 
-          <Grid item xs={12} sm={12} md={12} lg={6}>
-            <ChartCard title="Anime by Year & Score">
-              <BarLineChart
-                config={{
-                  valueBarName: 'count',
-                  valueLine1Name: 'user score',
-                  valueLine2Name: 'global score',
-                  useBrush: true,
-                  brushIndex: Object.keys(byYear).length > 10 ? Object.keys(byYear).length - 10 : 0,
-                  nodeColor: nodeColor,
-                  showAnimeDrawer: showAnimeDrawer,
-                }}
-                data={Object.keys(byYear).map((k) => {
-                  return {
-                    label: k,
-                    valueBar: byYear[k].count,
-                    valueLine1: byYear[k].sumScore / byYear[k].countScore,
-                    valueLine2: byYear[k].globalSumScore / byYear[k].globalCountScore,
-                    nodes: byYear[k].nodes,
-                  };
-                })}
-              />
-            </ChartCard>
+            <Grid item xs={12} sm={12} md={12} lg={6}>
+              <ChartCard title="Anime by Year & Score">
+                <BarLineChart
+                  config={{
+                    valueBarName: 'count',
+                    valueLine1Name: 'user score',
+                    valueLine2Name: 'global score',
+                    useBrush: true,
+                    brushIndex: Object.keys(byYear).length > 10 ? Object.keys(byYear).length - 10 : 0,
+                    nodeColor: nodeColor,
+                    showAnimeDrawer: handleOpenAnimeDrawer,
+                  }}
+                  data={Object.keys(byYear).map((k) => {
+                    return {
+                      label: k,
+                      valueBar: byYear[k].count,
+                      valueLine1: byYear[k].sumScore / byYear[k].countScore,
+                      valueLine2: byYear[k].globalSumScore / byYear[k].globalCountScore,
+                      nodes: byYear[k].nodes,
+                    };
+                  })}
+                />
+              </ChartCard>
+            </Grid>
+            <Grid item xs={12} sm={12} md={12} lg={6}>
+              <ChartCard title="Anime by Season & Year">
+                <ScatterChart
+                  config={{
+                    xName: 'year',
+                    yName: 'season',
+                    zName: 'count',
+                    nodeColor: nodeColor,
+                    showAnimeDrawer: handleOpenAnimeDrawer,
+                  }}
+                  data={Object.keys(bySeason).map((k) => {
+                    const seasonYear = k.split('-');
+                    return {
+                      x: parseInt(seasonYear[1], 10),
+                      y: SeasonToStr(seasonYear[0]),
+                      z: bySeason[k],
+                      nodes: nodes.filter((n) => n.user_anime_status !== '' && n.season + '-' + n.season_year == k),
+                    };
+                  })}
+                />
+              </ChartCard>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={6}>
-            <ChartCard title="Anime by Season & Year">
-              <ScatterChart
-                config={{
-                  xName: 'year',
-                  yName: 'season',
-                  zName: 'count',
-                  nodeColor: nodeColor,
-                  showAnimeDrawer: showAnimeDrawer,
-                }}
-                data={Object.keys(bySeason).map((k) => {
-                  const seasonYear = k.split('-');
-                  return {
-                    x: parseInt(seasonYear[1], 10),
-                    y: SeasonToStr(seasonYear[0]),
-                    z: bySeason[k],
-                    nodes: nodes.filter((n) => n.user_anime_status !== '' && n.season + '-' + n.season_year == k),
-                  };
-                })}
-              />
-            </ChartCard>
-          </Grid>
-        </Grid>
-      </DialogContent>
-    </Dialog>
+        </DialogContent>
+      </Dialog>
+      <AnimeDrawer
+        open={animeDrawerState.open}
+        anime_id={animeDrawerState.anime_id}
+        onClose={handleCloseAnimeDrawer}
+        nodes={nodes}
+        nodeColor={nodeColor}
+      />
+    </>
   );
 };
 

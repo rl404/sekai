@@ -8,16 +8,10 @@ import { Anime, AnimeDrawerData, AnimeDrawerState, Genre, GraphNode, Related } f
 import axios from 'axios';
 import { theme } from '../theme';
 import { DateToStr } from '../../utils/utils';
-import {
-  AnimeRelationToStr,
-  AnimeStatusToStr,
-  AnimeTypeToStr,
-  DayToStr,
-  SeasonToStr,
-  UserAnimeStatus,
-} from '../../utils/constant';
+import { AnimeRelationToStr, AnimeStatusToStr, AnimeTypeToStr, DayToStr, SeasonToStr } from '../../utils/constant';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import StatusCircle from '../circle/StatusCircle';
 
 const style = {
   statusCircle: {
@@ -169,9 +163,8 @@ const AnimeDrawer = ({
         var extendedRelated = new Set<GraphNode>();
 
         const addExtendedRelated = (n: GraphNode) => {
-          extendedRelated.add(n);
           n.neighbors.forEach((neighbor: GraphNode) => {
-            if (extendedRelated.has(neighbor)) return;
+            if (extendedRelated.has(neighbor) || neighbor.anime_id === anime.id) return;
             extendedRelated.add(neighbor);
             addExtendedRelated(neighbor);
           });
@@ -224,6 +217,8 @@ const AnimeDrawer = ({
           error: '',
         });
         setPictureState(0);
+        setShowExtendedRelation(false);
+        handleCloseAnimeDrawer();
       })
       .catch((error) => {
         setAnimeState({ ...animeState, loading: false, error: error.response?.data?.message });
@@ -245,7 +240,6 @@ const AnimeDrawer = ({
   const [animeDrawerState, setAnimeDrawerState] = React.useState<AnimeDrawerState>({
     open: false,
     anime_id: 0,
-    showExtendedRelation: false,
   });
 
   const handleOpenAnimeDrawer = (anime_id: number) => {
@@ -256,11 +250,10 @@ const AnimeDrawer = ({
     setAnimeDrawerState({ ...animeDrawerState, open: false, anime_id: 0 });
   };
 
+  const [showExtendedRelation, setShowExtendedRelation] = React.useState(false);
+
   const handleToggleShowExtendedRelation = () => {
-    setAnimeDrawerState({
-      ...animeDrawerState,
-      showExtendedRelation: !animeDrawerState.showExtendedRelation,
-    });
+    setShowExtendedRelation(!showExtendedRelation);
   };
 
   return (
@@ -274,9 +267,10 @@ const AnimeDrawer = ({
           </Grid>
           <Grid item xs />
           <Grid item>
-            <StatusColor
+            <StatusCircle
               status={node?.user_anime_status || ''}
               color={nodeColor[node?.user_anime_status || ''] || ''}
+              sx={{ marginTop: 10 }}
             />
           </Grid>
         </Grid>
@@ -550,7 +544,7 @@ const AnimeDrawer = ({
                           return (
                             <React.Fragment key={r.id}>
                               <Grid item xs={1}>
-                                <StatusColor
+                                <StatusCircle
                                   status={n?.user_anime_status || ''}
                                   color={nodeColor[n?.user_anime_status || ''] || ''}
                                   sx={{ marginTop: 2 }}
@@ -581,13 +575,13 @@ const AnimeDrawer = ({
                     sx={{ ...style.statsTitle, marginBottom: 1, cursor: 'pointer' }}
                     onClick={handleToggleShowExtendedRelation}
                   >
-                    {animeDrawerState.showExtendedRelation ? (
+                    {showExtendedRelation ? (
                       <ExpandLessIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
                     ) : (
                       <ExpandMoreIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
                     )}{' '}
                     Extended Related{' '}
-                    {animeDrawerState.showExtendedRelation ? (
+                    {showExtendedRelation ? (
                       <ExpandLessIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
                     ) : (
                       <ExpandMoreIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
@@ -595,14 +589,14 @@ const AnimeDrawer = ({
                   </Divider>
                 </Tooltip>
               </Grid>
-              {animeDrawerState.showExtendedRelation &&
+              {showExtendedRelation &&
                 animeState.extended_related.map((r) => {
                   const n = nodes.find((n) => n.anime_id === r.id);
                   return (
                     <React.Fragment key={r.id}>
                       <Grid item xs={1} />
                       <Grid item xs={1}>
-                        <StatusColor
+                        <StatusCircle
                           status={n?.user_anime_status || ''}
                           color={nodeColor[n?.user_anime_status || ''] || ''}
                           sx={{ marginTop: 2 }}
@@ -639,55 +633,6 @@ const AnimeDrawer = ({
 };
 
 export default AnimeDrawer;
-
-const StatusColor = ({
-  status,
-  color,
-  sx,
-}: {
-  status: string;
-  color: string;
-  sx?: React.CSSProperties | undefined;
-}) => {
-  switch (status) {
-    case UserAnimeStatus.watching:
-      return (
-        <Tooltip placement="left" arrow title="You are watching this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.completed:
-      return (
-        <Tooltip placement="left" arrow title="You have completed this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.on_hold:
-      return (
-        <Tooltip placement="left" arrow title="You put this on hold">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.dropped:
-      return (
-        <Tooltip placement="left" arrow title="You have dropped this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    case UserAnimeStatus.planned:
-      return (
-        <Tooltip placement="left" arrow title="You are planning to watch this">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-    default:
-      return (
-        <Tooltip placement="left" arrow title="Not in your list">
-          <div style={{ ...style.statusCircle, ...sx, background: color }} />
-        </Tooltip>
-      );
-  }
-};
 
 const SkeletonDrawer = () => {
   return (

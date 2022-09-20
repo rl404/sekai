@@ -4,8 +4,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import InitDialog from '../components/dialog/InitDialog';
 import { AnimeRelation, UserAnimeStatus } from '../utils/constant';
-import { AnimeDrawerState, ConfigDialogState, ConfigState, GraphData, InitDialogState } from '../types/Types';
-import AnimeDrawer from '../components/drawer/AnimeDrawer';
+import { ConfigDialogState, ConfigState, GraphData, InitDialogState } from '../types/Types';
 import ConfigDialog from '../components/dialog/ConfigDialog';
 import { IconButton } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -69,21 +68,6 @@ const Home: NextPage = () => {
     [AnimeRelation.other]: 'rgba(255,255,255,0.1)',
   });
 
-  const [animeDrawerState, setAnimeDrawerState] = React.useState<AnimeDrawerState>({
-    open: false,
-    anime_id: 0,
-    showExtendedRelation: false,
-  });
-
-  const handleOpenAnimeDrawer = (anime_id: number, force: boolean = false) => {
-    if (!configState.showDetailOnClick && !force) return;
-    setAnimeDrawerState({ ...animeDrawerState, open: true, anime_id: anime_id });
-  };
-
-  const handleCloseAnimeDrawer = () => {
-    setAnimeDrawerState({ ...animeDrawerState, open: false, anime_id: 0 });
-  };
-
   const [configDialogState, setConfigDialogState] = React.useState<ConfigDialogState>({
     open: false,
   });
@@ -106,7 +90,6 @@ const Home: NextPage = () => {
 
   const setShowDetailOnClick = (v: boolean) => {
     setConfigState({ ...configState, showDetailOnClick: v });
-    !v && handleCloseAnimeDrawer();
   };
 
   const setShowTitle = (v: boolean) => {
@@ -144,9 +127,9 @@ const Home: NextPage = () => {
         graphData={graphDataState}
         nodeColor={graphNodeColorState}
         linkColor={graphLinkColorState}
+        showDetail={configState.showDetailOnClick}
         showTitle={configState.showTitle}
         showExtendedRelation={configState.showExtendedRelation}
-        showAnimeDrawer={handleOpenAnimeDrawer}
       />
 
       <IconButton href="https://github.com/rl404/sekai" target={'_blank'} sx={style.githubIcon}>
@@ -172,17 +155,7 @@ const Home: NextPage = () => {
         setShowDetailOnClick={setShowDetailOnClick}
         setShowTitle={setShowTitle}
         setShowExtendedRelation={setShowExtendedRelation}
-        openAnimeDrawer={handleOpenAnimeDrawer}
-        closeAnimeDrawer={handleCloseAnimeDrawer}
         setSearch={setSearch}
-      />
-
-      <AnimeDrawer
-        open={animeDrawerState.open}
-        anime_id={animeDrawerState.anime_id}
-        onClose={handleCloseAnimeDrawer}
-        nodes={graphDataState.nodes}
-        nodeColor={graphNodeColorState}
       />
     </>
   );

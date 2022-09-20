@@ -13,7 +13,7 @@ interface RadarChartData {
 interface RadarChartConfig {
   valueName: string;
   nodeColor: any;
-  showAnimeDrawer: (anime_id: number, force: boolean) => void;
+  showAnimeDrawer: (anime_id: number) => void;
 }
 
 const RadarChart = ({ data, config }: { data: Array<RadarChartData>; config: RadarChartConfig }) => {

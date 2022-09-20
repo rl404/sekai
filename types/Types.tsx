@@ -173,7 +173,6 @@ export interface ConfigState {
 export interface AnimeDrawerState {
   open: boolean;
   anime_id: number;
-  showExtendedRelation: boolean;
 }
 
 export interface AnimeDrawerData {
