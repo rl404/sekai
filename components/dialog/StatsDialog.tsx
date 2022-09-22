@@ -60,6 +60,9 @@ const StatsDialog = ({
 
   const inList = nodes.filter((n) => n.user_anime_status !== '');
   const nonZeroScore = nodes.filter((n) => n.user_anime_score !== 0);
+  const avgScore = nonZeroScore.reduce((total, next) => total + next.user_anime_score, 0) / nonZeroScore.length;
+  const globalNonZeroScore = inList.filter((n) => n.score > 0);
+  const globalAvgScore = globalNonZeroScore.reduce((total, next) => total + next.score, 0) / globalNonZeroScore.length;
 
   const byType: { [type: string]: number } = {
     [AnimeType.tv]: 0,
@@ -257,6 +260,7 @@ const StatsDialog = ({
               <StatsCard
                 title="Total Anime"
                 value={inList.length.toLocaleString()}
+                tooltip={`${nonZeroScore.length.toLocaleString()} rated anime`}
                 chart={
                   <MiniBarChart
                     data={Object.keys(byYear)
@@ -275,10 +279,16 @@ const StatsDialog = ({
             <Grid item xs={6} sm={3}>
               <StatsCard
                 title="Average Score"
-                value={(
-                  nonZeroScore.reduce((total, next) => total + next.user_anime_score, 0) / nonZeroScore.length
-                ).toFixed(2)}
-                tooltip={`from ${nonZeroScore.length.toLocaleString()} rated anime`}
+                value={avgScore.toFixed(2)}
+                tooltip={
+                  <>
+                    {globalAvgScore.toFixed(2)} average global score{' '}
+                    <span style={avgScore > globalAvgScore ? style.scoreGreen : style.scoreRed}>
+                      ({avgScore > globalAvgScore ? '+' : ''}
+                      {(avgScore - globalAvgScore).toFixed(2)})
+                    </span>
+                  </>
+                }
                 chart={
                   <MiniAreaChart
                     data={Object.keys(byYear)
@@ -503,6 +513,12 @@ const style = {
     height: '100%',
     opacity: 0.1,
   },
+  scoreGreen: {
+    color: theme.palette.success.main,
+  },
+  scoreRed: {
+    color: theme.palette.error.main,
+  },
 };
 
 const StatsCard = ({
@@ -513,7 +529,7 @@ const StatsCard = ({
 }: {
   title: string;
   value: string;
-  tooltip?: string;
+  tooltip?: NonNullable<React.ReactNode>;
   chart?: React.ReactNode;
 }) => {
   return (
