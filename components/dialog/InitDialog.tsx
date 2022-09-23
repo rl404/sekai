@@ -57,7 +57,7 @@ const InitDialog = ({
           return;
         }
 
-        const nodes = resp.data.data.nodes.map((n: UserAnimeRelationNode): GraphNode => {
+        const nodes: Array<GraphNode> = resp.data.data.nodes.map((n: UserAnimeRelationNode): GraphNode => {
           return {
             id: n.anime_id,
             anime_id: n.anime_id,
@@ -79,7 +79,7 @@ const InitDialog = ({
           };
         });
 
-        const links = resp.data.data.links.map((l: UserAnimeRelationLink): GraphLink => {
+        const links: Array<GraphLink> = resp.data.data.links.map((l: UserAnimeRelationLink): GraphLink => {
           const link = {
             source: l.anime_id1,
             sourceID: l.anime_id1,
@@ -91,19 +91,24 @@ const InitDialog = ({
           const a = nodes.find((n: any) => n.id === link.source);
           const b = nodes.find((n: any) => n.id === link.target);
 
-          !a.neighbors && (a.neighbors = []);
-          !b.neighbors && (b.neighbors = []);
+          a && !a.neighbors && (a.neighbors = []);
+          b && !b.neighbors && (b.neighbors = []);
 
-          a.neighbors.push(b);
-          b.neighbors.push(a);
+          a && b && a.neighbors.push(b);
+          a && b && b.neighbors.push(a);
 
-          !a.links && (a.links = []);
-          !b.links && (b.links = []);
+          a && !a.links && (a.links = []);
+          b && !b.links && (b.links = []);
 
-          a.links.push(link);
-          b.links.push(link);
+          a && a.links.push(link);
+          b && b.links.push(link);
 
           return link;
+        });
+
+        nodes.forEach((n) => {
+          n.neighbors = Array.from(new Set(n.neighbors));
+          n.links = Array.from(new Set(n.links));
         });
 
         setGraphData({
