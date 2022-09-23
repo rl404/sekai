@@ -4,8 +4,10 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  Divider,
   Grid,
   IconButton,
+  Link,
   Tooltip,
   Typography,
 } from '@mui/material';
@@ -31,6 +33,11 @@ import PieChart from '../chart/PieChart';
 import MiniBarChart from '../chart/MiniBarChart';
 import MiniAreaChart from '../chart/MiniAreaChart';
 import AnimeDrawer from '../drawer/AnimeDrawer';
+import StatusCircle from '../circle/StatusCircle';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 const StatsDialog = ({
   open,
@@ -60,6 +67,9 @@ const StatsDialog = ({
 
   const inList = nodes.filter((n) => n.user_anime_status !== '');
   const nonZeroScore = nodes.filter((n) => n.user_anime_score !== 0);
+  const avgScore = nonZeroScore.reduce((total, next) => total + next.user_anime_score, 0) / nonZeroScore.length;
+  const globalNonZeroScore = inList.filter((n) => n.score > 0);
+  const globalAvgScore = globalNonZeroScore.reduce((total, next) => total + next.score, 0) / globalNonZeroScore.length;
 
   const byType: { [type: string]: number } = {
     [AnimeType.tv]: 0,
@@ -257,6 +267,7 @@ const StatsDialog = ({
               <StatsCard
                 title="Total Anime"
                 value={inList.length.toLocaleString()}
+                tooltip={`${nonZeroScore.length.toLocaleString()} rated anime`}
                 chart={
                   <MiniBarChart
                     data={Object.keys(byYear)
@@ -275,10 +286,16 @@ const StatsDialog = ({
             <Grid item xs={6} sm={3}>
               <StatsCard
                 title="Average Score"
-                value={(
-                  nonZeroScore.reduce((total, next) => total + next.user_anime_score, 0) / nonZeroScore.length
-                ).toFixed(2)}
-                tooltip={`from ${nonZeroScore.length.toLocaleString()} rated anime`}
+                value={avgScore.toFixed(2)}
+                tooltip={
+                  <>
+                    {globalAvgScore.toFixed(2)} average global score{' '}
+                    <span style={avgScore > globalAvgScore ? style.scoreGreen : style.scoreRed}>
+                      ({avgScore > globalAvgScore ? '+' : ''}
+                      {(avgScore - globalAvgScore).toFixed(2)})
+                    </span>
+                  </>
+                }
                 chart={
                   <MiniAreaChart
                     data={Object.keys(byYear)
@@ -476,6 +493,56 @@ const StatsDialog = ({
                 />
               </ChartCard>
             </Grid>
+            <Grid item xs={12} sm={6} lg={3}>
+              <AnimeListCard
+                title="Top Highest Score"
+                valueFormatter={(n) => {
+                  return n.score.toFixed(2);
+                }}
+                nodes={Object.assign<GraphNode[], GraphNode[]>([], nodes).sort((a, b) => b.score - a.score)}
+                nodeColor={nodeColor}
+                showAnimeDrawer={handleOpenAnimeDrawer}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={3}>
+              <AnimeListCard
+                title="Most Episode Count"
+                valueFormatter={(n) => {
+                  return n.episode_count.toLocaleString();
+                }}
+                nodes={Object.assign<GraphNode[], GraphNode[]>([], nodes).sort(
+                  (a, b) => b.episode_count - a.episode_count,
+                )}
+                nodeColor={nodeColor}
+                showAnimeDrawer={handleOpenAnimeDrawer}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={3}>
+              <AnimeListCard
+                title="Longest Episode Duration (minutes)"
+                valueFormatter={(n) => {
+                  return (n.episode_duration / 60).toFixed(0).toLocaleString();
+                }}
+                nodes={Object.assign<GraphNode[], GraphNode[]>([], nodes).sort(
+                  (a, b) => b.episode_duration - a.episode_duration,
+                )}
+                nodeColor={nodeColor}
+                showAnimeDrawer={handleOpenAnimeDrawer}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} lg={3}>
+              <AnimeListCard
+                title="Most Relation Count"
+                valueFormatter={(n) => {
+                  return n.neighbors.length.toLocaleString();
+                }}
+                nodes={Object.assign<GraphNode[], GraphNode[]>([], nodes).sort(
+                  (a, b) => b.neighbors.length - a.neighbors.length,
+                )}
+                nodeColor={nodeColor}
+                showAnimeDrawer={handleOpenAnimeDrawer}
+              />
+            </Grid>
           </Grid>
         </DialogContent>
       </Dialog>
@@ -503,6 +570,12 @@ const style = {
     height: '100%',
     opacity: 0.1,
   },
+  scoreGreen: {
+    color: theme.palette.success.main,
+  },
+  scoreRed: {
+    color: theme.palette.error.main,
+  },
 };
 
 const StatsCard = ({
@@ -513,7 +586,7 @@ const StatsCard = ({
 }: {
   title: string;
   value: string;
-  tooltip?: string;
+  tooltip?: NonNullable<React.ReactNode>;
   chart?: React.ReactNode;
 }) => {
   return (
@@ -539,6 +612,100 @@ const ChartCard = ({ title, children }: { title: string; children: React.ReactNo
           {title}
         </Typography>
         {children}
+      </CardContent>
+    </Card>
+  );
+};
+
+const AnimeListCard = ({
+  title,
+  valueFormatter,
+  nodes,
+  nodeColor,
+  showAnimeDrawer,
+}: {
+  title: string;
+  valueFormatter: (node: GraphNode) => string;
+  nodes: Array<GraphNode>;
+  nodeColor: any;
+  showAnimeDrawer: (anime_id: number) => void;
+}) => {
+  const [inList, setInList] = React.useState(false);
+
+  const toggleInList = () => {
+    setInList(!inList);
+  };
+
+  const rowsPerPage = 10;
+  const [page, setPage] = React.useState(0);
+
+  const handlePrevPage = () => {
+    setPage(page - 1);
+  };
+
+  const handleNextPage = () => {
+    setPage(page + 1);
+  };
+
+  nodes = nodes
+    .filter((n) => !inList || n.user_anime_status !== '')
+    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+  return (
+    <Card>
+      <CardContent>
+        <Typography sx={{ ...style.statsTitle, textAlign: 'center', marginBottom: 1 }}>{title}</Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Divider />
+          </Grid>
+          {nodes.map((n, i) => {
+            return (
+              <React.Fragment key={n.id}>
+                <Grid item xs={1} sx={{ textAlign: 'right' }}>
+                  {`${page * rowsPerPage + i + 1}.`}
+                </Grid>
+                <Grid item xs={1} sx={{ textAlign: 'center' }}>
+                  <StatusCircle status={n.user_anime_status} color={nodeColor[n.user_anime_status] || 'black'} />
+                </Grid>
+                <Grid item xs={8} sx={{ overflowX: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                  <Link
+                    color="inherit"
+                    underline="hover"
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() => showAnimeDrawer(n.id)}
+                  >
+                    {n.title}
+                  </Link>
+                </Grid>
+                <Grid item xs={2} sx={{ textAlign: 'right' }}>
+                  {valueFormatter(n)}
+                </Grid>
+              </React.Fragment>
+            );
+          })}
+          <Grid item xs={12}>
+            <Divider />
+          </Grid>
+          <Grid item xs={12} container spacing={2}>
+            <Grid item>
+              <Tooltip title={inList ? 'show in list only' : 'show all'} placement="right" arrow>
+                <IconButton onClick={toggleInList} size="small">
+                  {inList ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              </Tooltip>
+            </Grid>
+            <Grid item xs />
+            <Grid item>
+              <IconButton onClick={handlePrevPage} size="small" disabled={page === 0}>
+                <ChevronLeftIcon />
+              </IconButton>
+              <IconButton onClick={handleNextPage} size="small">
+                <ChevronRightIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </Grid>
       </CardContent>
     </Card>
   );
