@@ -1,7 +1,8 @@
 import { Dialog, DialogContent, DialogTitle, Grid, Link } from '@mui/material';
 import * as React from 'react';
-import { GraphNode } from '../../types/Types';
+import { AnimeDrawerState, GraphNode } from '../../types/Types';
 import StatusCircle from '../circle/StatusCircle';
+import AnimeDrawer from '../drawer/AnimeDrawer';
 
 const ChartNodeDialog = ({
   open,
@@ -9,15 +10,26 @@ const ChartNodeDialog = ({
   title,
   nodes = [],
   nodeColor,
-  showAnimeDrawer,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   nodes: Array<GraphNode>;
   nodeColor: any;
-  showAnimeDrawer: (anime_id: number) => void;
 }) => {
+  const [animeDrawerState, setAnimeDrawerState] = React.useState<AnimeDrawerState>({
+    open: false,
+    anime_id: 0,
+  });
+
+  const handleCloseAnimeDrawer = () => {
+    setAnimeDrawerState({ open: false, anime_id: 0 });
+  };
+
+  const handleOpenAnimeDrawer = (anime_id: number) => {
+    setAnimeDrawerState({ open: true, anime_id: anime_id });
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
@@ -34,7 +46,7 @@ const ChartNodeDialog = ({
                     color="inherit"
                     underline="hover"
                     sx={{ cursor: 'pointer' }}
-                    onClick={() => showAnimeDrawer(n.id)}
+                    onClick={() => handleOpenAnimeDrawer(n.id)}
                   >
                     {n.title}
                   </Link>
@@ -44,6 +56,13 @@ const ChartNodeDialog = ({
           })}
         </Grid>
       </DialogContent>
+      <AnimeDrawer
+        open={animeDrawerState.open}
+        anime_id={animeDrawerState.anime_id}
+        onClose={handleCloseAnimeDrawer}
+        nodes={nodes}
+        nodeColor={nodeColor}
+      />
     </Dialog>
   );
 };

@@ -365,14 +365,14 @@ const RecommendationDialog = ({
             </Grid>
           </Grid>
         </DialogContent>
+        <AnimeDrawer
+          open={animeDrawerState.open}
+          anime_id={animeDrawerState.anime_id}
+          onClose={handleCloseAnimeDrawer}
+          nodes={nodes}
+          nodeColor={nodeColor}
+        />
       </Dialog>
-      <AnimeDrawer
-        open={animeDrawerState.open}
-        anime_id={animeDrawerState.anime_id}
-        onClose={handleCloseAnimeDrawer}
-        nodes={nodes}
-        nodeColor={nodeColor}
-      />
     </>
   );
 };

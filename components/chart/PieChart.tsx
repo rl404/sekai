@@ -12,7 +12,6 @@ interface PieChartData {
 interface PieChartConfig {
   valueName: string;
   nodeColor: any;
-  showAnimeDrawer: (anime_id: number) => void;
 }
 
 const PieChart = ({ data, config }: { data: Array<PieChartData>; config: PieChartConfig }) => {
@@ -64,7 +63,6 @@ const PieChart = ({ data, config }: { data: Array<PieChartData>; config: PieChar
         title={dialogTitle}
         nodes={dialogData}
         nodeColor={config.nodeColor}
-        showAnimeDrawer={config.showAnimeDrawer}
       />
     </>
   );

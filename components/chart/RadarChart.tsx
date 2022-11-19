@@ -13,7 +13,6 @@ interface RadarChartData {
 interface RadarChartConfig {
   valueName: string;
   nodeColor: any;
-  showAnimeDrawer: (anime_id: number) => void;
 }
 
 const RadarChart = ({ data, config }: { data: Array<RadarChartData>; config: RadarChartConfig }) => {
@@ -55,7 +54,6 @@ const RadarChart = ({ data, config }: { data: Array<RadarChartData>; config: Rad
         title={dialogTitle}
         nodes={dialogData}
         nodeColor={config.nodeColor}
-        showAnimeDrawer={config.showAnimeDrawer}
       />
     </>
   );
