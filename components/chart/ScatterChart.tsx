@@ -26,7 +26,6 @@ interface ScatterChartConfig {
   yName: string;
   zName: string;
   nodeColor: any;
-  showAnimeDrawer: (anime_id: number) => void;
 }
 
 const ScatterChart = ({ data, config }: { data: Array<ScatterChartData>; config: ScatterChartConfig }) => {
@@ -75,7 +74,6 @@ const ScatterChart = ({ data, config }: { data: Array<ScatterChartData>; config:
         title={dialogTitle}
         nodes={dialogData}
         nodeColor={config.nodeColor}
-        showAnimeDrawer={config.showAnimeDrawer}
       />
     </>
   );

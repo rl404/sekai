@@ -17,13 +17,7 @@ import {
 } from '@mui/material';
 import * as React from 'react';
 import Draggable from 'react-draggable';
-import {
-  ConfigState,
-  GraphData,
-  ListDialogState,
-  RecommendationDialogState,
-  StatsDialogState,
-} from '../../types/Types';
+import { ConfigState, GraphData, RecommendationDialogState } from '../../types/Types';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { UserAnimeStatus } from '../../utils/constant';
@@ -33,10 +27,10 @@ import 'react-resizable/css/styles.css';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import { theme } from '../theme';
-import ListDialog from './ListDialog';
-import StatsDialog from './StatsDialog';
 import GrowTransition from '../transition/GrowTransition';
-import RecommendationDialog from './RecommendationDialog';
+import ListButton from '../button/ListButton';
+import StatsButton from '../button/StatsButton';
+import RecommendationButton from '../button/RecommendationButton';
 
 const style = {
   rectangle: {
@@ -182,30 +176,6 @@ const ConfigDialog = ({
 
   const [dialogWidth, setDialogWidth] = React.useState(270);
 
-  const [listDialogState, setListDialogState] = React.useState<ListDialogState>({
-    open: false,
-  });
-
-  const handleOpenListDialog = () => {
-    setListDialogState({ ...listDialogState, open: true });
-  };
-
-  const handleCloseListDialog = () => {
-    setListDialogState({ ...listDialogState, open: false });
-  };
-
-  const [statsDialogState, setStatsDialogState] = React.useState<StatsDialogState>({
-    open: false,
-  });
-
-  const handleOpenStatsDialog = () => {
-    setStatsDialogState({ ...statsDialogState, open: true });
-  };
-
-  const handleCloseStatsDialog = () => {
-    setStatsDialogState({ ...statsDialogState, open: false });
-  };
-
   const [recommendationDialogState, setRecommendationDialogState] = React.useState<RecommendationDialogState>({
     open: false,
   });
@@ -219,269 +189,235 @@ const ConfigDialog = ({
   };
 
   return (
-    <>
-      <Dialog
-        open={open}
-        PaperComponent={DraggablePaper}
-        PaperProps={{ sx: { overflow: 'visible', width: dialogWidth, minWidth: 200 } }}
-        hideBackdrop
-        disableEnforceFocus
-        sx={{
-          top: 5,
-          left: 5,
-          [theme.breakpoints.down('md')]: {
-            left: '50%',
-            transform: 'translate(-50%, 0)',
-          },
-          height: 'fit-content',
-          width: 'fit-content',
+    <Dialog
+      open={open}
+      PaperComponent={DraggablePaper}
+      PaperProps={{ sx: { overflow: 'visible', width: dialogWidth, minWidth: 200 } }}
+      hideBackdrop
+      disableEnforceFocus
+      sx={{
+        top: 5,
+        left: 5,
+        [theme.breakpoints.down('md')]: {
+          left: '50%',
+          transform: 'translate(-50%, 0)',
+        },
+        height: 'fit-content',
+        width: 'fit-content',
+      }}
+      TransitionComponent={GrowTransition}
+      aria-labelledby="draggable-title"
+    >
+      <Resizable
+        width={dialogWidth}
+        height={200}
+        onResize={(e: any, _) => {
+          setDialogWidth(dialogWidth + e.movementX);
         }}
-        TransitionComponent={GrowTransition}
-        aria-labelledby="draggable-title"
       >
-        <Resizable
-          width={dialogWidth}
-          height={200}
-          onResize={(e: any, _) => {
-            setDialogWidth(dialogWidth + e.movementX);
-          }}
-        >
-          <>
-            <DialogTitle id="draggable-title" style={{ cursor: 'move' }}>
-              {`${config.username}'s Anime World `}
-              <Tooltip placement="right" arrow title={`show ${formState.open ? 'less' : 'more'}`}>
-                <IconButton onClick={handleToggleOpenForm} size="small">
-                  {formState.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                </IconButton>
-              </Tooltip>
-            </DialogTitle>
-            <Collapse in={formState.open}>
-              <DialogContent dividers>
-                <Grid container spacing={1}>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Anime Title"
-                      placeholder="naruto"
-                      size="small"
-                      fullWidth
-                      value={formState.search}
-                      onChange={handleSearch}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            {formState.search === '' ? (
-                              <SearchIcon fontSize="small" />
-                            ) : (
-                              <IconButton size="small" onClick={clearSearch}>
-                                <ClearIcon fontSize="small" />
-                              </IconButton>
-                            )}
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    Status Colors
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Box
-                      component="span"
-                      onClick={() => showColor(UserAnimeStatus.watching, true)}
-                      sx={{ ...style.rectangle, background: formState.watchingNodeColor }}
-                    />
-                    <ColorPicker
-                      open={formState.watchingNodeColorShow}
-                      color={formState.watchingNodeColor}
-                      onClose={() => showColor(UserAnimeStatus.watching, false)}
-                      onChange={(color: any) => setColor(UserAnimeStatus.watching, color.hex)}
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    Watching
-                  </Grid>
+        <>
+          <DialogTitle id="draggable-title" style={{ cursor: 'move' }}>
+            {`${config.username}'s Anime World `}
+            <Tooltip placement="right" arrow title={`show ${formState.open ? 'less' : 'more'}`}>
+              <IconButton onClick={handleToggleOpenForm} size="small">
+                {formState.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </IconButton>
+            </Tooltip>
+          </DialogTitle>
+          <Collapse in={formState.open}>
+            <DialogContent dividers>
+              <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Anime Title"
+                    placeholder="naruto"
+                    size="small"
+                    fullWidth
+                    value={formState.search}
+                    onChange={handleSearch}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {formState.search === '' ? (
+                            <SearchIcon fontSize="small" />
+                          ) : (
+                            <IconButton size="small" onClick={clearSearch}>
+                              <ClearIcon fontSize="small" />
+                            </IconButton>
+                          )}
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  Status Colors
+                </Grid>
+                <Grid item xs={2}>
+                  <Box
+                    component="span"
+                    onClick={() => showColor(UserAnimeStatus.watching, true)}
+                    sx={{ ...style.rectangle, background: formState.watchingNodeColor }}
+                  />
+                  <ColorPicker
+                    open={formState.watchingNodeColorShow}
+                    color={formState.watchingNodeColor}
+                    onClose={() => showColor(UserAnimeStatus.watching, false)}
+                    onChange={(color: any) => setColor(UserAnimeStatus.watching, color.hex)}
+                  />
+                </Grid>
+                <Grid item xs={10}>
+                  Watching
+                </Grid>
 
-                  <Grid item xs={2}>
-                    <Box
-                      component="span"
-                      onClick={() => showColor(UserAnimeStatus.completed, true)}
-                      sx={{ ...style.rectangle, background: formState.completedNodeColor }}
-                    />
-                    <ColorPicker
-                      open={formState.completedNodeColorShow}
-                      color={formState.completedNodeColor}
-                      onClose={() => showColor(UserAnimeStatus.completed, false)}
-                      onChange={(color: any) => setColor(UserAnimeStatus.completed, color.hex)}
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    Completed
-                  </Grid>
+                <Grid item xs={2}>
+                  <Box
+                    component="span"
+                    onClick={() => showColor(UserAnimeStatus.completed, true)}
+                    sx={{ ...style.rectangle, background: formState.completedNodeColor }}
+                  />
+                  <ColorPicker
+                    open={formState.completedNodeColorShow}
+                    color={formState.completedNodeColor}
+                    onClose={() => showColor(UserAnimeStatus.completed, false)}
+                    onChange={(color: any) => setColor(UserAnimeStatus.completed, color.hex)}
+                  />
+                </Grid>
+                <Grid item xs={10}>
+                  Completed
+                </Grid>
 
-                  <Grid item xs={2}>
-                    <Box
-                      component="span"
-                      onClick={() => showColor(UserAnimeStatus.on_hold, true)}
-                      sx={{ ...style.rectangle, background: formState.onHoldNodeColor }}
-                    />
-                    <ColorPicker
-                      open={formState.onHoldNodeColorShow}
-                      color={formState.onHoldNodeColor}
-                      onClose={() => showColor(UserAnimeStatus.on_hold, false)}
-                      onChange={(color: any) => setColor(UserAnimeStatus.on_hold, color.hex)}
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    On Hold
-                  </Grid>
+                <Grid item xs={2}>
+                  <Box
+                    component="span"
+                    onClick={() => showColor(UserAnimeStatus.on_hold, true)}
+                    sx={{ ...style.rectangle, background: formState.onHoldNodeColor }}
+                  />
+                  <ColorPicker
+                    open={formState.onHoldNodeColorShow}
+                    color={formState.onHoldNodeColor}
+                    onClose={() => showColor(UserAnimeStatus.on_hold, false)}
+                    onChange={(color: any) => setColor(UserAnimeStatus.on_hold, color.hex)}
+                  />
+                </Grid>
+                <Grid item xs={10}>
+                  On Hold
+                </Grid>
 
-                  <Grid item xs={2}>
-                    <Box
-                      component="span"
-                      onClick={() => showColor(UserAnimeStatus.dropped, true)}
-                      sx={{ ...style.rectangle, background: formState.droppedNodeColor }}
-                    />
-                    <ColorPicker
-                      open={formState.droppedNodeColorShow}
-                      color={formState.droppedNodeColor}
-                      onClose={() => showColor(UserAnimeStatus.dropped, false)}
-                      onChange={(color: any) => setColor(UserAnimeStatus.dropped, color.hex)}
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    Dropped
-                  </Grid>
+                <Grid item xs={2}>
+                  <Box
+                    component="span"
+                    onClick={() => showColor(UserAnimeStatus.dropped, true)}
+                    sx={{ ...style.rectangle, background: formState.droppedNodeColor }}
+                  />
+                  <ColorPicker
+                    open={formState.droppedNodeColorShow}
+                    color={formState.droppedNodeColor}
+                    onClose={() => showColor(UserAnimeStatus.dropped, false)}
+                    onChange={(color: any) => setColor(UserAnimeStatus.dropped, color.hex)}
+                  />
+                </Grid>
+                <Grid item xs={10}>
+                  Dropped
+                </Grid>
 
-                  <Grid item xs={2}>
-                    <Box
-                      component="span"
-                      onClick={() => showColor(UserAnimeStatus.planned, true)}
-                      sx={{ ...style.rectangle, background: formState.plannedNodeColor }}
-                    />
-                    <ColorPicker
-                      open={formState.plannedNodeColorShow}
-                      color={formState.plannedNodeColor}
-                      onClose={() => showColor(UserAnimeStatus.planned, false)}
-                      onChange={(color: any) => setColor(UserAnimeStatus.planned, color.hex)}
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    Planned
-                  </Grid>
+                <Grid item xs={2}>
+                  <Box
+                    component="span"
+                    onClick={() => showColor(UserAnimeStatus.planned, true)}
+                    sx={{ ...style.rectangle, background: formState.plannedNodeColor }}
+                  />
+                  <ColorPicker
+                    open={formState.plannedNodeColorShow}
+                    color={formState.plannedNodeColor}
+                    onClose={() => showColor(UserAnimeStatus.planned, false)}
+                    onChange={(color: any) => setColor(UserAnimeStatus.planned, color.hex)}
+                  />
+                </Grid>
+                <Grid item xs={10}>
+                  Planned
+                </Grid>
 
-                  <Grid item xs={2}>
-                    <Box
-                      component="span"
-                      onClick={() => showColor('', true)}
-                      sx={{ ...style.rectangle, background: formState.otherNodeColor }}
-                    />
-                    <ColorPicker
-                      open={formState.otherNodeColorShow}
-                      color={formState.otherNodeColor}
-                      onClose={() => showColor('', false)}
-                      onChange={(color: any) => setColor('', color.hex)}
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    Other
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Tooltip placement="right" arrow title="Show anime detail when a node is clicked">
-                      <FormControlLabel
-                        label="Show anime detail"
-                        control={
-                          <Checkbox
-                            size="small"
-                            defaultChecked={true}
-                            value={formState.showDetails}
-                            onChange={handleShowDetailCheckBox}
-                          />
-                        }
-                      />
-                    </Tooltip>
-                  </Grid>
-                  <Grid item xs={12}>
+                <Grid item xs={2}>
+                  <Box
+                    component="span"
+                    onClick={() => showColor('', true)}
+                    sx={{ ...style.rectangle, background: formState.otherNodeColor }}
+                  />
+                  <ColorPicker
+                    open={formState.otherNodeColorShow}
+                    color={formState.otherNodeColor}
+                    onClose={() => showColor('', false)}
+                    onChange={(color: any) => setColor('', color.hex)}
+                  />
+                </Grid>
+                <Grid item xs={10}>
+                  Other
+                </Grid>
+                <Grid item xs={12}>
+                  <Tooltip placement="right" arrow title="Show anime detail when a node is clicked">
                     <FormControlLabel
-                      label="Always show anime title"
-                      control={<Checkbox size="small" value={formState.showTitle} onChange={handleShowTitle} />}
+                      label="Show anime detail"
+                      control={
+                        <Checkbox
+                          size="small"
+                          defaultChecked={true}
+                          value={formState.showDetails}
+                          onChange={handleShowDetailCheckBox}
+                        />
+                      }
                     />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Tooltip placement="right" arrow title="Show all indirect anime relation when a node is hovered">
-                      <FormControlLabel
-                        label="Show extended relation"
-                        control={
-                          <Checkbox
-                            size="small"
-                            value={formState.showExtendedRelation}
-                            onChange={handleShowExtendedRelation}
-                          />
-                        }
-                      />
-                    </Tooltip>
-                  </Grid>
+                  </Tooltip>
                 </Grid>
-              </DialogContent>
-              <DialogContent>
-                <Grid container spacing={1}>
-                  <Grid item xs={12}>
-                    <Button fullWidth onClick={handleOpenListDialog}>
-                      Show Anime List
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button fullWidth onClick={handleOpenStatsDialog}>
-                      Show Stats
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button fullWidth onClick={handleOpenRecommendationDialog}>
-                      Show Recommendations
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button fullWidth onClick={() => window.location.reload()} color="error">
-                      Change username
-                    </Button>
-                  </Grid>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    label="Always show anime title"
+                    control={<Checkbox size="small" value={formState.showTitle} onChange={handleShowTitle} />}
+                  />
                 </Grid>
-              </DialogContent>
-            </Collapse>
-          </>
-        </Resizable>
-      </Dialog>
-
-      {listDialogState.open && (
-        <ListDialog
-          open={listDialogState.open}
-          onClose={handleCloseListDialog}
-          username={config.username}
-          nodes={graphData.nodes}
-          nodeColor={nodeColor}
-        />
-      )}
-
-      {statsDialogState.open && (
-        <StatsDialog
-          open={statsDialogState.open}
-          onClose={handleCloseStatsDialog}
-          username={config.username}
-          nodes={graphData.nodes}
-          nodeColor={nodeColor}
-        />
-      )}
-
-      {recommendationDialogState.open && (
-        <RecommendationDialog
-          open={recommendationDialogState.open}
-          onClose={handleCloseRecommendationDialog}
-          username={config.username}
-          nodes={graphData.nodes}
-          links={graphData.links}
-          nodeColor={nodeColor}
-        />
-      )}
-    </>
+                <Grid item xs={12}>
+                  <Tooltip placement="right" arrow title="Show all indirect anime relation when a node is hovered">
+                    <FormControlLabel
+                      label="Show extended relation"
+                      control={
+                        <Checkbox
+                          size="small"
+                          value={formState.showExtendedRelation}
+                          onChange={handleShowExtendedRelation}
+                        />
+                      }
+                    />
+                  </Tooltip>
+                </Grid>
+              </Grid>
+            </DialogContent>
+            <DialogContent>
+              <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <ListButton username={config.username} nodes={graphData.nodes} nodeColor={nodeColor} />
+                </Grid>
+                <Grid item xs={12}>
+                  <StatsButton username={config.username} nodes={graphData.nodes} nodeColor={nodeColor} />
+                </Grid>
+                <Grid item xs={12}>
+                  <RecommendationButton
+                    username={config.username}
+                    nodes={graphData.nodes}
+                    links={graphData.links}
+                    nodeColor={nodeColor}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button fullWidth onClick={() => window.location.reload()} color="error">
+                    Change username
+                  </Button>
+                </Grid>
+              </Grid>
+            </DialogContent>
+          </Collapse>
+        </>
+      </Resizable>
+    </Dialog>
   );
 };
 

@@ -20,7 +20,7 @@ const InitDialog = ({
   const [formState, setFormState] = React.useState({
     username: '',
     error: '',
-    loading: false,
+    loading: true,
   });
 
   const handleChangeUsername = (e: any) => {
@@ -131,7 +131,14 @@ const InitDialog = ({
   };
 
   React.useEffect(() => {
-    axios.get(`/api`);
+    axios
+      .get(`/api`)
+      .then(() => {
+        setFormState({ ...formState, loading: false });
+      })
+      .catch((error) => {
+        setFormState({ ...formState, error: 'api is down' });
+      });
   }, []);
 
   return (
