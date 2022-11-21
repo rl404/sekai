@@ -28,7 +28,7 @@ interface ScatterChartConfig {
   nodeColor: any;
 }
 
-const ScatterChart = ({ data, config }: { data: Array<ScatterChartData>; config: ScatterChartConfig }) => {
+const ScatterChart = React.memo(({ data, config }: { data: Array<ScatterChartData>; config: ScatterChartConfig }) => {
   const [openDialog, setOpenDialog] = React.useState(false);
 
   const handleOpenDialog = () => {
@@ -77,7 +77,7 @@ const ScatterChart = ({ data, config }: { data: Array<ScatterChartData>; config:
       />
     </>
   );
-};
+});
 
 export default ScatterChart;
 

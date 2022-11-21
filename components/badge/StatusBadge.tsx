@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Chip } from '@mui/material';
 import { AnimeStatus, AnimeStatusToStr } from '../../utils/constant';
 
@@ -9,9 +10,9 @@ const statusColor: {
   [AnimeStatus.not_yet]: 'default',
 };
 
-const StatusBadge = ({ status }: { status: string }) => {
+const StatusBadge = React.memo(({ status }: { status: string }) => {
   if (status === '') return <></>;
   return <Chip size="small" label={AnimeStatusToStr(status)} color={statusColor[status]} />;
-};
+});
 
 export default StatusBadge;

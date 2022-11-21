@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { ResponsiveContainer, AreaChart as AChart, Area, YAxis } from 'recharts';
 import { theme } from '../theme';
 
@@ -7,7 +8,7 @@ interface ChartData {
   color: string;
 }
 
-const MiniAreaChart = ({ data }: { data: Array<ChartData> }) => {
+const MiniAreaChart = React.memo(({ data }: { data: Array<ChartData> }) => {
   var minScore = Math.min(...data.filter((o) => o.value > 0).map((o) => o.value));
   var maxScore = Math.max(...data.filter((o) => o.value > 0).map((o) => o.value));
 
@@ -22,6 +23,6 @@ const MiniAreaChart = ({ data }: { data: Array<ChartData> }) => {
       </AChart>
     </ResponsiveContainer>
   );
-};
+});
 
 export default MiniAreaChart;

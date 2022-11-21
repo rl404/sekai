@@ -33,7 +33,7 @@ interface BarLineChartConfig {
   nodeColor: any;
 }
 
-const BarLineChart = ({ data, config }: { data: Array<BarLineChartData>; config: BarLineChartConfig }) => {
+const BarLineChart = React.memo(({ data, config }: { data: Array<BarLineChartData>; config: BarLineChartConfig }) => {
   var minScore = Math.min(...data.filter((o) => o.valueLine1 > 0).map((o) => o.valueLine1));
   var maxScore = Math.max(...data.filter((o) => o.valueLine1 > 0).map((o) => o.valueLine1));
 
@@ -99,6 +99,6 @@ const BarLineChart = ({ data, config }: { data: Array<BarLineChartData>; config:
       />
     </>
   );
-};
+});
 
 export default BarLineChart;
