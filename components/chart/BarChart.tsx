@@ -27,7 +27,7 @@ interface BarChartConfig {
   nodeColor: any;
 }
 
-const BarChart = ({ data, config }: { data: Array<BarChartData>; config: BarChartConfig }) => {
+const BarChart = React.memo(({ data, config }: { data: Array<BarChartData>; config: BarChartConfig }) => {
   const [openDialog, setOpenDialog] = React.useState(false);
 
   const handleOpenDialog = () => {
@@ -75,6 +75,6 @@ const BarChart = ({ data, config }: { data: Array<BarChartData>; config: BarChar
       />
     </>
   );
-};
+});
 
 export default BarChart;

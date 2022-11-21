@@ -14,7 +14,7 @@ interface PieChartConfig {
   nodeColor: any;
 }
 
-const PieChart = ({ data, config }: { data: Array<PieChartData>; config: PieChartConfig }) => {
+const PieChart = React.memo(({ data, config }: { data: Array<PieChartData>; config: PieChartConfig }) => {
   const [activeIndex, setActiveIndex] = React.useState(0);
 
   const onHover = (_: any, i: number) => {
@@ -66,7 +66,7 @@ const PieChart = ({ data, config }: { data: Array<PieChartData>; config: PieChar
       />
     </>
   );
-};
+});
 
 export default PieChart;
 

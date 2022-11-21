@@ -15,7 +15,7 @@ interface RadarChartConfig {
   nodeColor: any;
 }
 
-const RadarChart = ({ data, config }: { data: Array<RadarChartData>; config: RadarChartConfig }) => {
+const RadarChart = React.memo(({ data, config }: { data: Array<RadarChartData>; config: RadarChartConfig }) => {
   const [openDialog, setOpenDialog] = React.useState(false);
 
   const handleOpenDialog = () => {
@@ -57,6 +57,6 @@ const RadarChart = ({ data, config }: { data: Array<RadarChartData>; config: Rad
       />
     </>
   );
-};
+});
 
 export default RadarChart;
