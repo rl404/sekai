@@ -23,7 +23,7 @@
     "react-draggable": "^4.4.5",
     "react-force-graph": "^1.41.18",
     "react-resizable": "^3.0.4",
-    "recharts": "^2.2.0"
+    "recharts": "^2.3.2"
   },
   "devDependencies": {
     "@types/d3": "^7.4.0",
