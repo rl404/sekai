@@ -21,7 +21,7 @@
     "react-color": "^2.19.3",
     "react-dom": "18.2.0",
     "react-draggable": "^4.4.5",
-    "react-force-graph": "^1.41.20",
+    "react-force-graph": "^1.42.0",
     "react-resizable": "^3.0.4",
     "recharts": "^2.3.2"
   },
