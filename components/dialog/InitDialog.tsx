@@ -20,7 +20,7 @@ const InitDialog = ({
   const [formState, setFormState] = React.useState({
     username: '',
     error: '',
-    loading: true,
+    loading: false,
   });
 
   const handleChangeUsername = (e: any) => {
