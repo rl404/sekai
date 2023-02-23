@@ -79,32 +79,37 @@ const InitDialog = ({
           };
         });
 
-        const links: Array<GraphLink> = resp.data.data.links.map((l: UserAnimeRelationLink): GraphLink => {
-          const link = {
-            source: l.anime_id1,
-            sourceID: l.anime_id1,
-            target: l.anime_id2,
-            targetID: l.anime_id2,
-            relation: l.relation,
-          };
+        const links: Array<GraphLink> = resp.data.data.links
+          .filter(
+            (l: UserAnimeRelationLink) =>
+              nodes.find((n) => n.id === l.anime_id1) && nodes.find((n) => n.id === l.anime_id2),
+          )
+          .map((l: UserAnimeRelationLink): GraphLink => {
+            const link = {
+              source: l.anime_id1,
+              sourceID: l.anime_id1,
+              target: l.anime_id2,
+              targetID: l.anime_id2,
+              relation: l.relation,
+            };
 
-          const a = nodes.find((n: any) => n.id === link.source);
-          const b = nodes.find((n: any) => n.id === link.target);
+            const a = nodes.find((n: any) => n.id === link.source);
+            const b = nodes.find((n: any) => n.id === link.target);
 
-          a && !a.neighbors && (a.neighbors = []);
-          b && !b.neighbors && (b.neighbors = []);
+            a && !a.neighbors && (a.neighbors = []);
+            b && !b.neighbors && (b.neighbors = []);
 
-          a && b && a.neighbors.push(b);
-          a && b && b.neighbors.push(a);
+            a && b && a.neighbors.push(b);
+            a && b && b.neighbors.push(a);
 
-          a && !a.links && (a.links = []);
-          b && !b.links && (b.links = []);
+            a && !a.links && (a.links = []);
+            b && !b.links && (b.links = []);
 
-          a && a.links.push(link);
-          b && b.links.push(link);
+            a && a.links.push(link);
+            b && b.links.push(link);
 
-          return link;
-        });
+            return link;
+          });
 
         nodes.forEach((n) => {
           n.neighbors = Array.from(new Set(n.neighbors));
