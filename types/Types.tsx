@@ -168,6 +168,7 @@ export interface ConfigState {
   showTitle: boolean;
   showExtendedRelation: boolean;
   search: string;
+  focusSearchTrigger: number;
 }
 
 export interface AnimeDrawerState {
