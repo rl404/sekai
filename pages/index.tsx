@@ -82,6 +82,7 @@ const Home: NextPage = () => {
     showTitle: false,
     showExtendedRelation: false,
     search: '',
+    focusSearchTrigger: 0,
   });
 
   const setConfigUsername = (username: string) => {
@@ -102,6 +103,10 @@ const Home: NextPage = () => {
 
   const setSearch = (v: string) => {
     setConfigState({ ...configState, search: v });
+  };
+
+  const triggerFocusSearch = () => {
+    setConfigState({ ...configState, focusSearchTrigger: configState.focusSearchTrigger + 1 });
   };
 
   const title = 'Project Sekai';
@@ -130,6 +135,7 @@ const Home: NextPage = () => {
         showDetail={configState.showDetailOnClick}
         showTitle={configState.showTitle}
         showExtendedRelation={configState.showExtendedRelation}
+        focusSearchTrigger={configState.focusSearchTrigger}
       />
 
       <IconButton href="https://github.com/rl404/sekai" target={'_blank'} sx={style.githubIcon}>
@@ -156,6 +162,7 @@ const Home: NextPage = () => {
         setShowTitle={setShowTitle}
         setShowExtendedRelation={setShowExtendedRelation}
         setSearch={setSearch}
+        triggerFocusSearch={triggerFocusSearch}
       />
     </>
   );

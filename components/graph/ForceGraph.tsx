@@ -16,6 +16,7 @@ const ForceGraph = ({
   showDetail,
   showTitle,
   showExtendedRelation,
+  focusSearchTrigger,
 }: {
   search: string;
   graphData: GraphData | any;
@@ -24,8 +25,9 @@ const ForceGraph = ({
   showDetail: boolean;
   showTitle: boolean;
   showExtendedRelation: boolean;
+  focusSearchTrigger: number;
 }) => {
-  const graphRef = React.useRef();
+  const graphRef: any = React.useRef();
 
   const [animeDrawerState, setAnimeDrawerState] = React.useState<AnimeDrawerState>({
     open: false,
@@ -115,6 +117,47 @@ const ForceGraph = ({
       handleCloseAnimeDrawer();
     }
   }, [showDetail]);
+
+  const [searchFocusIndex, setSearchFocusIndex] = React.useState<number>(-1);
+
+  const focusSearch = () => {
+    if (!graphRef || !graphRef.current || search === '') return;
+
+    const nodeResults = graphData.nodes.filter((n: GraphNode) => n.title.toLowerCase().includes(search));
+
+    if (nodeResults.length === 0) return;
+
+    if (nodeResults.length === 1) {
+      graphRef.current.centerAt(nodeResults[0].x, nodeResults[0].y, 1000);
+      graphRef.current.zoom(2, 1000);
+      return;
+    }
+
+    if (searchFocusIndex >= 0) {
+      graphRef.current.centerAt(
+        nodeResults[searchFocusIndex % nodeResults.length].x,
+        nodeResults[searchFocusIndex % nodeResults.length].y,
+        1000,
+      );
+      graphRef.current.zoom(2, 1000);
+    }
+  };
+
+  React.useEffect(() => {
+    if (searchFocusIndex !== -1) {
+      setSearchFocusIndex(-1);
+    } else {
+      focusSearch();
+    }
+  }, [search]);
+
+  React.useEffect(() => {
+    setSearchFocusIndex(searchFocusIndex + 1);
+  }, [focusSearchTrigger]);
+
+  React.useEffect(() => {
+    focusSearch();
+  }, [searchFocusIndex]);
 
   return (
     <>

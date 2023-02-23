@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import * as React from 'react';
 import Draggable from 'react-draggable';
-import { ConfigState, GraphData, RecommendationDialogState } from '../../types/Types';
+import { ConfigState, GraphData } from '../../types/Types';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { UserAnimeStatus } from '../../utils/constant';
@@ -64,6 +64,7 @@ const ConfigDialog = React.memo(
     setShowTitle,
     setShowExtendedRelation,
     setSearch,
+    triggerFocusSearch,
   }: {
     open: boolean;
     config: ConfigState;
@@ -74,6 +75,7 @@ const ConfigDialog = React.memo(
     setShowTitle: (v: boolean) => void;
     setShowExtendedRelation: (v: boolean) => void;
     setSearch: (v: string) => void;
+    triggerFocusSearch: () => void;
   }) => {
     const [formState, setFormState] = React.useState({
       open: false,
@@ -171,24 +173,17 @@ const ConfigDialog = React.memo(
       setSearch(e.target.value);
     };
 
+    const handleSearchFocus = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.key !== 'Enter') return;
+      triggerFocusSearch();
+    };
+
     const clearSearch = () => {
       setFormState({ ...formState, search: '' });
       setSearch('');
     };
 
     const [dialogWidth, setDialogWidth] = React.useState(270);
-
-    const [recommendationDialogState, setRecommendationDialogState] = React.useState<RecommendationDialogState>({
-      open: false,
-    });
-
-    const handleOpenRecommendationDialog = () => {
-      setRecommendationDialogState({ ...recommendationDialogState, open: true });
-    };
-
-    const handleCloseRecommendationDialog = () => {
-      setRecommendationDialogState({ ...recommendationDialogState, open: false });
-    };
 
     return (
       <Dialog
@@ -241,6 +236,7 @@ const ConfigDialog = React.memo(
                       fullWidth
                       value={formState.search}
                       onChange={handleSearch}
+                      onKeyDown={handleSearchFocus}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
