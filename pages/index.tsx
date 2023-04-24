@@ -117,13 +117,16 @@ const Home: NextPage = () => {
     <>
       <Head>
         <title>{title}</title>
-        <meta name="title" content={title} />
         <meta name="description" content={desc} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={desc} />
         <meta property="og:image" content={image} />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={title} />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta http-equiv="Content-Type" content="text/html charset=utf-8" />
+        <meta name="theme-color" content="#2196f3" />
+        <meta name="twitter:card" content="summary_large_image" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
