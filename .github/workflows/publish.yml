@@ -44,3 +44,15 @@ jobs:
             rl404/sekai:${{ env.IMG_TAG }}
             ghcr.io/rl404/sekai:latest
             ghcr.io/rl404/sekai:${{ env.IMG_TAG }}
+  deploy:
+    name: Deploy to vercel
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Merge to branch vercel
+        uses: devmasx/merge-branch@1.4.0
+        with:
+          type: now
+          target_branch: vercel
+          github_token: ${{ secrets.GITHUB_TOKEN }}
