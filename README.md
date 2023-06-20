@@ -9,7 +9,6 @@ _Sekai_ is a website where you can see your anime world. How your anime relates 
 
 Powered by my [akatsuki](https://github.com/rl404/akatsuki) as backend.
 
-
 ## Features
 
 - Convert your anime list to [force-directed graph](https://en.wikipedia.org/wiki/Force-directed_graph_drawing).
