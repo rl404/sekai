@@ -7,10 +7,6 @@ jobs:
     name: Tag
     runs-on: ubuntu-latest
     steps:
-    - name: Set up Go environment
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
     - name: Check out code
       uses: actions/checkout@v3
       with:
