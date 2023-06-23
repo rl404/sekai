@@ -24,7 +24,7 @@
     "react-draggable": "^4.4.5",
     "react-force-graph": "^1.43.0",
     "react-resizable": "^3.0.5",
-    "recharts": "^2.7.1"
+    "recharts": "^2.7.2"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
