@@ -29,12 +29,12 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/d3": "^7.4.0",
-    "@types/node": "20.5.9",
+    "@types/node": "20.6.0",
     "@types/react": "18.2.21",
     "@types/react-color": "^3.0.6",
     "@types/react-dom": "18.2.7",
     "@types/react-resizable": "^3.0.4",
-    "eslint": "8.48.0",
+    "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
     "typescript": "5.2.2"
   }
