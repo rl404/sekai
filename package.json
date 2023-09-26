@@ -17,7 +17,7 @@
     "@mui/material": "^5.13.6",
     "axios": "^1.4.0",
     "d3": "^7.8.5",
-    "next": "13.5.2",
+    "next": "13.5.3",
     "react": "18.2.0",
     "react-color": "^2.19.3",
     "react-dom": "18.2.0",
@@ -29,13 +29,13 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/d3": "^7.4.0",
-    "@types/node": "20.6.5",
+    "@types/node": "20.7.0",
     "@types/react": "18.2.22",
     "@types/react-color": "^3.0.6",
     "@types/react-dom": "18.2.7",
     "@types/react-resizable": "^3.0.4",
     "eslint": "8.50.0",
-    "eslint-config-next": "13.5.2",
+    "eslint-config-next": "13.5.3",
     "typescript": "5.2.2"
   }
 }
