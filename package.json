@@ -30,7 +30,7 @@
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/d3": "^7.4.0",
     "@types/node": "20.11.16",
-    "@types/react": "18.2.53",
+    "@types/react": "18.2.54",
     "@types/react-color": "^3.0.6",
     "@types/react-dom": "18.2.18",
     "@types/react-resizable": "^3.0.4",
