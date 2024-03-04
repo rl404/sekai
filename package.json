@@ -17,7 +17,7 @@
     "@mui/material": "^5.13.6",
     "axios": "^1.4.0",
     "d3": "^7.8.5",
-    "next": "14.1.1",
+    "next": "14.1.2",
     "react": "18.2.0",
     "react-color": "^2.19.3",
     "react-dom": "18.2.0",
@@ -30,12 +30,12 @@
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/d3": "^7.4.0",
     "@types/node": "20.11.24",
-    "@types/react": "18.2.61",
+    "@types/react": "18.2.62",
     "@types/react-color": "^3.0.6",
     "@types/react-dom": "18.2.19",
     "@types/react-resizable": "^3.0.4",
     "eslint": "8.57.0",
-    "eslint-config-next": "14.1.1",
+    "eslint-config-next": "14.1.2",
     "typescript": "5.3.3"
   }
 }
