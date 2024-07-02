@@ -36,6 +36,6 @@
     "@types/react-resizable": "^3.0.4",
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.4",
-    "typescript": "5.5.2"
+    "typescript": "5.5.3"
   }
 }
