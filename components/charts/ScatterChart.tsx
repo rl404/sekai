@@ -2,7 +2,8 @@ import ChartNodeDialog from "../dialogs/ChartNodeDialog";
 import { ChartNodeDialogRefType } from "../dialogs/types";
 import { Node } from "../graphs/types";
 import { theme } from "../theme";
-import { Grid, Paper } from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import Paper from "@mui/material/Paper";
 import { memo, useRef, useState } from "react";
 import {
   CartesianGrid,
@@ -72,7 +73,7 @@ const ChartTooltip = ({ active, payload }: TooltipProps<any, any>) => {
     <Paper elevation={3} sx={{ padding: 0.5 }}>
       <Grid container>
         {payload.map((p) => (
-          <Grid item xs={12} key={p.name}>
+          <Grid size={12} key={p.name}>
             {`${p.name} : `}
             {typeof p.value === "string"
               ? p.value

@@ -2,7 +2,11 @@ import { useDispatchCtx } from "../context";
 import { getNodesLinks } from "@/libs/graph";
 import { getAxiosError, sleep } from "@/libs/utils";
 import { LoadingButton } from "@mui/lab";
-import { Dialog, DialogContent, DialogTitle, Grid, TextField } from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Grid from "@mui/material/Grid2";
+import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { memo, useEffect, useState } from "react";
 
@@ -71,7 +75,7 @@ const InitDialog = memo(() => {
       <DialogTitle>Welcome to Sekai</DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={9}>
+          <Grid size={{ xs: 12, sm: 9 }}>
             <TextField
               label="MyAnimeList username"
               placeholder="rl404"
@@ -85,7 +89,7 @@ const InitDialog = memo(() => {
               onKeyDown={(e) => e.key === "Enter" && onSubmit(1)}
             />
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid size={{ xs: 12, sm: 3 }}>
             <LoadingButton fullWidth onClick={() => onSubmit(1)} loading={loading}>
               Go
             </LoadingButton>

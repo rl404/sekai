@@ -26,19 +26,17 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import {
-  Card,
-  CardContent,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  Grid,
-  IconButton,
-  Link,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import { Fragment, ReactNode, forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
 
 const StatsDialog = memo(
@@ -261,9 +259,9 @@ const StatsDialog = memo(
         >
           <DialogTitle>
             <Grid container>
-              <Grid item>{`${ctx.username}'s Stats`}</Grid>
-              <Grid item xs />
-              <Grid item>
+              <Grid>{`${ctx.username}'s Stats`}</Grid>
+              <Grid size="grow" />
+              <Grid>
                 <IconButton onClick={onClose} size="small">
                   <CloseIcon />
                 </IconButton>
@@ -273,7 +271,7 @@ const StatsDialog = memo(
 
           <DialogContent dividers>
             <Grid container spacing={2}>
-              <Grid item xs={6} sm={3}>
+              <Grid size={{ xs: 6, sm: 3 }}>
                 <StatsCard
                   title="Total Anime"
                   value={inList.length.toLocaleString()}
@@ -288,7 +286,7 @@ const StatsDialog = memo(
                 />
               </Grid>
 
-              <Grid item xs={6} sm={3}>
+              <Grid size={{ xs: 6, sm: 3 }}>
                 <StatsCard
                   title="Average Score"
                   value={avgScore.toFixed(2)}
@@ -313,7 +311,7 @@ const StatsDialog = memo(
                 />
               </Grid>
 
-              <Grid item xs={6} sm={3}>
+              <Grid size={{ xs: 6, sm: 3 }}>
                 <StatsCard
                   title="Total Episodes"
                   value={ctx.graph.nodes.reduce((total, next) => total + next.userEpisodeCount, 0).toLocaleString()}
@@ -330,7 +328,7 @@ const StatsDialog = memo(
                 />
               </Grid>
 
-              <Grid item xs={6} sm={3}>
+              <Grid size={{ xs: 6, sm: 3 }}>
                 <StatsCard
                   title="Total Duration (days)"
                   value={(
@@ -351,7 +349,7 @@ const StatsDialog = memo(
                 />
               </Grid>
 
-              <Grid item xs={12} sm={12} md={6}>
+              <Grid size={{ xs: 12, sm: 12, md: 6 }}>
                 <ChartCard title="Anime by Status">
                   <BarChart
                     config={{ valueName: "count" }}
@@ -365,7 +363,7 @@ const StatsDialog = memo(
                 </ChartCard>
               </Grid>
 
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                 <ChartCard title="Anime by Type">
                   <RadarChart
                     config={{ valueName: "count" }}
@@ -380,7 +378,7 @@ const StatsDialog = memo(
                 </ChartCard>
               </Grid>
 
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                 <ChartCard title="Anime by Source">
                   <PieChart
                     config={{ valueName: "count" }}
@@ -395,7 +393,7 @@ const StatsDialog = memo(
                 </ChartCard>
               </Grid>
 
-              <Grid item xs={12} sm={12} md={6}>
+              <Grid size={{ xs: 12, sm: 12, md: 6 }}>
                 <ChartCard title="Anime by Episode Count & Score">
                   <BarLineChart
                     config={{
@@ -414,7 +412,7 @@ const StatsDialog = memo(
                 </ChartCard>
               </Grid>
 
-              <Grid item xs={12} sm={12} md={6}>
+              <Grid size={{ xs: 12, sm: 12, md: 6 }}>
                 <ChartCard title="Anime by Episode Duration (minutes) & Score">
                   <BarLineChart
                     config={{
@@ -433,7 +431,7 @@ const StatsDialog = memo(
                 </ChartCard>
               </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={6}>
+              <Grid size={{ xs: 12, sm: 12, md: 12, lg: 6 }}>
                 <ChartCard title="Anime by Year & Score">
                   <BarLineChart
                     config={{
@@ -454,7 +452,7 @@ const StatsDialog = memo(
                 </ChartCard>
               </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={6}>
+              <Grid size={{ xs: 12, sm: 12, md: 12, lg: 6 }}>
                 <ChartCard title="Anime by Season & Year">
                   <ScatterChart
                     config={{
@@ -477,7 +475,7 @@ const StatsDialog = memo(
                 </ChartCard>
               </Grid>
 
-              <Grid item xs={12} sm={6} lg={3}>
+              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                 <AnimeListCard
                   title="Top Highest Score"
                   valueFormatter={(n) => n.score.toFixed(2)}
@@ -486,7 +484,7 @@ const StatsDialog = memo(
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6} lg={3}>
+              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                 <AnimeListCard
                   title="Most Episode Count"
                   valueFormatter={(n) => n.episodeCount.toLocaleString()}
@@ -497,7 +495,7 @@ const StatsDialog = memo(
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6} lg={3}>
+              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                 <AnimeListCard
                   title="Longest Episode Duration (minutes)"
                   valueFormatter={(n) => (n.episodeDuration / 60).toFixed(0).toLocaleString()}
@@ -508,7 +506,7 @@ const StatsDialog = memo(
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6} lg={3}>
+              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                 <AnimeListCard
                   title="Most Relation Count"
                   valueFormatter={(n) => n.neighbors.length.toLocaleString()}
@@ -616,42 +614,42 @@ const AnimeListCard = ({
       <CardContent>
         <Typography sx={{ ...style.statsTitle, textAlign: "center", marginBottom: 1 }}>{title}</Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Divider />
           </Grid>
           {nodes.map((n, i) => {
             return (
               <Fragment key={n.id}>
-                <Grid item xs={1} sx={{ textAlign: "right" }}>
+                <Grid size={1} sx={{ textAlign: "right" }}>
                   {`${page * rowsPerPage + i + 1}.`}
                 </Grid>
-                <Grid item xs={1} sx={{ textAlign: "center" }}>
+                <Grid size={1} sx={{ textAlign: "center" }}>
                   <StatusCircle status={n.userAnimeStatus} />
                 </Grid>
-                <Grid item xs={8} sx={{ overflowX: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
+                <Grid size={8} sx={{ overflowX: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
                   <Link color="inherit" underline="hover" sx={{ cursor: "pointer" }} onClick={() => onClickAnime(n.id)}>
                     {n.title}
                   </Link>
                 </Grid>
-                <Grid item xs={2} sx={{ textAlign: "right" }}>
+                <Grid size={2} sx={{ textAlign: "right" }}>
                   {valueFormatter(n)}
                 </Grid>
               </Fragment>
             );
           })}
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Divider />
           </Grid>
-          <Grid item xs={12} container spacing={2}>
-            <Grid item>
+          <Grid size={12} container spacing={2}>
+            <Grid>
               <Tooltip title={inList ? "show in list only" : "show all"} placement="right" arrow>
                 <IconButton onClick={toggleInList} size="small">
                   {inList ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
               </Tooltip>
             </Grid>
-            <Grid item xs />
-            <Grid item>
+            <Grid size="grow" />
+            <Grid>
               <IconButton onClick={onPrevPage} size="small" disabled={page === 0}>
                 <ChevronLeftIcon />
               </IconButton>

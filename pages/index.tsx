@@ -3,7 +3,7 @@ import Main from "@/components/Main";
 import ConfigDialog from "@/components/dialogs/ConfigDialog";
 import InitDialog from "@/components/dialogs/InitDialog";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import dynamic from "next/dynamic";
 
 const style = {

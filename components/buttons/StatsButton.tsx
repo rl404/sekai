@@ -1,6 +1,6 @@
 import StatsDialog from "../dialogs/StatsDialog";
 import { StatsDialogRefType } from "../dialogs/types";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import { memo, useRef } from "react";
 
 const StatsButton = memo(() => {

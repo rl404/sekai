@@ -12,22 +12,19 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import {
-  Collapse,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  FormControl,
-  Grid,
-  IconButton,
-  InputLabel,
-  Link,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Tooltip,
-} from "@mui/material";
+import Collapse from "@mui/material/Collapse";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Divider from "@mui/material/Divider";
+import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import InputLabel from "@mui/material/InputLabel";
+import Link from "@mui/material/Link";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Tooltip from "@mui/material/Tooltip";
 import { Fragment, forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
 
 const RecommendationDialog = memo(
@@ -248,9 +245,9 @@ const RecommendationDialog = memo(
         >
           <DialogTitle>
             <Grid container spacing={2}>
-              <Grid item>{`${ctx.username}'s Recommendations`}</Grid>
-              <Grid item xs />
-              <Grid item>
+              <Grid>{`${ctx.username}'s Recommendations`}</Grid>
+              <Grid size="grow" />
+              <Grid>
                 <Tooltip
                   title={hideInList ? "includes already in list" : "hide already in list"}
                   placement="left"
@@ -261,7 +258,7 @@ const RecommendationDialog = memo(
                   </IconButton>
                 </Tooltip>
               </Grid>
-              <Grid item>
+              <Grid>
                 <FormControl size="small" sx={{ width: 100 }}>
                   <InputLabel id="filterScore-select">Min Score</InputLabel>
                   <Select id="filterScore-select" label="Min Score" value={minScore} onChange={onChangeScore}>
@@ -279,7 +276,7 @@ const RecommendationDialog = memo(
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item>
+              <Grid>
                 <IconButton onClick={onClose} size="small">
                   <CloseIcon />
                 </IconButton>
@@ -289,36 +286,36 @@ const RecommendationDialog = memo(
 
           <DialogContent dividers>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={6} xl={4}>
+              <Grid size={{ xs: 12, sm: 12, md: 6, xl: 4 }}>
                 <RecommendationGrid title="Sequel or Prequel" data={missingSequelPrequel} onClickAnime={onClickAnime} />
               </Grid>
-              <Grid item xs={12} sm={12} md={6} xl={4}>
+              <Grid size={{ xs: 12, sm: 12, md: 6, xl: 4 }}>
                 <RecommendationGrid
                   title="Side Story or Alternative Story"
                   data={missingSideStory}
                   onClickAnime={onClickAnime}
                 />
               </Grid>
-              <Grid item xs={12} sm={12} md={6} xl={4}>
+              <Grid size={{ xs: 12, sm: 12, md: 6, xl: 4 }}>
                 <RecommendationGrid title="On Hold" data={onHold} onClickAnime={onClickAnime} />
               </Grid>
-              <Grid item xs={12} sm={12} md={6} xl={4}>
+              <Grid size={{ xs: 12, sm: 12, md: 6, xl: 4 }}>
                 <RecommendationGrid title="Planned & Already Aired" data={plannedAired} onClickAnime={onClickAnime} />
               </Grid>
-              <Grid item xs={12} sm={12} md={6} xl={4}>
+              <Grid size={{ xs: 12, sm: 12, md: 6, xl: 4 }}>
                 <RecommendationGrid title="Summary or Full Story" data={summary} onClickAnime={onClickAnime} />
               </Grid>
-              <Grid item xs={12} sm={12} md={6} xl={4}>
+              <Grid size={{ xs: 12, sm: 12, md: 6, xl: 4 }}>
                 <RecommendationGrid title="Other Relation" data={other} onClickAnime={onClickAnime} />
               </Grid>
-              <Grid item xs={12} sm={12} md={6} xl={4}>
+              <Grid size={{ xs: 12, sm: 12, md: 6, xl: 4 }}>
                 <RecommendationGrid
                   title="Mismatched Episode Count"
                   data={mismatchEpisode}
                   onClickAnime={onClickAnime}
                 />
               </Grid>
-              <Grid item xs={12} sm={12} md={6} xl={4}>
+              <Grid size={{ xs: 12, sm: 12, md: 6, xl: 4 }}>
                 <RecommendationGrid title="Completed but No Score" data={completedZero} onClickAnime={onClickAnime} />
               </Grid>
             </Grid>
@@ -362,37 +359,37 @@ const RecommendationGrid = ({
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={10} lg={11}>
+      <Grid size={{ xs: 10, lg: 11 }}>
         <Divider sx={style.title}>
           {title} ({data.length.toLocaleString()})
         </Divider>
       </Grid>
-      <Grid item xs={2} lg={1}>
+      <Grid size={{ xs: 2, lg: 1 }}>
         <Tooltip title={open ? "hide list" : "show list"} placement="left" arrow>
           <IconButton onClick={toggleOpen} size="small">
             {open ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
           </IconButton>
         </Tooltip>
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Collapse in={open}>
           <Grid container spacing={2}>
             {data.length === 0 ? (
               <>
-                <Grid item xs={1} sx={{ textAlign: "center" }}>
+                <Grid size={1} sx={{ textAlign: "center" }}>
                   <ThumbUpAltIcon />
                 </Grid>
-                <Grid item xs={11} sx={{ textAlign: "left" }}>
+                <Grid size={11} sx={{ textAlign: "left" }}>
                   None. Good job.
                 </Grid>
               </>
             ) : (
               data.map((n) => (
                 <Fragment key={n.animeID}>
-                  <Grid item xs={1}>
+                  <Grid size={1}>
                     <StatusCircle status={n.userAnimeStatus} />
                   </Grid>
-                  <Grid item xs={11}>
+                  <Grid size={11}>
                     <Link
                       color="inherit"
                       underline="hover"

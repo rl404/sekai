@@ -5,7 +5,7 @@ import { Link, Node } from "./types";
 import { AnimeRelationToStr } from "@/libs/constant";
 import * as d3 from "d3";
 import { memo, useEffect, useRef, useState } from "react";
-import { ForceGraph2D } from "react-force-graph";
+import ForceGraph2D from "react-force-graph-2d";
 
 const ForceGraph = memo(() => {
   const ref = useRef<any>();

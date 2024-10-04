@@ -17,30 +17,27 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  Grid,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  Link,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  TableSortLabel,
-  TextField,
-} from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import InputLabel from "@mui/material/InputLabel";
+import Link from "@mui/material/Link";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import TextField from "@mui/material/TextField";
 import { ChangeEvent, MouseEvent, forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
 
 const headers: TableHeader[] = [
@@ -173,10 +170,10 @@ const ListDialog = memo(
         >
           <DialogTitle>
             <Grid container spacing={2}>
-              <Grid item>{`${ctx.username}'s Anime List`}</Grid>
-              <Grid item xs />
+              <Grid>{`${ctx.username}'s Anime List`}</Grid>
+              <Grid size="grow" />
 
-              <Grid item>
+              <Grid>
                 <FormControl size="small" sx={{ minWidth: 100 }}>
                   <InputLabel id="filterList-select">Show</InputLabel>
                   <Select id="filterList-select" label="Show" value={filterList} onChange={onChangeFilterList}>
@@ -187,7 +184,7 @@ const ListDialog = memo(
                 </FormControl>
               </Grid>
 
-              <Grid item>
+              <Grid>
                 <TextField
                   label="Anime Title"
                   placeholder="naruto"
@@ -210,7 +207,7 @@ const ListDialog = memo(
                 />
               </Grid>
 
-              <Grid item>
+              <Grid>
                 <FormControl size="small" sx={{ minWidth: 100 }}>
                   <InputLabel id="filterStatus-select">Status</InputLabel>
                   <Select id="filterStatus-select" label="Status" value={filterStatus} onChange={onChangeFilterStatus}>
@@ -224,7 +221,7 @@ const ListDialog = memo(
                 </FormControl>
               </Grid>
 
-              <Grid item>
+              <Grid>
                 <FormControl size="small" sx={{ minWidth: 100 }}>
                   <InputLabel id="filterType-select">Type</InputLabel>
                   <Select id="filterType-select" label="Type" value={filterType} onChange={onChangeFilterType}>
@@ -238,7 +235,7 @@ const ListDialog = memo(
                 </FormControl>
               </Grid>
 
-              <Grid item>
+              <Grid>
                 <FormControl size="small" sx={{ minWidth: 100 }}>
                   <InputLabel id="filterUserStatus-select">Your Status</InputLabel>
                   <Select
@@ -257,7 +254,7 @@ const ListDialog = memo(
                 </FormControl>
               </Grid>
 
-              <Grid item>
+              <Grid>
                 <IconButton onClick={onClose} size="small">
                   <CloseIcon />
                 </IconButton>
@@ -372,13 +369,21 @@ const ListDialog = memo(
 export default ListDialog;
 
 const getComparator = (order: Order, orderBy: string): ((a: any, b: any) => number) => {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-};
+  return (a, b) => {
+    if (orderBy === "userAnimeScore") {
+      if (a["userAnimeStatus"] === "") return 1;
+      if (b["userAnimeStatus"] === "") return -1;
+    }
 
-const descendingComparator = (a: any, b: any, orderBy: string): number => {
-  if (b[orderBy] < a[orderBy]) return -1;
-  if (b[orderBy] > a[orderBy]) return 1;
-  return 0;
+    if (orderBy === "scoreDiff") {
+      if (a["userAnimeStatus"] === "") return 1;
+      if (b["userAnimeStatus"] === "") return -1;
+      if (a["userAnimeScore"] == 0) return 1;
+      if (b["userAnimeScore"] == 0) return -11;
+    }
+
+    if (b[orderBy] < a[orderBy]) return order === "desc" ? -1 : 1;
+    if (b[orderBy] > a[orderBy]) return order === "desc" ? 1 : -1;
+    return 0;
+  };
 };
