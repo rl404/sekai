@@ -134,8 +134,9 @@ const AnimeDrawer = memo(
             });
           };
 
-          setNode(ctx.graph.nodes.find((n) => n.animeID === data.id));
-          node && addExtendedRelated(node);
+          const nodeTmp = ctx.graph.nodes.find((n) => n.animeID === data.id);
+          setNode(nodeTmp);
+          nodeTmp && addExtendedRelated(nodeTmp);
 
           setAnime({
             id: data.id,
