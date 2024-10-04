@@ -8,24 +8,21 @@ import ClearIcon from "@mui/icons-material/Clear";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SearchIcon from "@mui/icons-material/Search";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Collapse,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-  Grid,
-  IconButton,
-  InputAdornment,
-  Paper,
-  PaperProps,
-  Stack,
-  TextField,
-  Tooltip,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import Collapse from "@mui/material/Collapse";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Paper, { PaperProps } from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
 import { ChangeEvent, KeyboardEvent, memo, useState } from "react";
 import { Color, ColorResult, SketchPicker } from "react-color";
 import Draggable from "react-draggable";
@@ -91,7 +88,7 @@ const ConfigDialog = memo(() => {
       <Collapse in={show}>
         <DialogContent dividers>
           <Grid container spacing={1}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TextField
                 label="Anime Title"
                 placeholder="naruto"
@@ -116,55 +113,41 @@ const ConfigDialog = memo(() => {
               />
             </Grid>
 
-            <Grid item xs={12}>
-              Status Colors
-            </Grid>
-            <Grid item xs={2}>
+            <Grid size={12}>Status Colors</Grid>
+            <Grid size={2}>
               <ColorPicker status={UserAnimeStatus.watching} />
             </Grid>
-            <Grid item xs={10}>
-              Watching
-            </Grid>
-            <Grid item xs={2}>
+            <Grid size={10}>Watching</Grid>
+            <Grid size={2}>
               <ColorPicker status={UserAnimeStatus.completed} />
             </Grid>
-            <Grid item xs={10}>
-              Completed
-            </Grid>
-            <Grid item xs={2}>
+            <Grid size={10}>Completed</Grid>
+            <Grid size={2}>
               <ColorPicker status={UserAnimeStatus.onHold} />
             </Grid>
-            <Grid item xs={10}>
-              On-Hold
-            </Grid>
-            <Grid item xs={2}>
+            <Grid size={10}>On-Hold</Grid>
+            <Grid size={2}>
               <ColorPicker status={UserAnimeStatus.dropped} />
             </Grid>
-            <Grid item xs={10}>
-              Dropped
-            </Grid>
-            <Grid item xs={2}>
+            <Grid size={10}>Dropped</Grid>
+            <Grid size={2}>
               <ColorPicker status={UserAnimeStatus.planned} />
             </Grid>
-            <Grid item xs={10}>
-              Planned
-            </Grid>
-            <Grid item xs={2}>
+            <Grid size={10}>Planned</Grid>
+            <Grid size={2}>
               <ColorPicker status="" />
             </Grid>
-            <Grid item xs={10}>
-              Other
-            </Grid>
+            <Grid size={10}>Other</Grid>
 
-            <Grid item xs={12}>
+            <Grid size={12}>
               <DetailCheckbox />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TitleCheckbox />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={12}>
               <ExtendedCheckbox />
             </Grid>
           </Grid>
@@ -172,16 +155,16 @@ const ConfigDialog = memo(() => {
 
         <DialogContent>
           <Grid container spacing={1}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <ListButton />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <StatsButton />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <RecommendationButton />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Button fullWidth onClick={() => window.location.reload()} color="error">
                 Change username
               </Button>

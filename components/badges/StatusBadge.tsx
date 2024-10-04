@@ -1,5 +1,5 @@
 import { AnimeStatus, AnimeStatusToStr } from "@/libs/constant";
-import { Chip } from "@mui/material";
+import Chip from "@mui/material/Chip";
 import { memo } from "react";
 
 const statusColor: {
