@@ -1,6 +1,6 @@
 import ListDialog from "../dialogs/ListDialog";
 import { ListDialogRefType } from "../dialogs/types";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import { memo, useRef } from "react";
 
 const ListButton = memo(() => {

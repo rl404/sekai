@@ -1,6 +1,6 @@
 import RecommendationDialog from "../dialogs/RecommendationDialog";
 import { RecommendationDialogRefType } from "../dialogs/types";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import { memo, useRef } from "react";
 
 const RecommendationButton = memo(() => {

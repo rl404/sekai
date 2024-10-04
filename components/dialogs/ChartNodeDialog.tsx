@@ -2,7 +2,11 @@ import StatusCircle from "../circles/StatusCircle";
 import AnimeDrawer from "../drawers/AnimeDrawer";
 import { AnimeDrawerRefType } from "../drawers/types";
 import { Node } from "../graphs/types";
-import { Dialog, DialogContent, DialogTitle, Grid, Link } from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Grid from "@mui/material/Grid2";
+import Link from "@mui/material/Link";
 import { Fragment, forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
 
 const ChartNodeDialog = memo(
@@ -37,10 +41,10 @@ const ChartNodeDialog = memo(
             {data.map((n) => {
               return (
                 <Fragment key={n.id}>
-                  <Grid item xs={1}>
+                  <Grid size={1}>
                     <StatusCircle status={n.userAnimeStatus} />
                   </Grid>
-                  <Grid item xs={11}>
+                  <Grid size={11}>
                     <Link
                       color="inherit"
                       underline="hover"

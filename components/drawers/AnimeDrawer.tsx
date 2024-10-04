@@ -13,7 +13,14 @@ import ChevronLefttIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Chip, Divider, Drawer, Grid, IconButton, Link, Tooltip, Typography } from "@mui/material";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import Grid from "@mui/material/Grid2";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { Fragment, forwardRef, memo, useEffect, useImperativeHandle, useRef, useState } from "react";
 
@@ -195,14 +202,14 @@ const AnimeDrawer = memo(
     return (
       <Drawer open={open} anchor="right" variant="persistent" PaperProps={{ sx: style.drawer }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} container>
-            <Grid item>
+          <Grid size={12} container>
+            <Grid>
               <Tooltip title="Close" placement="right" arrow>
                 <IconButton onClick={toggleOpen}>{open ? <ChevronRightIcon /> : <ChevronLefttIcon />}</IconButton>
               </Tooltip>
             </Grid>
-            <Grid item xs />
-            <Grid item>
+            <Grid size="grow" />
+            <Grid>
               <StatusCircle
                 status={ctx.graph.nodes.find((n) => n.animeID === animeID)?.userAnimeStatus || ""}
                 sx={{ marginTop: 10 }}
@@ -211,14 +218,14 @@ const AnimeDrawer = memo(
           </Grid>
 
           {error !== "" ? (
-            <Grid item xs={12} sx={{ textAlign: "center", color: "red" }}>
+            <Grid size={12} sx={{ textAlign: "center", color: "red" }}>
               {error}
             </Grid>
           ) : loading ? (
             <AnimeDrawerSkeleton />
           ) : (
             <>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Tooltip
                   placement="left"
                   arrow
@@ -228,12 +235,12 @@ const AnimeDrawer = memo(
                       <Grid container spacing={1}>
                         {anime.titleSynonyms.length > 0 && (
                           <>
-                            <Grid item xs={4} sx={{ ...style.statsTitle, textAlign: "right" }}>
+                            <Grid size={4} sx={{ ...style.statsTitle, textAlign: "right" }}>
                               <Typography variant="subtitle2">Synonym</Typography>
                             </Grid>
-                            <Grid item xs={8} container spacing={1}>
+                            <Grid size={8} container spacing={1}>
                               {anime.titleSynonyms.map((t) => (
-                                <Grid item xs={12} key={t}>
+                                <Grid size={12} key={t}>
                                   <Typography>{t}</Typography>
                                 </Grid>
                               ))}
@@ -242,20 +249,20 @@ const AnimeDrawer = memo(
                         )}
                         {anime.titleEnglish !== "" && (
                           <>
-                            <Grid item xs={4} sx={{ ...style.statsTitle, textAlign: "right" }}>
+                            <Grid size={4} sx={{ ...style.statsTitle, textAlign: "right" }}>
                               <Typography variant="subtitle2">English</Typography>
                             </Grid>
-                            <Grid item xs={8}>
+                            <Grid size={8}>
                               <Typography>{anime.titleEnglish}</Typography>
                             </Grid>
                           </>
                         )}
                         {anime.titleJapanese !== "" && (
                           <>
-                            <Grid item xs={4} sx={{ ...style.statsTitle, textAlign: "right" }}>
+                            <Grid size={4} sx={{ ...style.statsTitle, textAlign: "right" }}>
                               <Typography variant="subtitle2">Japanese</Typography>
                             </Grid>
-                            <Grid item xs={8}>
+                            <Grid size={8}>
                               <Typography>{anime.titleJapanese}</Typography>
                             </Grid>
                           </>
@@ -281,7 +288,7 @@ const AnimeDrawer = memo(
                 <Divider />
               </Grid>
 
-              <Grid item xs={12} sx={style.imageArea}>
+              <Grid size={12} sx={style.imageArea}>
                 <img src={anime.pictures[pictureIndex]} alt={anime.title} style={style.image} />
                 <IconButton onClick={onPrevPicture} disabled={pictureIndex <= 0} sx={style.picturePrevButton}>
                   <Tooltip placement="right" arrow title="Previous picture">
@@ -299,14 +306,14 @@ const AnimeDrawer = memo(
                 </IconButton>
               </Grid>
 
-              <Grid item xs={4}>
+              <Grid size={4}>
                 <Divider sx={style.statsTitle}>Rank</Divider>
                 <Typography variant="h6" align="center">
                   <b>#{anime.rank.toLocaleString()}</b>
                 </Typography>
               </Grid>
 
-              <Grid item xs={4}>
+              <Grid size={4}>
                 <Divider sx={style.statsTitle}>Score</Divider>
                 <Tooltip
                   placement="bottom"
@@ -334,7 +341,7 @@ const AnimeDrawer = memo(
                 </Tooltip>
               </Grid>
 
-              <Grid item xs={4}>
+              <Grid size={4}>
                 <Divider sx={style.statsTitle}>Popularity</Divider>
                 <Tooltip
                   placement="bottom"
@@ -342,34 +349,34 @@ const AnimeDrawer = memo(
                   PopperProps={{ sx: { ...style.tooltip, width: 160 } }}
                   title={
                     <Grid container spacing={1}>
-                      <Grid item xs={6} sx={style.statsTitle}>
+                      <Grid size={6} sx={style.statsTitle}>
                         Watching
                       </Grid>
-                      <Grid item xs={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: "right" }}>
                         {anime.stats.watching.toLocaleString()}
                       </Grid>
-                      <Grid item xs={6} sx={style.statsTitle}>
+                      <Grid size={6} sx={style.statsTitle}>
                         Completed
                       </Grid>
-                      <Grid item xs={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: "right" }}>
                         {anime.stats.completed.toLocaleString()}
                       </Grid>
-                      <Grid item xs={6} sx={style.statsTitle}>
+                      <Grid size={6} sx={style.statsTitle}>
                         On Hold
                       </Grid>
-                      <Grid item xs={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: "right" }}>
                         {anime.stats.onHold.toLocaleString()}
                       </Grid>
-                      <Grid item xs={6} sx={style.statsTitle}>
+                      <Grid size={6} sx={style.statsTitle}>
                         Dropped
                       </Grid>
-                      <Grid item xs={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: "right" }}>
                         {anime.stats.dropped.toLocaleString()}
                       </Grid>
-                      <Grid item xs={6} sx={style.statsTitle}>
+                      <Grid size={6} sx={style.statsTitle}>
                         Planned
                       </Grid>
-                      <Grid item xs={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: "right" }}>
                         {anime.stats.planned.toLocaleString()}
                       </Grid>
                     </Grid>
@@ -381,14 +388,14 @@ const AnimeDrawer = memo(
                 </Tooltip>
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid size={6}>
                 <Divider sx={style.statsTitle}>Type</Divider>
                 <Typography variant="h6" align="center">
                   <b>{AnimeTypeToStr(anime.type)}</b>
                 </Typography>
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid size={6}>
                 <Divider sx={style.statsTitle}>Status</Divider>
                 <Tooltip
                   placement="left"
@@ -396,48 +403,48 @@ const AnimeDrawer = memo(
                   PopperProps={{ sx: { ...style.tooltip, width: 230 } }}
                   title={
                     <Grid container spacing={1}>
-                      <Grid item xs={6} sx={style.statsTitle}>
+                      <Grid size={6} sx={style.statsTitle}>
                         Episode Count
                       </Grid>
-                      <Grid item xs={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: "right" }}>
                         {anime.episodeCount.toLocaleString()}
                       </Grid>
-                      <Grid item xs={6} sx={style.statsTitle}>
+                      <Grid size={6} sx={style.statsTitle}>
                         Episode Duration
                       </Grid>
-                      <Grid item xs={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: "right" }}>
                         {anime.episodeDuration}
                       </Grid>
                       {anime.season !== "" && (
                         <>
-                          <Grid item xs={6} sx={style.statsTitle}>
+                          <Grid size={6} sx={style.statsTitle}>
                             Season
                           </Grid>
-                          <Grid item xs={6} sx={{ textAlign: "right" }}>
+                          <Grid size={6} sx={{ textAlign: "right" }}>
                             {SeasonToStr(anime.season)} {anime.seasonYear}
                           </Grid>
                         </>
                       )}
                       {anime.broadcastDay !== "" && (
                         <>
-                          <Grid item xs={6} sx={style.statsTitle}>
+                          <Grid size={6} sx={style.statsTitle}>
                             Broadcast
                           </Grid>
-                          <Grid item xs={6} sx={{ textAlign: "right" }}>
+                          <Grid size={6} sx={{ textAlign: "right" }}>
                             {DayToStr(anime.broadcastDay)} {anime.broadcastTime}
                           </Grid>
                         </>
                       )}
-                      <Grid item xs={6} sx={style.statsTitle}>
+                      <Grid size={6} sx={style.statsTitle}>
                         Start Date
                       </Grid>
-                      <Grid item xs={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: "right" }}>
                         {anime.startDate || "-"}
                       </Grid>
-                      <Grid item xs={6} sx={style.statsTitle}>
+                      <Grid size={6} sx={style.statsTitle}>
                         End Date
                       </Grid>
-                      <Grid item xs={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: "right" }}>
                         {anime.endDate || "-"}
                       </Grid>
                     </Grid>
@@ -449,28 +456,28 @@ const AnimeDrawer = memo(
                 </Tooltip>
               </Grid>
 
-              <Grid item xs={12} sx={{ textAlign: "justify" }}>
+              <Grid size={12} sx={{ textAlign: "justify" }}>
                 <Divider sx={{ ...style.statsTitle, marginBottom: 1 }}>Synopsis</Divider>
                 <Typography sx={{ whiteSpace: "pre-line" }}>{anime.synopsis}</Typography>
               </Grid>
 
-              <Grid item xs={12} sx={{ textAlign: "center" }}>
+              <Grid size={12} sx={{ textAlign: "center" }}>
                 <Divider sx={{ ...style.statsTitle, marginBottom: 1 }}>Genres</Divider>
                 {anime.genres.map((g) => (
                   <Chip size="small" label={g} key={g} sx={{ margin: 0.5 }} />
                 ))}
               </Grid>
 
-              <Grid item xs={12} container spacing={2}>
-                <Grid item xs={12}>
+              <Grid size={12} container spacing={2}>
+                <Grid size={12}>
                   <Tooltip placement="left" arrow title={anime.related.length.toLocaleString()}>
                     <Divider sx={{ ...style.statsTitle, marginBottom: 1 }}>Related</Divider>
                   </Tooltip>
                 </Grid>
                 {Array.from(new Set(anime.related.map((r) => r.relation))).map((r) => {
                   return (
-                    <Fragment key={r}>
-                      <Grid item xs={3} sx={{ ...style.statsTitle, textAlign: "right" }}>
+                    <Grid size={12} container spacing={2} key={r}>
+                      <Grid size={3} sx={{ ...style.statsTitle, textAlign: "right" }}>
                         <Tooltip
                           placement="left"
                           arrow
@@ -479,17 +486,17 @@ const AnimeDrawer = memo(
                           <span>{AnimeRelationToStr(r)}</span>
                         </Tooltip>
                       </Grid>
-                      <Grid item xs={9} container spacing={1}>
+                      <Grid size={9} container spacing={1}>
                         {anime.related
                           .filter((a) => a.relation === r)
                           .map((r) => {
                             const n = ctx.graph.nodes.find((n) => n.animeID === r.id);
                             return (
-                              <Fragment key={r.id}>
-                                <Grid item xs={1}>
+                              <Grid size={12} container key={r.id}>
+                                <Grid size={1}>
                                   <StatusCircle status={n?.userAnimeStatus || ""} sx={{ marginTop: 2 }} />
                                 </Grid>
-                                <Grid item xs={11}>
+                                <Grid size={11}>
                                   <Link
                                     color="inherit"
                                     underline="hover"
@@ -499,17 +506,17 @@ const AnimeDrawer = memo(
                                     {r.title}
                                   </Link>
                                 </Grid>
-                              </Fragment>
+                              </Grid>
                             );
                           })}
                       </Grid>
-                    </Fragment>
+                    </Grid>
                   );
                 })}
               </Grid>
 
-              <Grid item xs={12} container spacing={2}>
-                <Grid item xs={12}>
+              <Grid size={12} container spacing={2}>
+                <Grid size={12}>
                   <Tooltip placement="left" arrow title={anime.extendedRelated.length.toLocaleString()}>
                     <Divider sx={{ ...style.statsTitle, marginBottom: 1, cursor: "pointer" }} onClick={toggleExtended}>
                       {showExtended ? (
@@ -531,11 +538,11 @@ const AnimeDrawer = memo(
                     const n = ctx.graph.nodes.find((n) => n.animeID === r.id);
                     return (
                       <Fragment key={r.id}>
-                        <Grid item xs={1} />
-                        <Grid item xs={1}>
+                        <Grid size={1} />
+                        <Grid size={1}>
                           <StatusCircle status={n?.userAnimeStatus || ""} sx={{ marginTop: 2 }} />
                         </Grid>
-                        <Grid item xs={10}>
+                        <Grid size={10}>
                           <Link
                             color="inherit"
                             underline="hover"

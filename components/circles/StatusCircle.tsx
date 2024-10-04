@@ -1,6 +1,6 @@
 import { useCtx } from "../context";
 import { UserAnimeStatus } from "@/libs/constant";
-import { Tooltip } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 import { CSSProperties, memo } from "react";
 
 const style = {
