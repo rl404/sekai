@@ -369,13 +369,21 @@ const ListDialog = memo(
 export default ListDialog;
 
 const getComparator = (order: Order, orderBy: string): ((a: any, b: any) => number) => {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-};
+  return (a, b) => {
+    if (orderBy === "userAnimeScore") {
+      if (a["userAnimeStatus"] === "") return 1;
+      if (b["userAnimeStatus"] === "") return -1;
+    }
 
-const descendingComparator = (a: any, b: any, orderBy: string): number => {
-  if (b[orderBy] < a[orderBy]) return -1;
-  if (b[orderBy] > a[orderBy]) return 1;
-  return 0;
+    if (orderBy === "scoreDiff") {
+      if (a["userAnimeStatus"] === "") return 1;
+      if (b["userAnimeStatus"] === "") return -1;
+      if (a["userAnimeScore"] == 0) return 1;
+      if (b["userAnimeScore"] == 0) return -11;
+    }
+
+    if (b[orderBy] < a[orderBy]) return order === "desc" ? -1 : 1;
+    if (b[orderBy] > a[orderBy]) return order === "desc" ? 1 : -1;
+    return 0;
+  };
 };
