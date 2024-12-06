@@ -27,7 +27,7 @@
     "recharts": "^2.7.2"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
+    "@trivago/prettier-plugin-sort-imports": "^5.0.0",
     "@types/d3": "^7.4.0",
     "@types/node": "22.10.1",
     "@types/react": "18.3.13",
