@@ -23,7 +23,7 @@ import Paper, { PaperProps } from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
-import { ChangeEvent, KeyboardEvent, memo, useState } from "react";
+import { ChangeEvent, KeyboardEvent, memo, useRef, useState } from "react";
 import { Color, ColorResult, SketchPicker } from "react-color";
 import Draggable from "react-draggable";
 
@@ -179,9 +179,10 @@ const ConfigDialog = memo(() => {
 export default ConfigDialog;
 
 const DraggablePaper = (props: PaperProps) => {
+  const ref = useRef<HTMLDivElement>(null)
   return (
-    <Draggable handle="#draggable-title">
-      <Paper {...props} />
+    <Draggable handle="#draggable-title" nodeRef={ref}>
+        <Paper ref={ref} {...props} />
     </Draggable>
   );
 };

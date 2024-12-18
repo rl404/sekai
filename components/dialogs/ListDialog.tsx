@@ -65,8 +65,8 @@ const style = {
 const ListDialog = memo(
   forwardRef((_, ref) => {
     const ctx = useCtx();
-    const tableRef = useRef<HTMLDivElement>();
-    const drawerRef = useRef<AnimeDrawerRefType>();
+    const tableRef = useRef<HTMLDivElement>(null);
+    const drawerRef = useRef<AnimeDrawerRefType>(null);
 
     const [open, setOpen] = useState(false);
     const [drawerAnimeID, setDrawerAnimeID] = useState(0);

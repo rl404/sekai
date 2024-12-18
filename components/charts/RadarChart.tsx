@@ -16,7 +16,7 @@ interface RadarChartConfig {
 }
 
 const RadarChart = memo(({ data, config }: { data: RadarChartData[]; config: RadarChartConfig }) => {
-  const ref = useRef<ChartNodeDialogRefType>();
+  const ref = useRef<ChartNodeDialogRefType>(null);
 
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogData, setdialogData] = useState([]);
