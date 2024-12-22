@@ -35,7 +35,7 @@
     "@types/react-dom": "19.0.2",
     "@types/react-resizable": "^3.0.4",
     "eslint": "8.57.1",
-    "eslint-config-next": "15.1.1",
+    "eslint-config-next": "15.1.2",
     "typescript": "5.7.2"
   }
 }
