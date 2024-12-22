@@ -14,7 +14,7 @@ interface PieChartConfig {
 }
 
 const PieChart = memo(({ data, config }: { data: PieChartData[]; config: PieChartConfig }) => {
-  const ref = useRef<ChartNodeDialogRefType>();
+  const ref = useRef<ChartNodeDialogRefType>(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [dialogTitle, setDialogTitle] = useState("");

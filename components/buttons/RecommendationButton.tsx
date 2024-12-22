@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import { memo, useRef } from "react";
 
 const RecommendationButton = memo(() => {
-  const ref = useRef<RecommendationDialogRefType>();
+  const ref = useRef<RecommendationDialogRefType>(null);
 
   const onClick = () => {
     ref.current?.setOpen(true);

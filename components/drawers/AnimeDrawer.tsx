@@ -85,7 +85,7 @@ const AnimeDrawer = memo(
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    const drawerRef = useRef<AnimeDrawerRefType>();
+    const drawerRef = useRef<AnimeDrawerRefType>(null);
     const [drawerAnimeID, setDrawerAnimeID] = useState(0);
 
     const toggleOpen = () => {

@@ -34,7 +34,7 @@ interface BarLineChartConfig {
 }
 
 const BarLineChart = memo(({ data, config }: { data: BarLineChartData[]; config: BarLineChartConfig }) => {
-  const ref = useRef<ChartNodeDialogRefType>();
+  const ref = useRef<ChartNodeDialogRefType>(null);
 
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogData, setdialogData] = useState([]);

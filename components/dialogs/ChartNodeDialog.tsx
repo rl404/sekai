@@ -11,7 +11,7 @@ import { Fragment, forwardRef, memo, useImperativeHandle, useRef, useState } fro
 
 const ChartNodeDialog = memo(
   forwardRef(({ title, data }: { title: string; data: Node[] }, ref) => {
-    const drawerRef = useRef<AnimeDrawerRefType>();
+    const drawerRef = useRef<AnimeDrawerRefType>(null);
 
     const [open, setOpen] = useState(false);
     const [drawerAnimeID, setDrawerAnimeID] = useState(0);

@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import { memo, useRef } from "react";
 
 const StatsButton = memo(() => {
-  const ref = useRef<StatsDialogRefType>();
+  const ref = useRef<StatsDialogRefType>(null);
 
   const onClick = () => {
     ref.current?.setOpen(true);

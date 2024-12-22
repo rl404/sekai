@@ -8,10 +8,10 @@ import { memo, useEffect, useRef, useState } from "react";
 import ForceGraph2D from "react-force-graph-2d";
 
 const ForceGraph = memo(() => {
-  const ref = useRef<any>();
+  const ref = useRef<any>(null);
   const ctx = useCtx();
 
-  const drawerRef = useRef<AnimeDrawerRefType>();
+  const drawerRef = useRef<AnimeDrawerRefType>(null);
   const [drawerAnimeID, setDrawerAnimeID] = useState(0);
 
   const [hoverNode, setHoverNode] = useState<Node | null>(null);

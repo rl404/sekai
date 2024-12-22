@@ -30,7 +30,7 @@ interface ScatterChartConfig {
 }
 
 const ScatterChart = memo(({ data, config }: { data: ScatterChartData[]; config: ScatterChartConfig }) => {
-  const ref = useRef<ChartNodeDialogRefType>();
+  const ref = useRef<ChartNodeDialogRefType>(null);
 
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogData, setdialogData] = useState([]);

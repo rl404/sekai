@@ -42,7 +42,7 @@ import { Fragment, ReactNode, forwardRef, memo, useImperativeHandle, useRef, use
 const StatsDialog = memo(
   forwardRef((_, ref) => {
     const ctx = useCtx();
-    const drawerRef = useRef<AnimeDrawerRefType>();
+    const drawerRef = useRef<AnimeDrawerRefType>(null);
 
     const [open, setOpen] = useState(false);
     const [drawerAnimeID, setDrawerAnimeID] = useState(0);
