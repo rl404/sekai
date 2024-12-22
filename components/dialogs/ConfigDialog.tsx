@@ -181,7 +181,7 @@ export default ConfigDialog;
 const DraggablePaper = (props: PaperProps) => {
   const ref = useRef<HTMLDivElement>(null)
   return (
-    <Draggable handle="#draggable-title" nodeRef={ref}>
+    <Draggable handle="#draggable-title" nodeRef={ref as React.RefObject<HTMLDivElement>}>
         <Paper ref={ref} {...props} />
     </Draggable>
   );
