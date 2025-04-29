@@ -1,6 +1,6 @@
-import { theme } from "../theme";
-import { memo } from "react";
-import { ResponsiveContainer, BarChart, Bar } from "recharts";
+import theme from '@/components/theme';
+import { memo } from 'react';
+import { Bar, BarChart, ResponsiveContainer } from 'recharts';
 
 const MiniBarChart = memo(({ data }: { data: { value: number }[] }) => {
   return (

@@ -1,40 +1,40 @@
-import StatusCircle from "../circles/StatusCircle";
-import { useCtx } from "../context";
-import { Node } from "../graphs/types";
-import { theme } from "../theme";
-import AnimeDrawerSkeleton from "./AnimeDrawerSkeleton";
-import { AnimeDrawerRefType, AnimeDrawerType, defaultAnimeDrawer } from "./types";
-import { AnimeRelationToStr, AnimeStatusToStr, AnimeTypeToStr, DayToStr, SeasonToStr } from "@/libs/constant";
-import { DateToStr, getAxiosError } from "@/libs/utils";
-import { Anime, Genre, Related } from "@/pages/api/anime/[anime_id]";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ChevronLefttIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Chip from "@mui/material/Chip";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import Grid from "@mui/material/Grid2";
-import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
-import axios from "axios";
-import { Fragment, forwardRef, memo, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { Anime, Genre, Related } from '@/app/api/anime/[id]/route';
+import StatusCircle from '@/components/circles/StatusCircle';
+import { useCtx } from '@/components/context';
+import { Node } from '@/components/graphs/types';
+import theme from '@/components/theme';
+import { AnimeRelationToStr, AnimeStatusToStr, AnimeTypeToStr, DayToStr, SeasonToStr } from '@/libs/constant';
+import { DateToStr, getAxiosError } from '@/libs/utils';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ChevronLefttIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import { Fragment, forwardRef, memo, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import AnimeDrawerSkeleton from './AnimeDrawerSkeleton';
+import { AnimeDrawerRefType, AnimeDrawerType, defaultAnimeDrawer } from './types';
 
 const style = {
   drawer: {
     width: 500,
-    [theme.breakpoints.down("sm")]: {
-      width: "100%",
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
     },
     padding: 2,
     zIndex: 1301,
   },
   tooltip: {
-    "& .MuiTooltip-tooltip": {
+    '& .MuiTooltip-tooltip': {
       padding: 2,
       background: theme.palette.background.paper,
       border: `1px solid ${theme.palette.divider}`,
@@ -45,25 +45,25 @@ const style = {
   },
   imageArea: {
     maxHeight: 500,
-    textAlign: "center",
-    position: "relative",
+    textAlign: 'center',
+    position: 'relative',
   },
   image: {
-    height: "100%",
+    height: '100%',
     maxHeight: 350,
-    maxWidth: "100%",
+    maxWidth: '100%',
   },
   picturePrevButton: {
-    position: "absolute",
-    top: "50%",
+    position: 'absolute',
+    top: '50%',
     left: 16,
-    transform: "translateY(-50%)",
+    transform: 'translateY(-50%)',
   },
   pictureNextButton: {
-    position: "absolute",
-    top: "50%",
+    position: 'absolute',
+    top: '50%',
     right: 16,
-    transform: "translateY(-50%)",
+    transform: 'translateY(-50%)',
   },
   scoreGreen: {
     color: theme.palette.success.main,
@@ -83,7 +83,7 @@ const AnimeDrawer = memo(
     const [pictureIndex, setPictureIndex] = useState(0);
     const [showExtended, setShowExtended] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
 
     const drawerRef = useRef<AnimeDrawerRefType>(null);
     const [drawerAnimeID, setDrawerAnimeID] = useState(0);
@@ -116,12 +116,12 @@ const AnimeDrawer = memo(
     useEffect(() => {
       if (animeID === 0) {
         setLoading(false);
-        setError("empty id");
+        setError('empty id');
         return;
       }
 
       setLoading(true);
-      setError("");
+      setError('');
 
       axios
         .get(`/api/anime/${animeID}`)
@@ -131,7 +131,7 @@ const AnimeDrawer = memo(
           const episodeDuration = new Date(0);
           episodeDuration.setSeconds(data.episode.duration);
 
-          var extendedRelated = new Set<Node>();
+          const extendedRelated = new Set<Node>();
 
           const addExtendedRelated = (n: Node) => {
             n.neighbors.forEach((neighbor) => {
@@ -143,7 +143,7 @@ const AnimeDrawer = memo(
 
           const nodeTmp = ctx.graph.nodes.find((n) => n.animeID === data.id);
           setNode(nodeTmp);
-          nodeTmp && addExtendedRelated(nodeTmp);
+          if (nodeTmp) addExtendedRelated(nodeTmp);
 
           setAnime({
             id: data.id,
@@ -152,7 +152,7 @@ const AnimeDrawer = memo(
             titleEnglish: data.alternative_titles.english,
             titleJapanese: data.alternative_titles.japanese,
             pictures: Array.from(new Set([data.picture].concat(data.pictures))),
-            synopsis: data.synopsis || "-",
+            synopsis: data.synopsis || '-',
             startDate: DateToStr(data.start_date),
             endDate: DateToStr(data.end_date),
             type: data.type,
@@ -169,10 +169,10 @@ const AnimeDrawer = memo(
             },
             episodeCount: data.episode.count,
             episodeDuration: episodeDuration.toISOString().substring(11, 19),
-            season: data.season?.season || "",
+            season: data.season?.season || '',
             seasonYear: data.season?.year || 0,
-            broadcastDay: data.broadcast?.day || "",
-            broadcastTime: data.broadcast?.time || "",
+            broadcastDay: data.broadcast?.day || '',
+            broadcastTime: data.broadcast?.time || '',
             genres: data.genres.map((g: Genre) => g.name),
             related: data.related,
             extendedRelated: Array.from(extendedRelated)
@@ -180,9 +180,9 @@ const AnimeDrawer = memo(
                 (r: Node): Related => ({
                   id: r.animeID,
                   title: r.title,
-                  picture: "",
-                  relation: "",
-                })
+                  picture: '',
+                  relation: '',
+                }),
               )
               .sort((a, b) => a.title.localeCompare(b.title)),
           });
@@ -200,7 +200,7 @@ const AnimeDrawer = memo(
     });
 
     return (
-      <Drawer open={open} anchor="right" variant="persistent" PaperProps={{ sx: style.drawer }}>
+      <Drawer open={open} anchor="right" variant="persistent" slotProps={{ paper: { sx: style.drawer } }}>
         <Grid container spacing={2}>
           <Grid size={12} container>
             <Grid>
@@ -211,14 +211,14 @@ const AnimeDrawer = memo(
             <Grid size="grow" />
             <Grid>
               <StatusCircle
-                status={ctx.graph.nodes.find((n) => n.animeID === animeID)?.userAnimeStatus || ""}
+                status={ctx.graph.nodes.find((n) => n.animeID === animeID)?.userAnimeStatus || ''}
                 sx={{ marginTop: 10 }}
               />
             </Grid>
           </Grid>
 
-          {error !== "" ? (
-            <Grid size={12} sx={{ textAlign: "center", color: "red" }}>
+          {error !== '' ? (
+            <Grid size={12} sx={{ textAlign: 'center', color: 'red' }}>
               {error}
             </Grid>
           ) : loading ? (
@@ -229,13 +229,13 @@ const AnimeDrawer = memo(
                 <Tooltip
                   placement="left"
                   arrow
-                  PopperProps={{ sx: style.tooltip }}
+                  slotProps={{ popper: { sx: style.tooltip } }}
                   title={
-                    (anime.titleSynonyms.length > 0 || anime.titleEnglish !== "" || anime.titleJapanese !== "") && (
+                    (anime.titleSynonyms.length > 0 || anime.titleEnglish !== '' || anime.titleJapanese !== '') && (
                       <Grid container spacing={1}>
                         {anime.titleSynonyms.length > 0 && (
                           <>
-                            <Grid size={4} sx={{ ...style.statsTitle, textAlign: "right" }}>
+                            <Grid size={4} sx={{ ...style.statsTitle, textAlign: 'right' }}>
                               <Typography variant="subtitle2">Synonym</Typography>
                             </Grid>
                             <Grid size={8} container spacing={1}>
@@ -247,9 +247,9 @@ const AnimeDrawer = memo(
                             </Grid>
                           </>
                         )}
-                        {anime.titleEnglish !== "" && (
+                        {anime.titleEnglish !== '' && (
                           <>
-                            <Grid size={4} sx={{ ...style.statsTitle, textAlign: "right" }}>
+                            <Grid size={4} sx={{ ...style.statsTitle, textAlign: 'right' }}>
                               <Typography variant="subtitle2">English</Typography>
                             </Grid>
                             <Grid size={8}>
@@ -257,9 +257,9 @@ const AnimeDrawer = memo(
                             </Grid>
                           </>
                         )}
-                        {anime.titleJapanese !== "" && (
+                        {anime.titleJapanese !== '' && (
                           <>
-                            <Grid size={4} sx={{ ...style.statsTitle, textAlign: "right" }}>
+                            <Grid size={4} sx={{ ...style.statsTitle, textAlign: 'right' }}>
                               <Typography variant="subtitle2">Japanese</Typography>
                             </Grid>
                             <Grid size={8}>
@@ -318,16 +318,16 @@ const AnimeDrawer = memo(
                 <Tooltip
                   placement="bottom"
                   arrow
-                  PopperProps={{ sx: style.tooltip }}
+                  slotProps={{ popper: { sx: style.tooltip } }}
                   title={
                     !node?.userAnimeStatus ? (
-                      ""
+                      ''
                     ) : (
                       <>
-                        Your score: {node?.userAnimeScore.toFixed(2)}{" "}
+                        Your score: {node?.userAnimeScore.toFixed(2)}{' '}
                         {node?.score > 0 && node?.userAnimeScore > 0 && (
                           <span style={node.userAnimeScore > node.score ? style.scoreGreen : style.scoreRed}>
-                            ({node.userAnimeScore > node.score ? `+` : ""}
+                            ({node.userAnimeScore > node.score ? `+` : ''}
                             {(node.userAnimeScore - node.score).toFixed(2)})
                           </span>
                         )}
@@ -346,37 +346,37 @@ const AnimeDrawer = memo(
                 <Tooltip
                   placement="bottom"
                   arrow
-                  PopperProps={{ sx: { ...style.tooltip, width: 160 } }}
+                  slotProps={{ popper: { sx: { ...style.tooltip, width: 160 } } }}
                   title={
                     <Grid container spacing={1}>
                       <Grid size={6} sx={style.statsTitle}>
                         Watching
                       </Grid>
-                      <Grid size={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: 'right' }}>
                         {anime.stats.watching.toLocaleString()}
                       </Grid>
                       <Grid size={6} sx={style.statsTitle}>
                         Completed
                       </Grid>
-                      <Grid size={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: 'right' }}>
                         {anime.stats.completed.toLocaleString()}
                       </Grid>
                       <Grid size={6} sx={style.statsTitle}>
                         On Hold
                       </Grid>
-                      <Grid size={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: 'right' }}>
                         {anime.stats.onHold.toLocaleString()}
                       </Grid>
                       <Grid size={6} sx={style.statsTitle}>
                         Dropped
                       </Grid>
-                      <Grid size={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: 'right' }}>
                         {anime.stats.dropped.toLocaleString()}
                       </Grid>
                       <Grid size={6} sx={style.statsTitle}>
                         Planned
                       </Grid>
-                      <Grid size={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: 'right' }}>
                         {anime.stats.planned.toLocaleString()}
                       </Grid>
                     </Grid>
@@ -400,37 +400,37 @@ const AnimeDrawer = memo(
                 <Tooltip
                   placement="left"
                   arrow
-                  PopperProps={{ sx: { ...style.tooltip, width: 230 } }}
+                  slotProps={{ popper: { sx: { ...style.tooltip, width: 230 } } }}
                   title={
                     <Grid container spacing={1}>
                       <Grid size={6} sx={style.statsTitle}>
                         Episode Count
                       </Grid>
-                      <Grid size={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: 'right' }}>
                         {anime.episodeCount.toLocaleString()}
                       </Grid>
                       <Grid size={6} sx={style.statsTitle}>
                         Episode Duration
                       </Grid>
-                      <Grid size={6} sx={{ textAlign: "right" }}>
+                      <Grid size={6} sx={{ textAlign: 'right' }}>
                         {anime.episodeDuration}
                       </Grid>
-                      {anime.season !== "" && (
+                      {anime.season !== '' && (
                         <>
                           <Grid size={6} sx={style.statsTitle}>
                             Season
                           </Grid>
-                          <Grid size={6} sx={{ textAlign: "right" }}>
+                          <Grid size={6} sx={{ textAlign: 'right' }}>
                             {SeasonToStr(anime.season)} {anime.seasonYear}
                           </Grid>
                         </>
                       )}
-                      {anime.broadcastDay !== "" && (
+                      {anime.broadcastDay !== '' && (
                         <>
                           <Grid size={6} sx={style.statsTitle}>
                             Broadcast
                           </Grid>
-                          <Grid size={6} sx={{ textAlign: "right" }}>
+                          <Grid size={6} sx={{ textAlign: 'right' }}>
                             {DayToStr(anime.broadcastDay)} {anime.broadcastTime}
                           </Grid>
                         </>
@@ -438,14 +438,14 @@ const AnimeDrawer = memo(
                       <Grid size={6} sx={style.statsTitle}>
                         Start Date
                       </Grid>
-                      <Grid size={6} sx={{ textAlign: "right" }}>
-                        {anime.startDate || "-"}
+                      <Grid size={6} sx={{ textAlign: 'right' }}>
+                        {anime.startDate || '-'}
                       </Grid>
                       <Grid size={6} sx={style.statsTitle}>
                         End Date
                       </Grid>
-                      <Grid size={6} sx={{ textAlign: "right" }}>
-                        {anime.endDate || "-"}
+                      <Grid size={6} sx={{ textAlign: 'right' }}>
+                        {anime.endDate || '-'}
                       </Grid>
                     </Grid>
                   }
@@ -456,12 +456,12 @@ const AnimeDrawer = memo(
                 </Tooltip>
               </Grid>
 
-              <Grid size={12} sx={{ textAlign: "justify" }}>
+              <Grid size={12} sx={{ textAlign: 'justify' }}>
                 <Divider sx={{ ...style.statsTitle, marginBottom: 1 }}>Synopsis</Divider>
-                <Typography sx={{ whiteSpace: "pre-line" }}>{anime.synopsis}</Typography>
+                <Typography sx={{ whiteSpace: 'pre-line' }}>{anime.synopsis}</Typography>
               </Grid>
 
-              <Grid size={12} sx={{ textAlign: "center" }}>
+              <Grid size={12} sx={{ textAlign: 'center' }}>
                 <Divider sx={{ ...style.statsTitle, marginBottom: 1 }}>Genres</Divider>
                 {anime.genres.map((g) => (
                   <Chip size="small" label={g} key={g} sx={{ margin: 0.5 }} />
@@ -477,7 +477,7 @@ const AnimeDrawer = memo(
                 {Array.from(new Set(anime.related.map((r) => r.relation))).map((r) => {
                   return (
                     <Grid size={12} container spacing={2} key={r}>
-                      <Grid size={3} sx={{ ...style.statsTitle, textAlign: "right" }}>
+                      <Grid size={3} sx={{ ...style.statsTitle, textAlign: 'right' }}>
                         <Tooltip
                           placement="left"
                           arrow
@@ -494,13 +494,13 @@ const AnimeDrawer = memo(
                             return (
                               <Grid size={12} container key={r.id}>
                                 <Grid size={1}>
-                                  <StatusCircle status={n?.userAnimeStatus || ""} sx={{ marginTop: 2 }} />
+                                  <StatusCircle status={n?.userAnimeStatus || ''} sx={{ marginTop: 2 }} />
                                 </Grid>
                                 <Grid size={11}>
                                   <Link
                                     color="inherit"
                                     underline="hover"
-                                    sx={{ cursor: "pointer" }}
+                                    sx={{ cursor: 'pointer' }}
                                     onClick={() => onClickRelation(r.id)}
                                   >
                                     {r.title}
@@ -518,13 +518,13 @@ const AnimeDrawer = memo(
               <Grid size={12} container spacing={2}>
                 <Grid size={12}>
                   <Tooltip placement="left" arrow title={anime.extendedRelated.length.toLocaleString()}>
-                    <Divider sx={{ ...style.statsTitle, marginBottom: 1, cursor: "pointer" }} onClick={toggleExtended}>
+                    <Divider sx={{ ...style.statsTitle, marginBottom: 1, cursor: 'pointer' }} onClick={toggleExtended}>
                       {showExtended ? (
                         <ExpandLessIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
                       ) : (
                         <ExpandMoreIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
-                      )}{" "}
-                      Extended Related{" "}
+                      )}{' '}
+                      Extended Related{' '}
                       {showExtended ? (
                         <ExpandLessIcon fontSize="small" sx={{ marginBottom: -0.5 }} />
                       ) : (
@@ -540,13 +540,13 @@ const AnimeDrawer = memo(
                       <Fragment key={r.id}>
                         <Grid size={1} />
                         <Grid size={1}>
-                          <StatusCircle status={n?.userAnimeStatus || ""} sx={{ marginTop: 2 }} />
+                          <StatusCircle status={n?.userAnimeStatus || ''} sx={{ marginTop: 2 }} />
                         </Grid>
                         <Grid size={10}>
                           <Link
                             color="inherit"
                             underline="hover"
-                            sx={{ cursor: "pointer" }}
+                            sx={{ cursor: 'pointer' }}
                             onClick={() => onClickRelation(r.id)}
                           >
                             {r.title}
@@ -563,7 +563,7 @@ const AnimeDrawer = memo(
         {animeID > 0 && <AnimeDrawer ref={drawerRef} animeID={drawerAnimeID} />}
       </Drawer>
     );
-  })
+  }),
 );
 
 export default AnimeDrawer;

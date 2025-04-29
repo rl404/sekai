@@ -1,38 +1,38 @@
-import ChartNodeDialog from "../dialogs/ChartNodeDialog";
-import { ChartNodeDialogRefType } from "../dialogs/types";
-import { Node } from "../graphs/types";
-import { theme } from "../theme";
-import Grid from "@mui/material/Grid2";
-import Paper from "@mui/material/Paper";
-import { memo, useRef, useState } from "react";
+import ChartNodeDialog from '@/components/dialogs/ChartNodeDialog';
+import { ChartNodeDialogRefType } from '@/components/dialogs/types';
+import { Node } from '@/components/graphs/types';
+import theme from '@/components/theme';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import { memo, useRef, useState } from 'react';
 import {
   CartesianGrid,
   ResponsiveContainer,
-  Scatter,
   ScatterChart as SChart,
+  Scatter,
   Tooltip,
   TooltipProps,
   XAxis,
   YAxis,
   ZAxis,
-} from "recharts";
+} from 'recharts';
 
-interface ScatterChartData {
+type ScatterChartData = {
   x: number;
   y: string;
   z: number;
-}
+};
 
-interface ScatterChartConfig {
+type ScatterChartConfig = {
   xName: string;
   yName: string;
   zName: string;
-}
+};
 
 const ScatterChart = memo(({ data, config }: { data: ScatterChartData[]; config: ScatterChartConfig }) => {
   const ref = useRef<ChartNodeDialogRefType>(null);
 
-  const [dialogTitle, setDialogTitle] = useState("");
+  const [dialogTitle, setDialogTitle] = useState('');
   const [dialogData, setdialogData] = useState([]);
 
   const onClick = (d: any) => {
@@ -52,7 +52,7 @@ const ScatterChart = memo(({ data, config }: { data: ScatterChartData[]; config:
             type="number"
             dataKey="x"
             name={config.xName}
-            domain={["dataMin - 1", "dataMax + 1"]}
+            domain={['dataMin - 1', 'dataMax + 1']}
             tickCount={Math.max(...data.map((o) => o.x)) - Math.min(...data.map((o) => o.x))}
           />
           <YAxis type="category" dataKey="y" name={config.yName} width={80} allowDuplicatedCategory={false} />
@@ -75,13 +75,13 @@ const ChartTooltip = ({ active, payload }: TooltipProps<any, any>) => {
         {payload.map((p) => (
           <Grid size={12} key={p.name}>
             {`${p.name} : `}
-            {typeof p.value === "string"
+            {typeof p.value === 'string'
               ? p.value
               : p.value % 1 != 0
-              ? p.value.toFixed(2).toLocaleString()
-              : p.name === "year"
-              ? p.value
-              : p.value.toLocaleString()}
+                ? p.value.toFixed(2).toLocaleString()
+                : p.name === 'year'
+                  ? p.value
+                  : p.value.toLocaleString()}
           </Grid>
         ))}
       </Grid>

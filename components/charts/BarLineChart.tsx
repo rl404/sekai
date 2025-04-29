@@ -1,9 +1,8 @@
-import ChartNodeDialog from "../dialogs/ChartNodeDialog";
-import { ChartNodeDialogRefType } from "../dialogs/types";
-import { Node } from "../graphs/types";
-import { theme } from "../theme";
-import ChartTooltip from "./ChartTooltip";
-import { memo, useRef, useState } from "react";
+import ChartNodeDialog from '@/components/dialogs/ChartNodeDialog';
+import { ChartNodeDialogRefType } from '@/components/dialogs/types';
+import { Node } from '@/components/graphs/types';
+import theme from '@/components/theme';
+import { memo, useRef, useState } from 'react';
 import {
   Bar,
   Brush,
@@ -15,32 +14,33 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from "recharts";
+} from 'recharts';
+import ChartTooltip from './ChartTooltip';
 
-interface BarLineChartData {
+type BarLineChartData = {
   label: string;
   valueBar: number;
   valueLine1: number;
   valueLine2: number;
   color?: string;
-}
+};
 
-interface BarLineChartConfig {
+type BarLineChartConfig = {
   valueBarName: string;
   valueLine1Name: string;
   valueLine2Name: string;
   useBrush?: boolean;
   brushIndex?: number;
-}
+};
 
 const BarLineChart = memo(({ data, config }: { data: BarLineChartData[]; config: BarLineChartConfig }) => {
   const ref = useRef<ChartNodeDialogRefType>(null);
 
-  const [dialogTitle, setDialogTitle] = useState("");
+  const [dialogTitle, setDialogTitle] = useState('');
   const [dialogData, setdialogData] = useState([]);
 
-  var minScore = Math.min(...data.filter((o) => o.valueLine1 > 0).map((o) => o.valueLine1));
-  var maxScore = Math.max(...data.filter((o) => o.valueLine1 > 0).map((o) => o.valueLine1));
+  let minScore = Math.min(...data.filter((o) => o.valueLine1 > 0).map((o) => o.valueLine1));
+  let maxScore = Math.max(...data.filter((o) => o.valueLine1 > 0).map((o) => o.valueLine1));
 
   if (minScore - 0.5 > 0) minScore -= 0.5;
   if (maxScore + 0.5 <= 10) maxScore += 0.5;
@@ -72,7 +72,7 @@ const BarLineChart = memo(({ data, config }: { data: BarLineChartData[]; config:
           )}
           <Bar yAxisId="left" dataKey="valueBar" name={config?.valueBarName}>
             {data.map((v, i) => (
-              <Cell key={`cell-${i}`} fill={v.color || "white"} />
+              <Cell key={`cell-${i}`} fill={v.color || 'white'} />
             ))}
           </Bar>
           <Line yAxisId="right" dataKey="valueLine1" stroke="#2196f3" name={config?.valueLine1Name} />

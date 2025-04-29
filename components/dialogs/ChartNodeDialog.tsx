@@ -1,13 +1,13 @@
-import StatusCircle from "../circles/StatusCircle";
-import AnimeDrawer from "../drawers/AnimeDrawer";
-import { AnimeDrawerRefType } from "../drawers/types";
-import { Node } from "../graphs/types";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import Grid from "@mui/material/Grid2";
-import Link from "@mui/material/Link";
-import { Fragment, forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
+import StatusCircle from '@/components/circles/StatusCircle';
+import AnimeDrawer from '@/components/drawers/AnimeDrawer';
+import { AnimeDrawerRefType } from '@/components/drawers/types';
+import { Node } from '@/components/graphs/types';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import { Fragment, forwardRef, memo, useImperativeHandle, useRef, useState } from 'react';
 
 const ChartNodeDialog = memo(
   forwardRef(({ title, data }: { title: string; data: Node[] }, ref) => {
@@ -48,7 +48,7 @@ const ChartNodeDialog = memo(
                     <Link
                       color="inherit"
                       underline="hover"
-                      sx={{ cursor: "pointer" }}
+                      sx={{ cursor: 'pointer' }}
                       onClick={() => onClickAnime(n.id)}
                     >
                       {n.title}
@@ -62,7 +62,7 @@ const ChartNodeDialog = memo(
         <AnimeDrawer ref={drawerRef} animeID={drawerAnimeID} />
       </Dialog>
     );
-  })
+  }),
 );
 
 export default ChartNodeDialog;
