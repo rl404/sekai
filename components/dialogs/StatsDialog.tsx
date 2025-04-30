@@ -1,17 +1,17 @@
-import BarChart from "../charts/BarChart";
-import BarLineChart from "../charts/BarLineChart";
-import MiniAreaChart from "../charts/MiniAreaChart";
-import MiniBarChart from "../charts/MiniBarChart";
-import PieChart from "../charts/PieChart";
-import RadarChart from "../charts/RadarChart";
-import ScatterChart from "../charts/ScatterChart";
-import StatusCircle from "../circles/StatusCircle";
-import { useCtx } from "../context";
-import AnimeDrawer from "../drawers/AnimeDrawer";
-import { AnimeDrawerRefType } from "../drawers/types";
-import { Node } from "../graphs/types";
-import { theme } from "../theme";
-import SlideTransition from "../transitions/SlideTransition";
+import BarChart from '@/components/charts/BarChart';
+import BarLineChart from '@/components/charts/BarLineChart';
+import MiniAreaChart from '@/components/charts/MiniAreaChart';
+import MiniBarChart from '@/components/charts/MiniBarChart';
+import PieChart from '@/components/charts/PieChart';
+import RadarChart from '@/components/charts/RadarChart';
+import ScatterChart from '@/components/charts/ScatterChart';
+import StatusCircle from '@/components/circles/StatusCircle';
+import { useCtx } from '@/components/context';
+import AnimeDrawer from '@/components/drawers/AnimeDrawer';
+import { AnimeDrawerRefType } from '@/components/drawers/types';
+import { Node } from '@/components/graphs/types';
+import theme from '@/components/theme';
+import SlideTransition from '@/components/transitions/SlideTransition';
 import {
   AnimeSource,
   AnimeSourceToStr,
@@ -20,34 +20,35 @@ import {
   SeasonToStr,
   UserAnimeStatus,
   UserAnimeStatusStr,
-} from "@/libs/constant";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import CloseIcon from "@mui/icons-material/Close";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid2";
-import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
-import { Fragment, ReactNode, forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
+} from '@/libs/constant';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import CloseIcon from '@mui/icons-material/Close';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import { Fragment, ReactNode, forwardRef, memo, useImperativeHandle, useRef, useState } from 'react';
 
 const StatsDialog = memo(
   forwardRef((_, ref) => {
     const ctx = useCtx();
-    const drawerRef = useRef<AnimeDrawerRefType>();
+    const drawerRef = useRef<AnimeDrawerRefType>(null);
 
     const [open, setOpen] = useState(false);
     const [drawerAnimeID, setDrawerAnimeID] = useState(0);
 
-    const inList = ctx.graph.nodes.filter((n) => n.userAnimeStatus !== "");
+    const inList = ctx.graph.nodes.filter((n) => n.userAnimeStatus !== '');
     const nonZeroScore = ctx.graph.nodes.filter((n) => n.userAnimeScore !== 0);
     const avgScore = nonZeroScore.reduce((total, next) => total + next.userAnimeScore, 0) / nonZeroScore.length;
     const globalNonZeroScore = inList.filter((n) => n.score > 0);
@@ -101,14 +102,14 @@ const StatsDialog = memo(
         nodes: Node[];
       };
     } = {
-      "1": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "2-6": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "7-13": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "14-26": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "27-52": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "53-100": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "101+": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "?": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '1': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '2-6': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '7-13': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '14-26': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '27-52': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '53-100': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '101+': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '?': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
     };
 
     const byEpisodeDuration: {
@@ -121,15 +122,15 @@ const StatsDialog = memo(
         nodes: Node[];
       };
     } = {
-      "< 1": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "1-5": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "6-10": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "11-15": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "16-30": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "31-60": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "61-120": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "121+": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
-      "?": { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '< 1': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '1-5': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '6-10': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '11-15': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '16-30': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '31-60': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '61-120': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '121+': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
+      '?': { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] },
     };
 
     const bySeason: { [season: string]: number } = {};
@@ -144,55 +145,55 @@ const StatsDialog = memo(
       };
     } = {};
 
-    var minYear = -1;
-    var maxYear = new Date().getFullYear();
+    let minYear = -1;
+    let maxYear = new Date().getFullYear();
 
     ctx.graph.nodes
-      .filter((n) => n.userAnimeStatus !== "" && n.type !== "")
+      .filter((n) => n.userAnimeStatus !== '' && n.type !== '')
       .forEach((n) => {
         byType[n.type]++;
         byStatus[n.userAnimeStatus]++;
-        n.source && bySource[n.source]++;
+        if (n.source) bySource[n.source]++;
 
-        var episodeCountKey = "?";
-        if (n.episodeCount === 1) episodeCountKey = "1";
-        if (n.episodeCount >= 2 && n.episodeCount < 7) episodeCountKey = "2-6";
-        if (n.episodeCount >= 7 && n.episodeCount < 14) episodeCountKey = "7-13";
-        if (n.episodeCount >= 14 && n.episodeCount < 27) episodeCountKey = "14-26";
-        if (n.episodeCount >= 27 && n.episodeCount < 53) episodeCountKey = "27-52";
-        if (n.episodeCount >= 53 && n.episodeCount < 101) episodeCountKey = "53-100";
-        if (n.episodeCount >= 101) episodeCountKey = "101+";
+        let episodeCountKey = '?';
+        if (n.episodeCount === 1) episodeCountKey = '1';
+        if (n.episodeCount >= 2 && n.episodeCount < 7) episodeCountKey = '2-6';
+        if (n.episodeCount >= 7 && n.episodeCount < 14) episodeCountKey = '7-13';
+        if (n.episodeCount >= 14 && n.episodeCount < 27) episodeCountKey = '14-26';
+        if (n.episodeCount >= 27 && n.episodeCount < 53) episodeCountKey = '27-52';
+        if (n.episodeCount >= 53 && n.episodeCount < 101) episodeCountKey = '53-100';
+        if (n.episodeCount >= 101) episodeCountKey = '101+';
 
         byEpisodeCount[episodeCountKey].count++;
         byEpisodeCount[episodeCountKey].nodes.push(n);
-        n.userAnimeScore > 0 && (byEpisodeCount[episodeCountKey].sumScore += n.userAnimeScore);
-        n.userAnimeScore > 0 && byEpisodeCount[episodeCountKey].countScore++;
-        n.score > 0 && (byEpisodeCount[episodeCountKey].globalSumScore += n.score);
-        n.score > 0 && byEpisodeCount[episodeCountKey].globalCountScore++;
+        if (n.userAnimeScore > 0) byEpisodeCount[episodeCountKey].sumScore += n.userAnimeScore;
+        if (n.userAnimeScore > 0) byEpisodeCount[episodeCountKey].countScore++;
+        if (n.score > 0) byEpisodeCount[episodeCountKey].globalSumScore += n.score;
+        if (n.score > 0) byEpisodeCount[episodeCountKey].globalCountScore++;
 
-        var episodeDurationKey = "?";
+        let episodeDurationKey = '?';
         if (n.episodeDuration > 0) {
           const dur = n.episodeDuration / 60;
-          if (dur < 1) episodeDurationKey = "< 1";
-          if (dur >= 1 && dur < 6) episodeDurationKey = "1-5";
-          if (dur >= 6 && dur < 11) episodeDurationKey = "6-10";
-          if (dur >= 11 && dur < 16) episodeDurationKey = "11-15";
-          if (dur >= 16 && dur < 31) episodeDurationKey = "16-30";
-          if (dur >= 31 && dur < 61) episodeDurationKey = "31-60";
-          if (dur >= 61 && dur < 121) episodeDurationKey = "61-120";
-          if (dur >= 121) episodeDurationKey = "121+";
+          if (dur < 1) episodeDurationKey = '< 1';
+          if (dur >= 1 && dur < 6) episodeDurationKey = '1-5';
+          if (dur >= 6 && dur < 11) episodeDurationKey = '6-10';
+          if (dur >= 11 && dur < 16) episodeDurationKey = '11-15';
+          if (dur >= 16 && dur < 31) episodeDurationKey = '16-30';
+          if (dur >= 31 && dur < 61) episodeDurationKey = '31-60';
+          if (dur >= 61 && dur < 121) episodeDurationKey = '61-120';
+          if (dur >= 121) episodeDurationKey = '121+';
         }
 
         byEpisodeDuration[episodeDurationKey].count++;
         byEpisodeDuration[episodeDurationKey].nodes.push(n);
-        n.userAnimeScore > 0 && (byEpisodeDuration[episodeDurationKey].sumScore += n.userAnimeScore);
-        n.userAnimeScore > 0 && byEpisodeDuration[episodeDurationKey].countScore++;
-        n.score > 0 && (byEpisodeDuration[episodeDurationKey].globalSumScore += n.score);
-        n.score > 0 && byEpisodeDuration[episodeDurationKey].globalCountScore++;
+        if (n.userAnimeScore > 0) byEpisodeDuration[episodeDurationKey].sumScore += n.userAnimeScore;
+        if (n.userAnimeScore > 0) byEpisodeDuration[episodeDurationKey].countScore++;
+        if (n.score > 0) byEpisodeDuration[episodeDurationKey].globalSumScore += n.score;
+        if (n.score > 0) byEpisodeDuration[episodeDurationKey].globalCountScore++;
 
-        if (n.season !== "") {
-          const seasonYearKey = n.season + "-" + n.seasonYear;
-          !bySeason[seasonYearKey] && (bySeason[seasonYearKey] = 0);
+        if (n.season !== '') {
+          const seasonYearKey = n.season + '-' + n.seasonYear;
+          if (!bySeason[seasonYearKey]) bySeason[seasonYearKey] = 0;
           bySeason[seasonYearKey]++;
         }
 
@@ -201,26 +202,27 @@ const StatsDialog = memo(
           if (n.startYear > maxYear) maxYear = n.startYear;
 
           const year = n.startYear.toString();
-          !byYear[year] &&
-            (byYear[year] = {
+          if (!byYear[year]) {
+            byYear[year] = {
               count: 0,
               globalSumScore: 0,
               globalCountScore: 0,
               sumScore: 0,
               countScore: 0,
               nodes: [],
-            });
+            };
+          }
           byYear[year].count++;
           byYear[year].nodes.push(n);
-          n.userAnimeScore > 0 && (byYear[year].sumScore += n.userAnimeScore);
-          n.userAnimeScore > 0 && byYear[year].countScore++;
-          n.score > 0 && (byYear[year].globalSumScore += n.score);
-          n.score > 0 && byYear[year].globalCountScore++;
+          if (n.userAnimeScore > 0) byYear[year].sumScore += n.userAnimeScore;
+          if (n.userAnimeScore > 0) byYear[year].countScore++;
+          if (n.score > 0) byYear[year].globalSumScore += n.score;
+          if (n.score > 0) byYear[year].globalCountScore++;
         }
       });
 
     // Fill missing year.
-    for (var i = minYear; i <= maxYear; i++) {
+    for (let i = minYear; i <= maxYear; i++) {
       const year = i.toString();
       if (!byYear[year]) {
         byYear[year] = { count: 0, globalSumScore: 0, globalCountScore: 0, sumScore: 0, countScore: 0, nodes: [] };
@@ -249,13 +251,8 @@ const StatsDialog = memo(
         <Dialog
           open={open}
           fullScreen
+          slotProps={{ paper: { sx: style.dialogPaper } }}
           TransitionComponent={SlideTransition}
-          PaperProps={{
-            style: {
-              backgroundImage: "radial-gradient(rgb(65, 65, 65) 0.5px, #121212 0.5px)",
-              backgroundSize: "15px 15px",
-            },
-          }}
         >
           <DialogTitle>
             <Grid container>
@@ -292,9 +289,9 @@ const StatsDialog = memo(
                   value={avgScore.toFixed(2)}
                   tooltip={
                     <>
-                      {globalAvgScore.toFixed(2)} average global score{" "}
+                      {globalAvgScore.toFixed(2)} average global score{' '}
                       <span style={avgScore > globalAvgScore ? style.scoreGreen : style.scoreRed}>
-                        ({avgScore > globalAvgScore ? "+" : ""}
+                        ({avgScore > globalAvgScore ? '+' : ''}
                         {(avgScore - globalAvgScore).toFixed(2)})
                       </span>
                     </>
@@ -352,7 +349,7 @@ const StatsDialog = memo(
               <Grid size={{ xs: 12, sm: 12, md: 6 }}>
                 <ChartCard title="Anime by Status">
                   <BarChart
-                    config={{ valueName: "count" }}
+                    config={{ valueName: 'count' }}
                     data={Object.keys(byStatus).map((k) => ({
                       label: UserAnimeStatusStr(k),
                       value: byStatus[k],
@@ -366,12 +363,12 @@ const StatsDialog = memo(
               <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                 <ChartCard title="Anime by Type">
                   <RadarChart
-                    config={{ valueName: "count" }}
+                    config={{ valueName: 'count' }}
                     data={Object.keys(byType)
                       .map((k) => ({
                         label: AnimeTypeToStr(k),
                         value: byType[k],
-                        nodes: ctx.graph.nodes.filter((n) => n.userAnimeStatus !== "" && n.type == k),
+                        nodes: ctx.graph.nodes.filter((n) => n.userAnimeStatus !== '' && n.type == k),
                       }))
                       .sort((a, b) => b.value - a.value)}
                   />
@@ -381,12 +378,12 @@ const StatsDialog = memo(
               <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                 <ChartCard title="Anime by Source">
                   <PieChart
-                    config={{ valueName: "count" }}
+                    config={{ valueName: 'count' }}
                     data={Object.keys(bySource)
                       .map((k) => ({
                         label: AnimeSourceToStr(k),
                         value: bySource[k],
-                        nodes: ctx.graph.nodes.filter((n) => n.userAnimeStatus !== "" && n.source == k),
+                        nodes: ctx.graph.nodes.filter((n) => n.userAnimeStatus !== '' && n.source == k),
                       }))
                       .sort((a, b) => b.value - a.value)}
                   />
@@ -397,9 +394,9 @@ const StatsDialog = memo(
                 <ChartCard title="Anime by Episode Count & Score">
                   <BarLineChart
                     config={{
-                      valueBarName: "count",
-                      valueLine1Name: "user score",
-                      valueLine2Name: "global score",
+                      valueBarName: 'count',
+                      valueLine1Name: 'user score',
+                      valueLine2Name: 'global score',
                     }}
                     data={Object.keys(byEpisodeCount).map((k) => ({
                       label: k,
@@ -416,9 +413,9 @@ const StatsDialog = memo(
                 <ChartCard title="Anime by Episode Duration (minutes) & Score">
                   <BarLineChart
                     config={{
-                      valueBarName: "count",
-                      valueLine1Name: "user score",
-                      valueLine2Name: "global score",
+                      valueBarName: 'count',
+                      valueLine1Name: 'user score',
+                      valueLine2Name: 'global score',
                     }}
                     data={Object.keys(byEpisodeDuration).map((k) => ({
                       label: k,
@@ -435,9 +432,9 @@ const StatsDialog = memo(
                 <ChartCard title="Anime by Year & Score">
                   <BarLineChart
                     config={{
-                      valueBarName: "count",
-                      valueLine1Name: "user score",
-                      valueLine2Name: "global score",
+                      valueBarName: 'count',
+                      valueLine1Name: 'user score',
+                      valueLine2Name: 'global score',
                       useBrush: true,
                       brushIndex: Object.keys(byYear).length > 10 ? Object.keys(byYear).length - 10 : 0,
                     }}
@@ -456,18 +453,18 @@ const StatsDialog = memo(
                 <ChartCard title="Anime by Season & Year">
                   <ScatterChart
                     config={{
-                      xName: "year",
-                      yName: "season",
-                      zName: "count",
+                      xName: 'year',
+                      yName: 'season',
+                      zName: 'count',
                     }}
                     data={Object.keys(bySeason).map((k) => {
-                      const seasonYear = k.split("-");
+                      const seasonYear = k.split('-');
                       return {
                         x: parseInt(seasonYear[1], 10),
                         y: SeasonToStr(seasonYear[0]),
                         z: bySeason[k],
                         nodes: ctx.graph.nodes.filter(
-                          (n) => n.userAnimeStatus !== "" && n.season + "-" + n.seasonYear == k
+                          (n) => n.userAnimeStatus !== '' && n.season + '-' + n.seasonYear == k,
                         ),
                       };
                     })}
@@ -489,7 +486,7 @@ const StatsDialog = memo(
                   title="Most Episode Count"
                   valueFormatter={(n) => n.episodeCount.toLocaleString()}
                   nodes={Object.assign<Node[], Node[]>([], ctx.graph.nodes).sort(
-                    (a, b) => b.episodeCount - a.episodeCount
+                    (a, b) => b.episodeCount - a.episodeCount,
                   )}
                   onClickAnime={onClickAnime}
                 />
@@ -500,7 +497,7 @@ const StatsDialog = memo(
                   title="Longest Episode Duration (minutes)"
                   valueFormatter={(n) => (n.episodeDuration / 60).toFixed(0).toLocaleString()}
                   nodes={Object.assign<Node[], Node[]>([], ctx.graph.nodes).sort(
-                    (a, b) => b.episodeDuration - a.episodeDuration
+                    (a, b) => b.episodeDuration - a.episodeDuration,
                   )}
                   onClickAnime={onClickAnime}
                 />
@@ -511,7 +508,7 @@ const StatsDialog = memo(
                   title="Most Relation Count"
                   valueFormatter={(n) => n.neighbors.length.toLocaleString()}
                   nodes={Object.assign<Node[], Node[]>([], ctx.graph.nodes).sort(
-                    (a, b) => b.neighbors.length - a.neighbors.length
+                    (a, b) => b.neighbors.length - a.neighbors.length,
                   )}
                   onClickAnime={onClickAnime}
                 />
@@ -522,20 +519,24 @@ const StatsDialog = memo(
         </Dialog>
       </>
     );
-  })
+  }),
 );
 
 export default StatsDialog;
 
 const style = {
+  dialogPaper: {
+    backgroundImage: 'radial-gradient(rgb(65, 65, 65) 0.5px, #121212 0.5px)',
+    backgroundSize: '15px 15px',
+  },
   statsTitle: {
     color: theme.palette.grey[500],
   },
   statsChart: {
-    position: "absolute" as "absolute",
+    position: 'absolute',
     top: 0,
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
     opacity: 0.1,
   },
   scoreGreen: {
@@ -549,7 +550,7 @@ const style = {
 const StatsCard = ({
   title,
   value,
-  tooltip = "",
+  tooltip = '',
   chart,
 }: {
   title: string;
@@ -558,9 +559,9 @@ const StatsCard = ({
   chart: ReactNode;
 }) => {
   return (
-    <Card sx={{ position: "relative" }}>
-      <div style={style.statsChart}>{chart}</div>
-      <CardContent sx={{ textAlign: "center", position: "relative" }}>
+    <Card sx={{ position: 'relative' }}>
+      <Box sx={style.statsChart}>{chart}</Box>
+      <CardContent sx={{ textAlign: 'center', position: 'relative' }}>
         <Typography gutterBottom sx={style.statsTitle}>
           {title}
         </Typography>
@@ -575,7 +576,7 @@ const StatsCard = ({
 const ChartCard = ({ title, children }: { title: string; children: ReactNode }) => {
   return (
     <Card>
-      <CardContent sx={{ textAlign: "center", height: 300 }}>
+      <CardContent sx={{ textAlign: 'center', height: 300 }}>
         <Typography gutterBottom sx={style.statsTitle}>
           {title}
         </Typography>
@@ -606,13 +607,13 @@ const AnimeListCard = ({
   const onNextPage = () => setPage(page + 1);
 
   nodes = nodes
-    .filter((n) => !inList || n.userAnimeStatus !== "")
+    .filter((n) => !inList || n.userAnimeStatus !== '')
     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <Card>
       <CardContent>
-        <Typography sx={{ ...style.statsTitle, textAlign: "center", marginBottom: 1 }}>{title}</Typography>
+        <Typography sx={{ ...style.statsTitle, textAlign: 'center', marginBottom: 1 }}>{title}</Typography>
         <Grid container spacing={2}>
           <Grid size={12}>
             <Divider />
@@ -620,18 +621,18 @@ const AnimeListCard = ({
           {nodes.map((n, i) => {
             return (
               <Fragment key={n.id}>
-                <Grid size={1} sx={{ textAlign: "right" }}>
+                <Grid size={1} sx={{ textAlign: 'right' }}>
                   {`${page * rowsPerPage + i + 1}.`}
                 </Grid>
-                <Grid size={1} sx={{ textAlign: "center" }}>
+                <Grid size={1} sx={{ textAlign: 'center' }}>
                   <StatusCircle status={n.userAnimeStatus} />
                 </Grid>
-                <Grid size={8} sx={{ overflowX: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
-                  <Link color="inherit" underline="hover" sx={{ cursor: "pointer" }} onClick={() => onClickAnime(n.id)}>
+                <Grid size={8} sx={{ overflowX: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                  <Link color="inherit" underline="hover" sx={{ cursor: 'pointer' }} onClick={() => onClickAnime(n.id)}>
                     {n.title}
                   </Link>
                 </Grid>
-                <Grid size={2} sx={{ textAlign: "right" }}>
+                <Grid size={2} sx={{ textAlign: 'right' }}>
                   {valueFormatter(n)}
                 </Grid>
               </Fragment>
@@ -642,7 +643,7 @@ const AnimeListCard = ({
           </Grid>
           <Grid size={12} container spacing={2}>
             <Grid>
-              <Tooltip title={inList ? "show in list only" : "show all"} placement="right" arrow>
+              <Tooltip title={inList ? 'show in list only' : 'show all'} placement="right" arrow>
                 <IconButton onClick={toggleInList} size="small">
                   {inList ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>

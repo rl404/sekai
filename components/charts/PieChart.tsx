@@ -1,23 +1,23 @@
-import ChartNodeDialog from "../dialogs/ChartNodeDialog";
-import { ChartNodeDialogRefType } from "../dialogs/types";
-import { Node } from "../graphs/types";
-import { memo, useRef, useState } from "react";
-import { ResponsiveContainer, PieChart as PChart, Pie, Sector } from "recharts";
+import ChartNodeDialog from '@/components/dialogs/ChartNodeDialog';
+import { ChartNodeDialogRefType } from '@/components/dialogs/types';
+import { Node } from '@/components/graphs/types';
+import { memo, useRef, useState } from 'react';
+import { PieChart as PChart, Pie, ResponsiveContainer, Sector } from 'recharts';
 
-interface PieChartData {
+type PieChartData = {
   label: string;
   value: number;
-}
+};
 
-interface PieChartConfig {
+type PieChartConfig = {
   valueName: string;
-}
+};
 
 const PieChart = memo(({ data, config }: { data: PieChartData[]; config: PieChartConfig }) => {
-  const ref = useRef<ChartNodeDialogRefType>();
+  const ref = useRef<ChartNodeDialogRefType>(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [dialogTitle, setDialogTitle] = useState("");
+  const [dialogTitle, setDialogTitle] = useState('');
   const [dialogData, setdialogData] = useState([]);
 
   const onHover = (_: any, i: number) => {
@@ -65,7 +65,7 @@ const PieActiveShape = (props: any) => {
   const my = cy + (outerRadius + 30) * sin;
   const ex = mx + (cos >= 0 ? 1 : -1) * 22;
   const ey = my;
-  const textAnchor = cos >= 0 ? "start" : "end";
+  const textAnchor = cos >= 0 ? 'start' : 'end';
 
   return (
     <g>

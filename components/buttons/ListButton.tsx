@@ -1,10 +1,10 @@
-import ListDialog from "../dialogs/ListDialog";
-import { ListDialogRefType } from "../dialogs/types";
-import Button from "@mui/material/Button";
-import { memo, useRef } from "react";
+import ListDialog from '@/components/dialogs/ListDialog';
+import { ListDialogRefType } from '@/components/dialogs/types';
+import Button from '@mui/material/Button';
+import { memo, useRef } from 'react';
 
 const ListButton = memo(() => {
-  const ref = useRef<ListDialogRefType>();
+  const ref = useRef<ListDialogRefType>(null);
 
   const onClick = () => {
     ref.current?.setOpen(true);

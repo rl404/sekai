@@ -1,14 +1,14 @@
-import { useCtx } from "../context";
-import { UserAnimeStatus } from "@/libs/constant";
-import Tooltip from "@mui/material/Tooltip";
-import { CSSProperties, memo } from "react";
+import { useCtx } from '@/components/context';
+import { UserAnimeStatus } from '@/libs/constant';
+import Tooltip from '@mui/material/Tooltip';
+import { CSSProperties, memo } from 'react';
 
 const style = {
   width: 20,
   height: 20,
-  borderRadius: "50%",
-  border: "1px solid white",
-  margin: "auto",
+  borderRadius: '50%',
+  border: '1px solid white',
+  margin: 'auto',
 };
 
 const StatusCircle = memo(({ status, sx }: { status: string; sx?: CSSProperties }) => {
