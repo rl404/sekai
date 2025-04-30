@@ -37,25 +37,25 @@ type StatsStatus = {
   planned: number;
 };
 
-interface Related {
+type Related = {
   id: number;
   title: string;
   picture: string;
   relation: string;
-}
+};
 
 export const defaultAnimeDrawer: AnimeDrawerType = {
   id: 0,
-  title: "",
+  title: '',
   titleSynonyms: [],
-  titleEnglish: "",
-  titleJapanese: "",
+  titleEnglish: '',
+  titleJapanese: '',
   pictures: [],
-  synopsis: "",
-  startDate: "",
-  endDate: "",
-  type: "",
-  status: "",
+  synopsis: '',
+  startDate: '',
+  endDate: '',
+  type: '',
+  status: '',
   rank: 0,
   mean: 0,
   popularity: 0,
@@ -67,11 +67,11 @@ export const defaultAnimeDrawer: AnimeDrawerType = {
     planned: 0,
   },
   episodeCount: 0,
-  episodeDuration: "",
-  season: "",
+  episodeDuration: '',
+  season: '',
   seasonYear: 0,
-  broadcastDay: "",
-  broadcastTime: "",
+  broadcastDay: '',
+  broadcastTime: '',
   genres: [],
   related: [],
   extendedRelated: [],

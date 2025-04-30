@@ -1,8 +1,6 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { Data as Base } from "../index";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { Base } from '@/app/api';
 
-type Data = Base & {
+export type Data = Base & {
   data: Anime;
 };
 
@@ -79,13 +77,14 @@ export type Genre = {
   name: string;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  const resp = await fetch(`${process.env.API_HOST_AKATSUKI}/anime/${req.query.anime_id}`, {
-    method: req.method,
-  });
+export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const resp = await fetch(`${process.env.API_HOST_AKATSUKI}/anime/${id}`);
   const data = await resp.json();
-  res
-    .status(data.status)
-    .setHeader("cache-control", "max-age=3600, s-maxage=86400, stale-while-revalidate=3600")
-    .json(data);
+  return Response.json(data, {
+    status: resp.status,
+    headers: {
+      'cache-control': 'max-age=3600, s-maxage=86400, stale-while-revalidate=3600',
+    },
+  });
 }

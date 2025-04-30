@@ -1,11 +1,7 @@
-version: "3"
-
 services:
   sekai:
     container_name: sekai
     image: rl404/sekai:latest
-    build: .
     restart: always
     env_file: .env
     network_mode: host
-

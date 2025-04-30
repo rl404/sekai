@@ -1,9 +1,9 @@
-import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid2";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { memo } from "react";
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { memo } from 'react';
 
 const AnimeDrawerSkeleton = memo(() => {
   return (
@@ -15,7 +15,7 @@ const AnimeDrawerSkeleton = memo(() => {
         <Divider />
       </Grid>
       <Grid size={12}>
-        <Skeleton variant="rectangular" width={340} height={480} sx={{ margin: "auto" }} />
+        <Skeleton variant="rectangular" width={340} height={480} sx={{ margin: 'auto' }} />
       </Grid>
       <Grid size={4}>
         <Divider>

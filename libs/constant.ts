@@ -1,234 +1,234 @@
 export const AnimeType = {
-  tv: "TV",
-  ova: "OVA",
-  ona: "ONA",
-  movie: "MOVIE",
-  special: "SPECIAL",
-  music: "MUSIC",
+  tv: 'TV',
+  ova: 'OVA',
+  ona: 'ONA',
+  movie: 'MOVIE',
+  special: 'SPECIAL',
+  music: 'MUSIC',
 };
 
 export const AnimeTypeToStr = (type: string): string => {
   switch (type) {
     case AnimeType.tv:
-      return "TV";
+      return 'TV';
     case AnimeType.ova:
-      return "OVA";
+      return 'OVA';
     case AnimeType.ona:
-      return "ONA";
+      return 'ONA';
     case AnimeType.movie:
-      return "Movie";
+      return 'Movie';
     case AnimeType.special:
-      return "Special";
+      return 'Special';
     case AnimeType.music:
-      return "Music";
+      return 'Music';
     default:
-      return "-";
+      return '-';
   }
 };
 
 export const AnimeStatus = {
-  finished: "FINISHED",
-  releasing: "RELEASING",
-  notYet: "NOT_YET",
+  finished: 'FINISHED',
+  releasing: 'RELEASING',
+  notYet: 'NOT_YET',
 };
 
 export const AnimeStatusToStr = (status: string): string => {
   switch (status) {
     case AnimeStatus.finished:
-      return "Finished";
+      return 'Finished';
     case AnimeStatus.releasing:
-      return "Airing";
+      return 'Airing';
     case AnimeStatus.notYet:
-      return "Not yet aired";
+      return 'Not yet aired';
     default:
-      return "-";
+      return '-';
   }
 };
 
 export const UserAnimeStatus = {
-  watching: "WATCHING",
-  completed: "COMPLETED",
-  onHold: "ON_HOLD",
-  dropped: "DROPPED",
-  planned: "PLANNED",
+  watching: 'WATCHING',
+  completed: 'COMPLETED',
+  onHold: 'ON_HOLD',
+  dropped: 'DROPPED',
+  planned: 'PLANNED',
 };
 
 export const UserAnimeStatusStr = (status: string): string => {
   switch (status) {
     case UserAnimeStatus.watching:
-      return "Watching";
+      return 'Watching';
     case UserAnimeStatus.completed:
-      return "Completed";
+      return 'Completed';
     case UserAnimeStatus.onHold:
-      return "On Hold";
+      return 'On Hold';
     case UserAnimeStatus.dropped:
-      return "Dropped";
+      return 'Dropped';
     case UserAnimeStatus.planned:
-      return "Planned";
+      return 'Planned';
     default:
-      return "";
+      return '';
   }
 };
 
 export const AnimeRelation = {
-  sequel: "SEQUEL",
-  prequel: "PREQUEL",
-  alternativeSetting: "ALTERNATIVE_SETTING",
-  alternativeVersion: "ALTERNATIVE_VERSION",
-  sideStory: "SIDE_STORY",
-  parentStory: "PARENT_STORY",
-  summary: "SUMMARY",
-  fullStory: "FULL_STORY",
-  spinOff: "SPIN_OFF",
-  adaptation: "ADAPTATION",
-  character: "CHARACTER",
-  other: "OTHER",
+  sequel: 'SEQUEL',
+  prequel: 'PREQUEL',
+  alternativeSetting: 'ALTERNATIVE_SETTING',
+  alternativeVersion: 'ALTERNATIVE_VERSION',
+  sideStory: 'SIDE_STORY',
+  parentStory: 'PARENT_STORY',
+  summary: 'SUMMARY',
+  fullStory: 'FULL_STORY',
+  spinOff: 'SPIN_OFF',
+  adaptation: 'ADAPTATION',
+  character: 'CHARACTER',
+  other: 'OTHER',
 };
 
 export const AnimeRelationToStr = (relation: string): string => {
   switch (relation) {
     case AnimeRelation.sequel:
-      return "Sequel";
+      return 'Sequel';
     case AnimeRelation.prequel:
-      return "Prequel";
+      return 'Prequel';
     case AnimeRelation.alternativeSetting:
-      return "Alternative Setting";
+      return 'Alternative Setting';
     case AnimeRelation.alternativeVersion:
-      return "Alternative Version";
+      return 'Alternative Version';
     case AnimeRelation.sideStory:
-      return "Side Story";
+      return 'Side Story';
     case AnimeRelation.parentStory:
-      return "Parent Story";
+      return 'Parent Story';
     case AnimeRelation.summary:
-      return "Summary";
+      return 'Summary';
     case AnimeRelation.fullStory:
-      return "Full Story";
+      return 'Full Story';
     case AnimeRelation.spinOff:
-      return "Spin Off";
+      return 'Spin Off';
     case AnimeRelation.adaptation:
-      return "Adaptation";
+      return 'Adaptation';
     case AnimeRelation.character:
-      return "Character";
+      return 'Character';
     case AnimeRelation.other:
-      return "Other";
+      return 'Other';
     default:
-      return "Unknown";
+      return 'Unknown';
   }
 };
 
 export const Season = {
-  winter: "WINTER",
-  spring: "SPRING",
-  summer: "SUMMER",
-  fall: "FALL",
+  winter: 'WINTER',
+  spring: 'SPRING',
+  summer: 'SUMMER',
+  fall: 'FALL',
 };
 
 export const SeasonToStr = (season: string): string => {
   switch (season) {
     case Season.winter:
-      return "Winter";
+      return 'Winter';
     case Season.spring:
-      return "Spring";
+      return 'Spring';
     case Season.summer:
-      return "Summer";
+      return 'Summer';
     case Season.fall:
-      return "Fall";
+      return 'Fall';
     default:
-      return "";
+      return '';
   }
 };
 
 export const Day = {
-  monday: "MONDAY",
-  tuesday: "TUESDAY",
-  wednesday: "WEDNESDAY",
-  thursday: "THURSDAY",
-  friday: "FRIDAY",
-  saturday: "SATURDAY",
-  sunday: "SUNDAY",
-  other: "OTHER",
+  monday: 'MONDAY',
+  tuesday: 'TUESDAY',
+  wednesday: 'WEDNESDAY',
+  thursday: 'THURSDAY',
+  friday: 'FRIDAY',
+  saturday: 'SATURDAY',
+  sunday: 'SUNDAY',
+  other: 'OTHER',
 };
 
 export const DayToStr = (day: string): string => {
   switch (day) {
     case Day.monday:
-      return "Monday";
+      return 'Monday';
     case Day.tuesday:
-      return "Tuesday";
+      return 'Tuesday';
     case Day.wednesday:
-      return "Wednesday";
+      return 'Wednesday';
     case Day.thursday:
-      return "Thursday";
+      return 'Thursday';
     case Day.friday:
-      return "Friday";
+      return 'Friday';
     case Day.saturday:
-      return "Saturday";
+      return 'Saturday';
     case Day.sunday:
-      return "Sunday";
+      return 'Sunday';
     case Day.other:
-      return "Other";
+      return 'Other';
     default:
-      return "";
+      return '';
   }
 };
 
 export const AnimeSource = {
-  original: "ORIGINAL",
-  manga: "MANGA",
-  koma4Manga: "4_KOMA_MANGA",
-  webManga: "WEB_MANGA",
-  digitalManga: "DIGITAL_MANGA",
-  novel: "NOVEL",
-  lightNovel: "LIGHT_NOVEL",
-  visualNovel: "VISUAL_NOVEL",
-  game: "GAME",
-  cardGame: "CARD_GAME",
-  book: "BOOK",
-  pictureBook: "PICTURE_BOOK",
-  radio: "RADIO",
-  music: "MUSIC",
-  other: "OTHER",
-  webNovel: "WEB_NOVEL",
-  mixedMedia: "MIXED_MEDIA",
+  original: 'ORIGINAL',
+  manga: 'MANGA',
+  koma4Manga: '4_KOMA_MANGA',
+  webManga: 'WEB_MANGA',
+  digitalManga: 'DIGITAL_MANGA',
+  novel: 'NOVEL',
+  lightNovel: 'LIGHT_NOVEL',
+  visualNovel: 'VISUAL_NOVEL',
+  game: 'GAME',
+  cardGame: 'CARD_GAME',
+  book: 'BOOK',
+  pictureBook: 'PICTURE_BOOK',
+  radio: 'RADIO',
+  music: 'MUSIC',
+  other: 'OTHER',
+  webNovel: 'WEB_NOVEL',
+  mixedMedia: 'MIXED_MEDIA',
 };
 
 export const AnimeSourceToStr = (source: string): string => {
   switch (source) {
     case AnimeSource.original:
-      return "Original";
+      return 'Original';
     case AnimeSource.manga:
-      return "Manga";
+      return 'Manga';
     case AnimeSource.koma4Manga:
-      return "4 Koma Manga";
+      return '4 Koma Manga';
     case AnimeSource.webManga:
-      return "Web Manga";
+      return 'Web Manga';
     case AnimeSource.digitalManga:
-      return "Digital Manga";
+      return 'Digital Manga';
     case AnimeSource.novel:
-      return "Novel";
+      return 'Novel';
     case AnimeSource.lightNovel:
-      return "Light Novel";
+      return 'Light Novel';
     case AnimeSource.visualNovel:
-      return "Visual Novel";
+      return 'Visual Novel';
     case AnimeSource.game:
-      return "Game";
+      return 'Game';
     case AnimeSource.cardGame:
-      return "Card Game";
+      return 'Card Game';
     case AnimeSource.book:
-      return "Book";
+      return 'Book';
     case AnimeSource.pictureBook:
-      return "Picture Book";
+      return 'Picture Book';
     case AnimeSource.radio:
-      return "Radio";
+      return 'Radio';
     case AnimeSource.music:
-      return "Music";
+      return 'Music';
     case AnimeSource.other:
-      return "Other";
+      return 'Other';
     case AnimeSource.webNovel:
-      return "Web Novel";
+      return 'Web Novel';
     case AnimeSource.mixedMedia:
-      return "Mixed Media";
+      return 'Mixed Media';
     default:
-      return "";
+      return '';
   }
 };

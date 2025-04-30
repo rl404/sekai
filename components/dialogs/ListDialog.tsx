@@ -1,11 +1,10 @@
-import StatusBadge from "../badges/StatusBadge";
-import StatusCircle from "../circles/StatusCircle";
-import { useCtx } from "../context";
-import AnimeDrawer from "../drawers/AnimeDrawer";
-import { AnimeDrawerRefType } from "../drawers/types";
-import { theme } from "../theme";
-import SlideTransition from "../transitions/SlideTransition";
-import { Order, TableHeader } from "./types";
+import StatusBadge from '@/components/badges/StatusBadge';
+import StatusCircle from '@/components/circles/StatusCircle';
+import { useCtx } from '@/components/context';
+import AnimeDrawer from '@/components/drawers/AnimeDrawer';
+import { AnimeDrawerRefType } from '@/components/drawers/types';
+import theme from '@/components/theme';
+import SlideTransition from '@/components/transitions/SlideTransition';
 import {
   AnimeStatus,
   AnimeStatusToStr,
@@ -13,46 +12,51 @@ import {
   AnimeTypeToStr,
   UserAnimeStatus,
   UserAnimeStatusStr,
-} from "@/libs/constant";
-import ClearIcon from "@mui/icons-material/Clear";
-import CloseIcon from "@mui/icons-material/Close";
-import SearchIcon from "@mui/icons-material/Search";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import FormControl from "@mui/material/FormControl";
-import Grid from "@mui/material/Grid2";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import InputLabel from "@mui/material/InputLabel";
-import Link from "@mui/material/Link";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import TextField from "@mui/material/TextField";
-import { ChangeEvent, MouseEvent, forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
+} from '@/libs/constant';
+import ClearIcon from '@mui/icons-material/Clear';
+import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@mui/icons-material/Search';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import Link from '@mui/material/Link';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import TextField from '@mui/material/TextField';
+import { ChangeEvent, MouseEvent, forwardRef, memo, useImperativeHandle, useRef, useState } from 'react';
+import { Order, TableHeader } from './types';
 
 const headers: TableHeader[] = [
-  { key: "title", label: "Title" },
-  { key: "status", label: "Status", align: "center" },
-  { key: "score", label: "Global Score", align: "center" },
-  { key: "type", label: "Type", align: "center" },
-  { key: "userAnimeStatus", label: "Your Status", align: "center" },
-  { key: "userAnimeScore", label: "Your Score", align: "center" },
-  { key: "scoreDiff", label: "Score Difference", align: "center" },
+  { key: 'title', label: 'Title' },
+  { key: 'status', label: 'Status', align: 'center' },
+  { key: 'score', label: 'Global Score', align: 'center' },
+  { key: 'type', label: 'Type', align: 'center' },
+  { key: 'userAnimeStatus', label: 'Your Status', align: 'center' },
+  { key: 'userAnimeScore', label: 'Your Score', align: 'center' },
+  { key: 'scoreDiff', label: 'Score Difference', align: 'center' },
 ];
 
 const style = {
+  dialogPaper: {
+    backgroundImage: 'radial-gradient(rgb(65, 65, 65) 0.5px, #121212 0.5px)',
+    backgroundSize: '15px 15px',
+  },
   borderBottom: {
-    borderBottom: "1px solid " + theme.palette.divider,
+    borderBottom: '1px solid ' + theme.palette.divider,
   },
   scoreGreen: {
     color: theme.palette.success.main,
@@ -70,15 +74,15 @@ const ListDialog = memo(
 
     const [open, setOpen] = useState(false);
     const [drawerAnimeID, setDrawerAnimeID] = useState(0);
-    const [order, setOrder] = useState<Order>("asc");
-    const [orderBy, setOrderBy] = useState("title");
+    const [order, setOrder] = useState<Order>('asc');
+    const [orderBy, setOrderBy] = useState('title');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(20);
-    const [search, setSearch] = useState("");
-    const [filterList, setFilterList] = useState("all");
-    const [filterStatus, setFilterStatus] = useState("all");
-    const [filterType, setFilterType] = useState("all");
-    const [filterUserStatus, setFilterUserStatus] = useState("all");
+    const [search, setSearch] = useState('');
+    const [filterList, setFilterList] = useState('all');
+    const [filterStatus, setFilterStatus] = useState('all');
+    const [filterType, setFilterType] = useState('all');
+    const [filterUserStatus, setFilterUserStatus] = useState('all');
 
     const onClose = () => {
       setOpen(false);
@@ -97,7 +101,7 @@ const ListDialog = memo(
     };
 
     const onResetSearch = () => {
-      setSearch("");
+      setSearch('');
       setPage(0);
       scrollTop();
     };
@@ -121,8 +125,8 @@ const ListDialog = memo(
     };
 
     const onChangeOrder = (_: MouseEvent<unknown>, key: string) => {
-      const isAsc = orderBy === key && order === "asc";
-      setOrder(isAsc ? "desc" : "asc");
+      const isAsc = orderBy === key && order === 'asc';
+      setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(key);
       setPage(0);
     };
@@ -160,13 +164,8 @@ const ListDialog = memo(
         <Dialog
           open={open}
           fullScreen
+          slotProps={{ paper: { sx: style.dialogPaper } }}
           TransitionComponent={SlideTransition}
-          PaperProps={{
-            style: {
-              backgroundImage: "radial-gradient(rgb(65, 65, 65) 0.5px, #121212 0.5px)",
-              backgroundSize: "15px 15px",
-            },
-          }}
         >
           <DialogTitle>
             <Grid container spacing={2}>
@@ -191,18 +190,20 @@ const ListDialog = memo(
                   size="small"
                   value={search}
                   onChange={onChangeSearch}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        {search === "" ? (
-                          <SearchIcon fontSize="small" />
-                        ) : (
-                          <IconButton size="small" onClick={onResetSearch}>
-                            <ClearIcon fontSize="small" />
-                          </IconButton>
-                        )}
-                      </InputAdornment>
-                    ),
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {search === '' ? (
+                            <SearchIcon fontSize="small" />
+                          ) : (
+                            <IconButton size="small" onClick={onResetSearch}>
+                              <ClearIcon fontSize="small" />
+                            </IconButton>
+                          )}
+                        </InputAdornment>
+                      ),
+                    },
                   }}
                 />
               </Grid>
@@ -270,11 +271,11 @@ const ListDialog = memo(
                     {headers.map((h) => (
                       <TableCell
                         key={h.key}
-                        align={h.align || "left"}
+                        align={h.align || 'left'}
                         onClick={(e) => onChangeOrder(e, h.key)}
                         sx={style.borderBottom}
                       >
-                        <TableSortLabel active={orderBy === h.key} direction={orderBy === h.key ? order : "asc"}>
+                        <TableSortLabel active={orderBy === h.key} direction={orderBy === h.key ? order : 'asc'}>
                           {h.label}
                         </TableSortLabel>
                       </TableCell>
@@ -284,15 +285,15 @@ const ListDialog = memo(
 
                 <TableBody>
                   {ctx.graph.nodes
-                    .filter((d) => search === "" || d.title.toLowerCase().includes(search))
+                    .filter((d) => search === '' || d.title.toLowerCase().includes(search))
                     .filter(
                       (d) =>
-                        filterList === "all" ||
-                        (filterList === "list" ? d.userAnimeStatus !== "" : d.userAnimeStatus === "")
+                        filterList === 'all' ||
+                        (filterList === 'list' ? d.userAnimeStatus !== '' : d.userAnimeStatus === ''),
                     )
-                    .filter((d) => filterStatus === "all" || d.status === filterStatus)
-                    .filter((d) => filterType === "all" || d.type === filterType)
-                    .filter((d) => filterUserStatus === "all" || d.userAnimeStatus === filterUserStatus)
+                    .filter((d) => filterStatus === 'all' || d.status === filterStatus)
+                    .filter((d) => filterType === 'all' || d.type === filterType)
+                    .filter((d) => filterUserStatus === 'all' || d.userAnimeStatus === filterUserStatus)
                     .sort(getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((d) => (
@@ -301,7 +302,7 @@ const ListDialog = memo(
                           <Link
                             color="inherit"
                             underline="hover"
-                            sx={{ cursor: "pointer" }}
+                            sx={{ cursor: 'pointer' }}
                             onClick={() => onClickAnime(d.animeID)}
                           >
                             {d.title}
@@ -320,12 +321,12 @@ const ListDialog = memo(
                           <StatusCircle status={d.userAnimeStatus} />
                         </TableCell>
                         <TableCell align="center" sx={style.borderBottom}>
-                          {d.userAnimeStatus !== "" && d.userAnimeScore.toFixed(2)}
+                          {d.userAnimeStatus !== '' && d.userAnimeScore.toFixed(2)}
                         </TableCell>
                         <TableCell align="center" sx={style.borderBottom}>
                           {d.score > 0 && d.userAnimeScore > 0 && (
                             <span style={d.userAnimeScore - d.score > 0 ? style.scoreGreen : style.scoreRed}>
-                              {d.userAnimeScore - d.score > 0 && "+"}
+                              {d.userAnimeScore - d.score > 0 && '+'}
                               {(d.userAnimeScore - d.score).toFixed(2)}
                             </span>
                           )}
@@ -337,7 +338,7 @@ const ListDialog = memo(
             </TableContainer>
           </DialogContent>
 
-          <DialogActions sx={{ padding: "16px 24px" }}>
+          <DialogActions sx={{ padding: '16px 24px' }}>
             <TablePagination
               component="div"
               count={
@@ -345,12 +346,12 @@ const ListDialog = memo(
                   .filter((d) => (search ? d.title.toLowerCase().includes(search) : true))
                   .filter(
                     (d) =>
-                      filterList === "all" ||
-                      (filterList === "list" ? d.userAnimeStatus !== "" : d.userAnimeStatus === "")
+                      filterList === 'all' ||
+                      (filterList === 'list' ? d.userAnimeStatus !== '' : d.userAnimeStatus === ''),
                   )
-                  .filter((d) => filterStatus === "all" || d.status === filterStatus)
-                  .filter((d) => filterType === "all" || d.type === filterType)
-                  .filter((d) => filterUserStatus === "all" || d.userAnimeStatus === filterUserStatus).length
+                  .filter((d) => filterStatus === 'all' || d.status === filterStatus)
+                  .filter((d) => filterType === 'all' || d.type === filterType)
+                  .filter((d) => filterUserStatus === 'all' || d.userAnimeStatus === filterUserStatus).length
               }
               page={page}
               onPageChange={onChangePage}
@@ -363,27 +364,27 @@ const ListDialog = memo(
         </Dialog>
       </>
     );
-  })
+  }),
 );
 
 export default ListDialog;
 
 const getComparator = (order: Order, orderBy: string): ((a: any, b: any) => number) => {
   return (a, b) => {
-    if (orderBy === "userAnimeScore") {
-      if (a["userAnimeStatus"] === "") return 1;
-      if (b["userAnimeStatus"] === "") return -1;
+    if (orderBy === 'userAnimeScore') {
+      if (a['userAnimeStatus'] === '') return 1;
+      if (b['userAnimeStatus'] === '') return -1;
     }
 
-    if (orderBy === "scoreDiff") {
-      if (a["userAnimeStatus"] === "") return 1;
-      if (b["userAnimeStatus"] === "") return -1;
-      if (a["userAnimeScore"] == 0) return 1;
-      if (b["userAnimeScore"] == 0) return -11;
+    if (orderBy === 'scoreDiff') {
+      if (a['userAnimeStatus'] === '') return 1;
+      if (b['userAnimeStatus'] === '') return -1;
+      if (a['userAnimeScore'] == 0) return 1;
+      if (b['userAnimeScore'] == 0) return -11;
     }
 
-    if (b[orderBy] < a[orderBy]) return order === "desc" ? -1 : 1;
-    if (b[orderBy] > a[orderBy]) return order === "desc" ? 1 : -1;
+    if (b[orderBy] < a[orderBy]) return order === 'desc' ? -1 : 1;
+    if (b[orderBy] > a[orderBy]) return order === 'desc' ? 1 : -1;
     return 0;
   };
 };

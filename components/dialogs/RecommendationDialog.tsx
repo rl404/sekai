@@ -1,31 +1,48 @@
-import StatusCircle from "../circles/StatusCircle";
-import { useCtx } from "../context";
-import AnimeDrawer from "../drawers/AnimeDrawer";
-import { AnimeDrawerRefType } from "../drawers/types";
-import { Node } from "../graphs/types";
-import { theme } from "../theme";
-import SlideTransition from "../transitions/SlideTransition";
-import { AnimeRelation, AnimeStatus, UserAnimeStatus } from "@/libs/constant";
-import CloseIcon from "@mui/icons-material/Close";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import Collapse from "@mui/material/Collapse";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import Divider from "@mui/material/Divider";
-import FormControl from "@mui/material/FormControl";
-import Grid from "@mui/material/Grid2";
-import IconButton from "@mui/material/IconButton";
-import InputLabel from "@mui/material/InputLabel";
-import Link from "@mui/material/Link";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Tooltip from "@mui/material/Tooltip";
-import { Fragment, forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
+import StatusCircle from '@/components/circles/StatusCircle';
+import { useCtx } from '@/components/context';
+import AnimeDrawer from '@/components/drawers/AnimeDrawer';
+import { AnimeDrawerRefType } from '@/components/drawers/types';
+import { Node } from '@/components/graphs/types';
+import theme from '@/components/theme';
+import SlideTransition from '@/components/transitions/SlideTransition';
+import { AnimeRelation, AnimeStatus, UserAnimeStatus } from '@/libs/constant';
+import CloseIcon from '@mui/icons-material/Close';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Collapse from '@mui/material/Collapse';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
+import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
+import Link from '@mui/material/Link';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Tooltip from '@mui/material/Tooltip';
+import { Fragment, forwardRef, memo, useImperativeHandle, useRef, useState } from 'react';
+
+const style = {
+  dialogPaper: {
+    backgroundImage: 'radial-gradient(rgb(65, 65, 65) 0.5px, #121212 0.5px)',
+    backgroundSize: '15px 15px',
+  },
+  statusCircle: {
+    width: 20,
+    height: 20,
+    borderRadius: '50%',
+    border: '1px solid white',
+    margin: 'auto',
+  },
+  title: {
+    color: theme.palette.grey[500],
+  },
+};
 
 const RecommendationDialog = memo(
   forwardRef((_, ref) => {
@@ -37,10 +54,10 @@ const RecommendationDialog = memo(
     const [hideInList, setHideInList] = useState(false);
     const [minScore, setMinScore] = useState(7);
 
-    let sequelPrequel = new Set<Node>();
-    let sideStory = new Set<Node>();
-    let summaryFull = new Set<Node>();
-    let otherChar = new Set<Node>();
+    const sequelPrequel = new Set<Node>();
+    const sideStory = new Set<Node>();
+    const summaryFull = new Set<Node>();
+    const otherChar = new Set<Node>();
 
     ctx.graph.links.forEach((l) => {
       if (l.relation === AnimeRelation.sequel || l.relation === AnimeRelation.prequel) {
@@ -140,9 +157,9 @@ const RecommendationDialog = memo(
         (n) =>
           n.score >= minScore &&
           n.userAnimeStatus !== UserAnimeStatus.completed &&
-          (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing)
+          (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing),
       )
-      .filter((n) => !hideInList || n.userAnimeStatus === "")
+      .filter((n) => !hideInList || n.userAnimeStatus === '')
       .sort((a, b) => a.title.localeCompare(b.title));
 
     const missingSideStory = Array.from(sideStory)
@@ -150,9 +167,9 @@ const RecommendationDialog = memo(
         (n) =>
           n.score >= minScore &&
           n.userAnimeStatus !== UserAnimeStatus.completed &&
-          (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing)
+          (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing),
       )
-      .filter((n) => !hideInList || n.userAnimeStatus === "")
+      .filter((n) => !hideInList || n.userAnimeStatus === '')
       .sort((a, b) => a.title.localeCompare(b.title));
 
     const onHold = ctx.graph.nodes
@@ -160,9 +177,9 @@ const RecommendationDialog = memo(
         (n) =>
           n.score >= minScore &&
           n.userAnimeStatus === UserAnimeStatus.onHold &&
-          (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing)
+          (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing),
       )
-      .filter((n) => !hideInList || n.userAnimeStatus === "")
+      .filter((n) => !hideInList || n.userAnimeStatus === '')
       .sort((a, b) => a.title.localeCompare(b.title));
 
     const plannedAired = ctx.graph.nodes
@@ -170,9 +187,9 @@ const RecommendationDialog = memo(
         (n) =>
           n.score >= minScore &&
           n.userAnimeStatus === UserAnimeStatus.planned &&
-          (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing)
+          (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing),
       )
-      .filter((n) => !hideInList || n.userAnimeStatus === "")
+      .filter((n) => !hideInList || n.userAnimeStatus === '')
       .sort((a, b) => a.title.localeCompare(b.title));
 
     const summary = Array.from(summaryFull)
@@ -180,9 +197,9 @@ const RecommendationDialog = memo(
         (n) =>
           n.score >= minScore &&
           n.userAnimeStatus !== UserAnimeStatus.completed &&
-          (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing)
+          (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing),
       )
-      .filter((n) => !hideInList || n.userAnimeStatus === "")
+      .filter((n) => !hideInList || n.userAnimeStatus === '')
       .sort((a, b) => a.title.localeCompare(b.title));
 
     const other = Array.from(otherChar)
@@ -190,19 +207,19 @@ const RecommendationDialog = memo(
         (n) =>
           n.score >= minScore &&
           n.userAnimeStatus !== UserAnimeStatus.completed &&
-          (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing)
+          (n.status === AnimeStatus.finished || n.status === AnimeStatus.releasing),
       )
-      .filter((n) => !hideInList || n.userAnimeStatus === "")
+      .filter((n) => !hideInList || n.userAnimeStatus === '')
       .sort((a, b) => a.title.localeCompare(b.title));
 
     const mismatchEpisode = ctx.graph.nodes
       .filter((n) => n.userAnimeStatus === UserAnimeStatus.completed && n.episodeCount !== n.userEpisodeCount)
-      .filter((n) => !hideInList || n.userAnimeStatus === "")
+      .filter((n) => !hideInList || n.userAnimeStatus === '')
       .sort((a, b) => a.title.localeCompare(b.title));
 
     const completedZero = ctx.graph.nodes
       .filter((n) => n.userAnimeStatus === UserAnimeStatus.completed && n.userAnimeScore === 0)
-      .filter((n) => !hideInList || n.userAnimeStatus === "")
+      .filter((n) => !hideInList || n.userAnimeStatus === '')
       .sort((a, b) => a.title.localeCompare(b.title));
 
     const onClose = () => {
@@ -235,13 +252,8 @@ const RecommendationDialog = memo(
         <Dialog
           open={open}
           fullScreen
+          slotProps={{ paper: { sx: style.dialogPaper } }}
           TransitionComponent={SlideTransition}
-          PaperProps={{
-            style: {
-              backgroundImage: "radial-gradient(rgb(65, 65, 65) 0.5px, #121212 0.5px)",
-              backgroundSize: "15px 15px",
-            },
-          }}
         >
           <DialogTitle>
             <Grid container spacing={2}>
@@ -249,7 +261,7 @@ const RecommendationDialog = memo(
               <Grid size="grow" />
               <Grid>
                 <Tooltip
-                  title={hideInList ? "includes already in list" : "hide already in list"}
+                  title={hideInList ? 'includes already in list' : 'hide already in list'}
                   placement="left"
                   arrow
                 >
@@ -271,7 +283,7 @@ const RecommendationDialog = memo(
                             <MenuItem value={i} key={i}>
                               {i}
                             </MenuItem>
-                          )
+                          ),
                       )}
                   </Select>
                 </FormControl>
@@ -324,23 +336,10 @@ const RecommendationDialog = memo(
         </Dialog>
       </>
     );
-  })
+  }),
 );
 
 export default RecommendationDialog;
-
-const style = {
-  statusCircle: {
-    width: 20,
-    height: 20,
-    borderRadius: "50%",
-    border: "1px solid white",
-    margin: "auto",
-  },
-  title: {
-    color: theme.palette.grey[500],
-  },
-};
 
 const RecommendationGrid = ({
   title,
@@ -365,7 +364,7 @@ const RecommendationGrid = ({
         </Divider>
       </Grid>
       <Grid size={{ xs: 2, lg: 1 }}>
-        <Tooltip title={open ? "hide list" : "show list"} placement="left" arrow>
+        <Tooltip title={open ? 'hide list' : 'show list'} placement="left" arrow>
           <IconButton onClick={toggleOpen} size="small">
             {open ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
           </IconButton>
@@ -376,10 +375,10 @@ const RecommendationGrid = ({
           <Grid container spacing={2}>
             {data.length === 0 ? (
               <>
-                <Grid size={1} sx={{ textAlign: "center" }}>
+                <Grid size={1} sx={{ textAlign: 'center' }}>
                   <ThumbUpAltIcon />
                 </Grid>
-                <Grid size={11} sx={{ textAlign: "left" }}>
+                <Grid size={11} sx={{ textAlign: 'left' }}>
                   None. Good job.
                 </Grid>
               </>
@@ -393,7 +392,7 @@ const RecommendationGrid = ({
                     <Link
                       color="inherit"
                       underline="hover"
-                      sx={{ cursor: "pointer" }}
+                      sx={{ cursor: 'pointer' }}
                       onClick={() => onClickAnime(n.id)}
                     >
                       {n.title}

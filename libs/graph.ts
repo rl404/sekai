@@ -1,8 +1,8 @@
-import { Graph } from "@/components/graphs/types";
-import { UserAnimeRelation } from "@/pages/api/user/[username]/anime/relations";
+import { UserAnimeRelation } from '@/app/api/user/[username]/anime/relations/route';
+import { Graph, Node } from '@/components/graphs/types';
 
 export const getNodesLinks = (data: UserAnimeRelation): Graph => {
-  let result: Graph = { nodes: [], links: [] };
+  const result: Graph = { nodes: [], links: [] };
 
   result.nodes = data.nodes.map((n) => ({
     id: n.anime_id,
@@ -36,20 +36,20 @@ export const getNodesLinks = (data: UserAnimeRelation): Graph => {
         relation: l.relation,
       };
 
-      const a = result.nodes.find((n: any) => n.id === link.source);
-      const b = result.nodes.find((n: any) => n.id === link.target);
+      const a = result.nodes.find((n: Node) => n.id === link.source);
+      const b = result.nodes.find((n: Node) => n.id === link.target);
 
-      a && !a.neighbors && (a.neighbors = []);
-      b && !b.neighbors && (b.neighbors = []);
+      if (a && !a.neighbors) a.neighbors = [];
+      if (b && !b.neighbors) b.neighbors = [];
 
-      a && b && a.neighbors.push(b);
-      a && b && b.neighbors.push(a);
+      if (a && b) a.neighbors.push(b);
+      if (a && b) b.neighbors.push(a);
 
-      a && !a.links && (a.links = []);
-      b && !b.links && (b.links = []);
+      if (a && !a.links) a.links = [];
+      if (b && !b.links) b.links = [];
 
-      a && a.links.push(link);
-      b && b.links.push(link);
+      if (a) a.links.push(link);
+      if (b) b.links.push(link);
 
       return link;
     });

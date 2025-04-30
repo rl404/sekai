@@ -1,36 +1,36 @@
-import ChartNodeDialog from "../dialogs/ChartNodeDialog";
-import { ChartNodeDialogRefType } from "../dialogs/types";
-import { Node } from "../graphs/types";
-import { theme } from "../theme";
-import ChartTooltip from "./ChartTooltip";
-import { memo, useRef, useState } from "react";
+import ChartNodeDialog from '@/components/dialogs/ChartNodeDialog';
+import { ChartNodeDialogRefType } from '@/components/dialogs/types';
+import { Node } from '@/components/graphs/types';
+import theme from '@/components/theme';
+import { memo, useRef, useState } from 'react';
 import {
-  ResponsiveContainer,
   BarChart as BChart,
+  Bar,
   CartesianGrid,
+  Cell,
+  LabelList,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Bar,
-  Cell,
-  Tooltip,
-  LabelList,
-} from "recharts";
+} from 'recharts';
+import ChartTooltip from './ChartTooltip';
 
-interface BarChartData {
+type BarChartData = {
   label: string;
   value: number;
   color: string;
   nodes: Node[];
-}
+};
 
-interface BarChartConfig {
+type BarChartConfig = {
   valueName: string;
-}
+};
 
 const BarChart = memo(({ data, config }: { data: BarChartData[]; config: BarChartConfig }) => {
   const ref = useRef<ChartNodeDialogRefType>(null);
 
-  const [dialogTitle, setDialogTitle] = useState("");
+  const [dialogTitle, setDialogTitle] = useState('');
   const [dialogData, setdialogData] = useState([]);
 
   const onClick = (d: any) => {
@@ -51,7 +51,7 @@ const BarChart = memo(({ data, config }: { data: BarChartData[]; config: BarChar
           <Bar dataKey="value" name={config.valueName}>
             <LabelList formatter={(a: number) => a.toLocaleString()} position="top" />
             {data.map((v, i) => (
-              <Cell key={`cell-${i}`} fill={v.color || "white"} />
+              <Cell key={`cell-${i}`} fill={v.color || 'white'} />
             ))}
           </Bar>
         </BChart>

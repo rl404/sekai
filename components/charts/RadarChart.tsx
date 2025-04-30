@@ -1,24 +1,24 @@
-import ChartNodeDialog from "../dialogs/ChartNodeDialog";
-import { ChartNodeDialogRefType } from "../dialogs/types";
-import { Node } from "../graphs/types";
-import { theme } from "../theme";
-import ChartTooltip from "./ChartTooltip";
-import { memo, useRef, useState } from "react";
-import { PolarAngleAxis, PolarGrid, Radar, RadarChart as RChart, ResponsiveContainer, Tooltip } from "recharts";
+import ChartNodeDialog from '@/components/dialogs/ChartNodeDialog';
+import { ChartNodeDialogRefType } from '@/components/dialogs/types';
+import { Node } from '@/components/graphs/types';
+import theme from '@/components/theme';
+import { memo, useRef, useState } from 'react';
+import { PolarAngleAxis, PolarGrid, RadarChart as RChart, Radar, ResponsiveContainer, Tooltip } from 'recharts';
+import ChartTooltip from './ChartTooltip';
 
-interface RadarChartData {
+type RadarChartData = {
   label: string;
   value: number;
-}
+};
 
-interface RadarChartConfig {
+type RadarChartConfig = {
   valueName: string;
-}
+};
 
 const RadarChart = memo(({ data, config }: { data: RadarChartData[]; config: RadarChartConfig }) => {
   const ref = useRef<ChartNodeDialogRefType>(null);
 
-  const [dialogTitle, setDialogTitle] = useState("");
+  const [dialogTitle, setDialogTitle] = useState('');
   const [dialogData, setdialogData] = useState([]);
 
   const onClick = (d: any) => {
@@ -33,7 +33,7 @@ const RadarChart = memo(({ data, config }: { data: RadarChartData[]; config: Rad
       <ResponsiveContainer width="100%" height="100%">
         <RChart data={data} margin={{ top: 15, right: 10, left: 0, bottom: 15 }} onClick={onClick}>
           <PolarGrid stroke={theme.palette.grey[700]} strokeDasharray="5 5" />
-          <Tooltip content={ChartTooltip} cursor={{ stroke: "#2196f3" }} />
+          <Tooltip content={ChartTooltip} cursor={{ stroke: '#2196f3' }} />
           <PolarAngleAxis dataKey="label" stroke={theme.palette.grey[500]} />
           <Radar dataKey="value" fill="white" name={config.valueName} />
         </RChart>

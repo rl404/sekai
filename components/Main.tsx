@@ -1,5 +1,5 @@
-import { Context, DispatchContex, defaultCtx, reducer } from "./context";
-import { ReactNode, useReducer } from "react";
+import { ReactNode, useReducer } from 'react';
+import { Context, DispatchContex, defaultCtx, reducer } from './context';
 
 export default function Main({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, defaultCtx);
