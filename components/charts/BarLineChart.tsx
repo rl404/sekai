@@ -46,7 +46,7 @@ const BarLineChart = memo(({ data, config }: { data: BarLineChartData[]; config:
   if (maxScore + 0.5 <= 10) maxScore += 0.5;
 
   const onClick = (d: any) => {
-    if (!d) return;
+    if (!d || !d.activeLabel) return;
     setDialogTitle(`${d.activeLabel} (${d.activePayload[0].payload.nodes.length.toLocaleString()})`);
     setdialogData(d.activePayload[0].payload.nodes.sort((a: Node, b: Node) => a.title.localeCompare(b.title)));
     ref.current?.setOpen(true);
