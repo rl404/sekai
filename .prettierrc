@@ -1,8 +1,8 @@
 {
-    "trailingComma": "all",
-    "printWidth": 120,
-    "singleQuote": true,
-    "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
-    "importOrderSortSpecifiers": true,
-    "plugins": ["@trivago/prettier-plugin-sort-imports"]
+  "trailingComma": "all",
+  "printWidth": 120,
+  "singleQuote": true,
+  "importOrder": ["<THIRD_PARTY_MODULES>", "@/(.*)$", "^[./]"],
+  "importOrderSortSpecifiers": true,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"]
 }

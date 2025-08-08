@@ -1,10 +1,10 @@
-import theme from '@/components/theme';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata, Viewport } from 'next';
 import { Roboto } from 'next/font/google';
+import theme from '@/src/components/theme';
 import './globals.css';
 
 const title = 'Project Sekai';
