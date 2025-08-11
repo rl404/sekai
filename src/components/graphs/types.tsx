@@ -6,7 +6,7 @@ export type Graph = {
   links: Link[];
 };
 
-export type Node = NodeObject & {
+export type Node = NodeObject<{
   id: number;
   title: string;
   status: AnimeStatus;
@@ -23,10 +23,13 @@ export type Node = NodeObject & {
   userEpisodeCount: number;
   scoreDiff: number;
   neighbors: number[];
-};
+}>;
 
-export type Link = LinkObject & {
-  sourceID: number;
-  targetID: number;
-  relation: AnimeRelation;
-};
+export type Link = LinkObject<
+  Node,
+  {
+    sourceID: number;
+    targetID: number;
+    relation: AnimeRelation;
+  }
+>;

@@ -1,15 +1,18 @@
 import * as d3 from 'd3';
 import dynamic from 'next/dynamic';
-import { memo, useEffect, useRef, useState } from 'react';
-import { LinkObject, NodeObject } from 'react-force-graph-2d';
+import { RefObject, memo, useEffect, useRef, useState } from 'react';
+import { ForceGraphMethods, ForceGraphProps } from 'react-force-graph-2d';
 import { useCtx } from '@/src/components/context';
 import { Link, Node } from '@/src/components/graphs/types';
 import { AnimeRelationToStr } from '@/src/libs/constant';
 import { activeLinkColor, defaultLinkColor, defaultNodeColor, getRelatedIDs, hasLink } from '@/src/libs/graph';
 
-const ForceGraph2DClient = dynamic(() => import('react-force-graph-2d'), {
-  ssr: false,
-});
+const ForceGraph2DClient = dynamic<ForceGraphProps<Node, Link> & { ref?: RefObject<ForceGraphMethods<Node, Link>> }>(
+  () => import('react-force-graph-2d'),
+  {
+    ssr: false,
+  },
+);
 
 const ForceGraph = memo(function ForceGraph() {
   const ctx = useCtx();
@@ -189,14 +192,14 @@ const ForceGraph = memo(function ForceGraph() {
         onBackgroundClick={onBackgroundClick}
         nodeLabel=""
         nodeRelSize={10}
-        nodeColor={nodeColor as (n: NodeObject) => string}
+        nodeColor={nodeColor}
         nodeCanvasObjectMode={() => 'before'}
-        nodeCanvasObject={nodeCanvasObject as (n: NodeObject, _ctx: CanvasRenderingContext2D) => void}
-        onNodeHover={onNodeHover as (n: NodeObject | null) => void}
-        onNodeDragEnd={onNodeDragEnd as (n: NodeObject) => void}
-        onNodeClick={onNodeClick as (n: NodeObject) => void}
-        linkLabel={linkLabel as (l: LinkObject) => string}
-        linkColor={linkColor as (l: LinkObject) => string}
+        nodeCanvasObject={nodeCanvasObject}
+        onNodeHover={onNodeHover}
+        onNodeDragEnd={onNodeDragEnd}
+        onNodeClick={onNodeClick}
+        linkLabel={linkLabel}
+        linkColor={linkColor}
         linkCurvature={0.1}
         linkDirectionalArrowLength={10}
       />

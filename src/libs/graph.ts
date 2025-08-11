@@ -6,7 +6,7 @@ export const defaultLinkColor = 'rgba(255,255,255,0.1)';
 export const activeLinkColor = 'white';
 
 export const getNodesLinks = (data: UserAnimeRelation): Graph => {
-  const nodes = data.nodes.map<Node>((n) => ({
+  const nodes: Node[] = data.nodes.map((n) => ({
     id: n.anime_id,
     title: n.title,
     status: n.status,
@@ -27,9 +27,9 @@ export const getNodesLinks = (data: UserAnimeRelation): Graph => {
 
   const nodeMap = getNodeMap(nodes);
 
-  const links = data.links
+  const links: Link[] = data.links
     .filter((l) => nodeMap.get(l.anime_id1) && nodeMap.get(l.anime_id2))
-    .map<Link>((l) => {
+    .map((l) => {
       const a = nodeMap.get(l.anime_id1);
       const b = nodeMap.get(l.anime_id2);
 
@@ -55,14 +55,6 @@ export const getNodesLinks = (data: UserAnimeRelation): Graph => {
     })),
     links: uniqueLinks(links),
   };
-};
-
-export const uniqueNodes = (nodes: Node[]): Node[] => {
-  return nodes.filter((n, i, all) => all.findIndex((a) => a.id === n.id) === i);
-};
-
-export const hasNode = (nodes: Node[], node: Node): boolean => {
-  return nodes.findIndex((n) => n.id === node.id) !== -1;
 };
 
 export const uniqueLinks = (links: Link[]): Link[] => {
