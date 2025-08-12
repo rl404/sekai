@@ -44,7 +44,11 @@ const BarChart = memo(function BarChart({ data, config }: { data: BarChartData[]
   return (
     <>
       <ResponsiveContainer width="100%" height="100%">
-        <BChart data={data} margin={{ top: 15, right: 10, left: 0, bottom: 15 }} onClick={onClick}>
+        <BChart
+          data={data.map((d) => ({ ...d, nodes: [] }))}
+          margin={{ top: 15, right: 10, left: 0, bottom: 15 }}
+          onClick={onClick}
+        >
           <Tooltip content={ChartTooltip} cursor={{ fill: theme.palette.grey[800] }} />
           <CartesianGrid strokeDasharray="5 5" stroke={theme.palette.grey[700]} />
           <XAxis dataKey="label" stroke={theme.palette.grey[500]} />

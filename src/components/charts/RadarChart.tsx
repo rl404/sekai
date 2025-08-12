@@ -33,7 +33,11 @@ const RadarChart = memo(function RadarChart({ data, config }: { data: RadarChart
   return (
     <>
       <ResponsiveContainer width="100%" height="100%">
-        <RChart data={data} margin={{ top: 15, right: 10, left: 0, bottom: 15 }} onClick={onClick}>
+        <RChart
+          data={data.map((d) => ({ ...d, nodes: [] }))}
+          margin={{ top: 15, right: 10, left: 0, bottom: 15 }}
+          onClick={onClick}
+        >
           <PolarGrid stroke={theme.palette.grey[700]} strokeDasharray="5 5" />
           <Tooltip content={ChartTooltip} cursor={{ stroke: '#2196f3' }} />
           <PolarAngleAxis dataKey="label" stroke={theme.palette.grey[500]} />

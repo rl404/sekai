@@ -22,7 +22,7 @@ const PieChart = memo(function PieChart({ data, config }: { data: PieChartData[]
 
   const onClick = (d: any, i: number) => {
     if (!d) return;
-    setDialogTitle(`${data[i].label} (${d.nodes.length.toLocaleString()})`);
+    setDialogTitle(`${data[i].label} (${data[i].nodes.length.toLocaleString()})`);
     setDialogData(data[i].nodes);
     toggleDialogOpen();
   };
@@ -32,7 +32,7 @@ const PieChart = memo(function PieChart({ data, config }: { data: PieChartData[]
       <ResponsiveContainer width="100%" height="100%">
         <PChart margin={{ top: 15, right: 10, left: 0, bottom: 15 }}>
           <Pie
-            data={data}
+            data={data.map((d) => ({ ...d, nodes: [] }))}
             dataKey="value"
             innerRadius={70}
             activeShape={PieActiveShape}

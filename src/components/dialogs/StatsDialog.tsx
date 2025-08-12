@@ -167,78 +167,76 @@ const StatsDialog = memo(function StatsDialog({ open, toggleOpen }: { open: bool
   let minYear = -1;
   let maxYear = new Date().getFullYear();
 
-  ctx.graphData.nodes
-    .filter((n) => n.userAnimeStatus !== UserAnimeStatus[''] && n.type !== AnimeType[''])
-    .forEach((n) => {
-      byType[n.type]++;
-      byStatus[n.userAnimeStatus]++;
-      if (n.source) bySource[n.source]++;
+  inList.forEach((n) => {
+    byType[n.type]++;
+    byStatus[n.userAnimeStatus]++;
+    if (n.source) bySource[n.source]++;
 
-      let episodeCountKey = '?';
-      if (n.episodeCount === 1) episodeCountKey = '1';
-      if (n.episodeCount >= 2 && n.episodeCount < 7) episodeCountKey = '2-6';
-      if (n.episodeCount >= 7 && n.episodeCount < 14) episodeCountKey = '7-13';
-      if (n.episodeCount >= 14 && n.episodeCount < 27) episodeCountKey = '14-26';
-      if (n.episodeCount >= 27 && n.episodeCount < 53) episodeCountKey = '27-52';
-      if (n.episodeCount >= 53 && n.episodeCount < 101) episodeCountKey = '53-100';
-      if (n.episodeCount >= 101) episodeCountKey = '101+';
+    let episodeCountKey = '?';
+    if (n.episodeCount === 1) episodeCountKey = '1';
+    if (n.episodeCount >= 2 && n.episodeCount < 7) episodeCountKey = '2-6';
+    if (n.episodeCount >= 7 && n.episodeCount < 14) episodeCountKey = '7-13';
+    if (n.episodeCount >= 14 && n.episodeCount < 27) episodeCountKey = '14-26';
+    if (n.episodeCount >= 27 && n.episodeCount < 53) episodeCountKey = '27-52';
+    if (n.episodeCount >= 53 && n.episodeCount < 101) episodeCountKey = '53-100';
+    if (n.episodeCount >= 101) episodeCountKey = '101+';
 
-      byEpisodeCount[episodeCountKey].count++;
-      byEpisodeCount[episodeCountKey].nodes.push(n);
-      if (n.userAnimeScore > 0) byEpisodeCount[episodeCountKey].sumScore += n.userAnimeScore;
-      if (n.userAnimeScore > 0) byEpisodeCount[episodeCountKey].countScore++;
-      if (n.score > 0) byEpisodeCount[episodeCountKey].globalSumScore += n.score;
-      if (n.score > 0) byEpisodeCount[episodeCountKey].globalCountScore++;
+    byEpisodeCount[episodeCountKey].count++;
+    byEpisodeCount[episodeCountKey].nodes.push(n);
+    if (n.userAnimeScore > 0) byEpisodeCount[episodeCountKey].sumScore += n.userAnimeScore;
+    if (n.userAnimeScore > 0) byEpisodeCount[episodeCountKey].countScore++;
+    if (n.score > 0) byEpisodeCount[episodeCountKey].globalSumScore += n.score;
+    if (n.score > 0) byEpisodeCount[episodeCountKey].globalCountScore++;
 
-      let episodeDurationKey = '?';
-      if (n.episodeDuration > 0) {
-        const dur = n.episodeDuration / 60;
-        if (dur < 1) episodeDurationKey = '< 1';
-        if (dur >= 1 && dur < 6) episodeDurationKey = '1-5';
-        if (dur >= 6 && dur < 11) episodeDurationKey = '6-10';
-        if (dur >= 11 && dur < 16) episodeDurationKey = '11-15';
-        if (dur >= 16 && dur < 31) episodeDurationKey = '16-30';
-        if (dur >= 31 && dur < 61) episodeDurationKey = '31-60';
-        if (dur >= 61 && dur < 121) episodeDurationKey = '61-120';
-        if (dur >= 121) episodeDurationKey = '121+';
+    let episodeDurationKey = '?';
+    if (n.episodeDuration > 0) {
+      const dur = n.episodeDuration / 60;
+      if (dur < 1) episodeDurationKey = '< 1';
+      if (dur >= 1 && dur < 6) episodeDurationKey = '1-5';
+      if (dur >= 6 && dur < 11) episodeDurationKey = '6-10';
+      if (dur >= 11 && dur < 16) episodeDurationKey = '11-15';
+      if (dur >= 16 && dur < 31) episodeDurationKey = '16-30';
+      if (dur >= 31 && dur < 61) episodeDurationKey = '31-60';
+      if (dur >= 61 && dur < 121) episodeDurationKey = '61-120';
+      if (dur >= 121) episodeDurationKey = '121+';
+    }
+
+    byEpisodeDuration[episodeDurationKey].count++;
+    byEpisodeDuration[episodeDurationKey].nodes.push(n);
+    if (n.userAnimeScore > 0) byEpisodeDuration[episodeDurationKey].sumScore += n.userAnimeScore;
+    if (n.userAnimeScore > 0) byEpisodeDuration[episodeDurationKey].countScore++;
+    if (n.score > 0) byEpisodeDuration[episodeDurationKey].globalSumScore += n.score;
+    if (n.score > 0) byEpisodeDuration[episodeDurationKey].globalCountScore++;
+
+    if (n.season !== '') {
+      const seasonYearKey = n.season + '-' + n.seasonYear;
+      if (!bySeason[seasonYearKey]) bySeason[seasonYearKey] = 0;
+      bySeason[seasonYearKey]++;
+    }
+
+    if (n.startYear > 0) {
+      if (minYear == -1 || n.startYear < minYear) minYear = n.startYear;
+      if (n.startYear > maxYear) maxYear = n.startYear;
+
+      const year = n.startYear.toString();
+      if (!byYear[year]) {
+        byYear[year] = {
+          count: 0,
+          globalSumScore: 0,
+          globalCountScore: 0,
+          sumScore: 0,
+          countScore: 0,
+          nodes: [],
+        };
       }
-
-      byEpisodeDuration[episodeDurationKey].count++;
-      byEpisodeDuration[episodeDurationKey].nodes.push(n);
-      if (n.userAnimeScore > 0) byEpisodeDuration[episodeDurationKey].sumScore += n.userAnimeScore;
-      if (n.userAnimeScore > 0) byEpisodeDuration[episodeDurationKey].countScore++;
-      if (n.score > 0) byEpisodeDuration[episodeDurationKey].globalSumScore += n.score;
-      if (n.score > 0) byEpisodeDuration[episodeDurationKey].globalCountScore++;
-
-      if (n.season !== '') {
-        const seasonYearKey = n.season + '-' + n.seasonYear;
-        if (!bySeason[seasonYearKey]) bySeason[seasonYearKey] = 0;
-        bySeason[seasonYearKey]++;
-      }
-
-      if (n.startYear > 0) {
-        if (minYear == -1 || n.startYear < minYear) minYear = n.startYear;
-        if (n.startYear > maxYear) maxYear = n.startYear;
-
-        const year = n.startYear.toString();
-        if (!byYear[year]) {
-          byYear[year] = {
-            count: 0,
-            globalSumScore: 0,
-            globalCountScore: 0,
-            sumScore: 0,
-            countScore: 0,
-            nodes: [],
-          };
-        }
-        byYear[year].count++;
-        byYear[year].nodes.push(n);
-        if (n.userAnimeScore > 0) byYear[year].sumScore += n.userAnimeScore;
-        if (n.userAnimeScore > 0) byYear[year].countScore++;
-        if (n.score > 0) byYear[year].globalSumScore += n.score;
-        if (n.score > 0) byYear[year].globalCountScore++;
-      }
-    });
+      byYear[year].count++;
+      byYear[year].nodes.push(n);
+      if (n.userAnimeScore > 0) byYear[year].sumScore += n.userAnimeScore;
+      if (n.userAnimeScore > 0) byYear[year].countScore++;
+      if (n.score > 0) byYear[year].globalSumScore += n.score;
+      if (n.score > 0) byYear[year].globalCountScore++;
+    }
+  });
 
   // Fill missing year.
   for (let i = minYear; i <= maxYear; i++) {
@@ -357,7 +355,7 @@ const StatsDialog = memo(function StatsDialog({ open, toggleOpen }: { open: bool
                     label: UserAnimeStatusStr(k),
                     value: byStatus[k],
                     color: ctx.nodeColor[k],
-                    nodes: ctx.graphData.nodes
+                    nodes: inList
                       .filter((n) => n.userAnimeStatus === k)
                       .sort((a: Node, b: Node) => a.title.localeCompare(b.title)),
                   }))}
@@ -374,9 +372,7 @@ const StatsDialog = memo(function StatsDialog({ open, toggleOpen }: { open: bool
                   .map((k) => ({
                     label: AnimeTypeToStr(k),
                     value: byType[k],
-                    nodes: ctx.graphData.nodes
-                      .filter((n) => n.userAnimeStatus !== '' && n.type == k)
-                      .sort((a: Node, b: Node) => a.title.localeCompare(b.title)),
+                    nodes: inList.filter((n) => n.type == k).sort((a: Node, b: Node) => a.title.localeCompare(b.title)),
                   }))
                   .sort((a, b) => b.value - a.value)}
               />
@@ -391,8 +387,8 @@ const StatsDialog = memo(function StatsDialog({ open, toggleOpen }: { open: bool
                   .map((k) => ({
                     label: AnimeSourceToStr(k),
                     value: bySource[k],
-                    nodes: ctx.graphData.nodes
-                      .filter((n) => n.userAnimeStatus !== '' && n.source == k)
+                    nodes: inList
+                      .filter((n) => n.source == k)
                       .sort((a: Node, b: Node) => a.title.localeCompare(b.title)),
                   }))
                   .sort((a, b) => b.value - a.value)}
@@ -475,8 +471,8 @@ const StatsDialog = memo(function StatsDialog({ open, toggleOpen }: { open: bool
                       x: parseInt(seasonYear[1], 10),
                       y: SeasonToStr(seasonYear[0] as Season),
                       z: bySeason[k],
-                      nodes: ctx.graphData.nodes
-                        .filter((n) => n.userAnimeStatus !== UserAnimeStatus[''] && n.season + '-' + n.seasonYear == k)
+                      nodes: inList
+                        .filter((n) => n.season + '-' + n.seasonYear == k)
                         .sort((a: Node, b: Node) => a.title.localeCompare(b.title)),
                     };
                   })}

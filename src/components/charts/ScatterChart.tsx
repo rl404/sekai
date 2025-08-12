@@ -12,6 +12,7 @@ import {
   YAxis,
   ZAxis,
 } from 'recharts';
+import { MouseHandlerDataParam } from 'recharts/types/synchronisation/types';
 import ChartNodeDialog from '@/src/components/dialogs/ChartNodeDialog';
 import { Node } from '@/src/components/graphs/types';
 import theme from '@/src/components/theme';
@@ -42,17 +43,17 @@ const ScatterChart = memo(function ScatterChart({
 
   const toggleDialogOpen = () => setDialogOpen(!dialogOpen);
 
-  const onClick = (d: any) => {
-    if (!d) return;
-    setDialogTitle(`${d.node.y} ${d.node.x} (${d.nodes.length.toLocaleString()})`);
-    setDialogData(d.nodes);
+  const onClick = (d: MouseHandlerDataParam) => {
+    if (!d || !d.activeIndex) return;
+    setDialogTitle(`${d.activeLabel} (${data[d.activeIndex as number].nodes.length.toLocaleString()})`);
+    setDialogData(data[d.activeIndex as number].nodes);
     toggleDialogOpen();
   };
 
   return (
     <>
       <ResponsiveContainer width="100%" height="100%">
-        <SChart margin={{ top: 15, right: 10, left: 0, bottom: 15 }}>
+        <SChart margin={{ top: 15, right: 10, left: 0, bottom: 15 }} onClick={onClick}>
           <Tooltip content={ChartTooltip} cursor={false} />
           <CartesianGrid strokeDasharray="5 5" stroke={theme.palette.grey[700]} />
           <XAxis
@@ -64,7 +65,7 @@ const ScatterChart = memo(function ScatterChart({
           />
           <YAxis type="category" dataKey="y" name={config.yName} width={80} allowDuplicatedCategory={false} />
           <ZAxis type="number" dataKey="z" name={config.zName} range={[10, 500]} />
-          <Scatter data={data} fill="white" onClick={onClick} />
+          <Scatter data={data.map((d) => ({ ...d, nodes: [] }))} fill="white" />
         </SChart>
       </ResponsiveContainer>
       <ChartNodeDialog title={dialogTitle} data={dialogData} open={dialogOpen} toggleOpen={toggleDialogOpen} />

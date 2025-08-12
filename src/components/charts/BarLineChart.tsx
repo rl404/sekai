@@ -41,6 +41,7 @@ const BarLineChart = memo(function BarLineChart({
   data: BarLineChartData[];
   config: BarLineChartConfig;
 }) {
+  const [barData, setBarData] = useState(data.map((d) => ({ ...d, nodes: [] })));
   const [dialogTitle, setDialogTitle] = useState('');
   const [dialogData, setDialogData] = useState<Node[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -70,7 +71,7 @@ const BarLineChart = memo(function BarLineChart({
   return (
     <>
       <ResponsiveContainer width="100%" height="100%">
-        <ComposedChart data={data} margin={{ top: 15, right: 10, left: 0, bottom: 15 }} onClick={onClick}>
+        <ComposedChart data={barData} margin={{ top: 15, right: 10, left: 0, bottom: 15 }} onClick={onClick}>
           <Tooltip content={ChartTooltip} cursor={{ fill: theme.palette.grey[800] }} />
           <CartesianGrid strokeDasharray="5 5" stroke={theme.palette.grey[700]} />
           <XAxis dataKey="label" stroke={theme.palette.grey[500]} />
