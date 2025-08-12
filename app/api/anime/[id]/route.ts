@@ -1,4 +1,5 @@
 import { Base } from '@/app/api';
+import { AnimeRelation, AnimeStatus, AnimeType, Day, Season as _Season } from '@/src/libs/constant';
 
 export type Data = Base & {
   data: Anime;
@@ -13,8 +14,8 @@ export type Anime = {
   synopsis: string;
   start_date: Date;
   end_date: Date;
-  type: string;
-  status: string;
+  type: AnimeType;
+  status: AnimeStatus;
   rank: number;
   mean: number;
   popularity: number;
@@ -48,12 +49,12 @@ type Episode = {
 };
 
 type Season = {
-  season: string;
+  season: _Season;
   year: number;
 };
 
 type Broadcast = {
-  day: string;
+  day: Day;
   time: string;
 };
 
@@ -61,7 +62,7 @@ export type Related = {
   id: number;
   title: string;
   picture: string;
-  relation: string;
+  relation: AnimeRelation;
 };
 
 type StatsStatus = {
