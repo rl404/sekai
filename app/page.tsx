@@ -1,18 +1,16 @@
 'use client';
 
-import Main from '@/components/Main';
-import ConfigDialog from '@/components/dialogs/ConfigDialog';
-import InitDialog from '@/components/dialogs/InitDialog';
-import ForceGraph from '@/components/graphs/ForceGraph';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import IconButton from '@mui/material/IconButton';
+import { IconButton } from '@mui/material';
+import Main from '@/src/components/Main';
+import ConfigDialog from '@/src/components/dialogs/ConfigDialog';
+import InitDialog from '@/src/components/dialogs/InitDialog';
+import ForceGraph from '@/src/components/graphs/ForceGraph';
 
-const style = {
-  githubIcon: {
-    position: 'absolute',
-    right: 10,
-    bottom: 10,
-  },
+const iconStyle = {
+  position: 'absolute',
+  right: 10,
+  bottom: 10,
 };
 
 export default function Home() {
@@ -20,7 +18,7 @@ export default function Home() {
     <Main>
       <ForceGraph />
 
-      <IconButton href="https://github.com/rl404/sekai" target="_blank" sx={style.githubIcon}>
+      <IconButton href="https://github.com/rl404/sekai" target="_blank" sx={iconStyle}>
         <GitHubIcon />
       </IconButton>
 

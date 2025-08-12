@@ -1,4 +1,5 @@
 import { Base } from '@/app/api';
+import { AnimeRelation, AnimeSource, AnimeStatus, AnimeType, Season, UserAnimeStatus } from '@/src/libs/constant';
 
 export type Data = Base & {
   data: UserAnimeRelation;
@@ -12,16 +13,16 @@ export type UserAnimeRelation = {
 type UserAnimeRelationNode = {
   anime_id: number;
   title: string;
-  status: string;
+  status: AnimeStatus;
   score: number;
-  type: string;
-  source: string;
+  type: AnimeType;
+  source: AnimeSource;
   start_year: number;
   episode_count: number;
   episode_duration: number;
-  season: string;
+  season: Season;
   season_year: number;
-  user_anime_status: string;
+  user_anime_status: UserAnimeStatus;
   user_anime_score: number;
   user_episode_count: number;
 };
@@ -29,7 +30,7 @@ type UserAnimeRelationNode = {
 type UserAnimeRelationLink = {
   anime_id1: number;
   anime_id2: number;
-  relation: string;
+  relation: AnimeRelation;
 };
 
 export async function GET(_: Request, { params }: { params: Promise<{ username: string }> }) {

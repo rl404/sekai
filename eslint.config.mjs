@@ -14,7 +14,6 @@ const eslintConfig = [
   {
     rules: {
       '@next/next/no-img-element': 'off',
-      'react/display-name': 'off',
       'react-hooks/exhaustive-deps': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
     },
