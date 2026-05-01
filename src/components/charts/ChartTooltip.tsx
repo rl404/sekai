@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { TooltipContentProps } from 'recharts';
+import { getTooltipValue } from '@/src/libs/utils';
 
 const ChartTooltip = ({ active, payload, label }: TooltipContentProps<any, any>) => {
   if (!(active && payload && payload.length)) return;
@@ -10,14 +11,7 @@ const ChartTooltip = ({ active, payload, label }: TooltipContentProps<any, any>)
         <Grid size={12}>{label}</Grid>
         {payload.map((p) => (
           <Grid size={12} key={p.name}>
-            {`${p.name} : `}
-            {typeof p.value === 'string'
-              ? p.value
-              : !p.value
-                ? 0
-                : p.value % 1 != 0
-                  ? p.value.toFixed(2).toLocaleString()
-                  : p.value.toLocaleString()}
+            {`${p.name} : ${getTooltipValue(p)}`}
           </Grid>
         ))}
       </Grid>
