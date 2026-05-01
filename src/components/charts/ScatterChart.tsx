@@ -16,6 +16,7 @@ import { MouseHandlerDataParam } from 'recharts/types/synchronisation/types';
 import ChartNodeDialog from '@/src/components/dialogs/ChartNodeDialog';
 import { Node } from '@/src/components/graphs/types';
 import theme from '@/src/components/theme';
+import { getTooltipValue } from '@/src/libs/utils';
 
 type ScatterChartData = {
   x: number;
@@ -82,14 +83,7 @@ const ChartTooltip = ({ active, payload }: TooltipContentProps<any, any>) => {
       <Grid container>
         {payload.map((p) => (
           <Grid size={12} key={p.name}>
-            {`${p.name} : `}
-            {typeof p.value === 'string'
-              ? p.value
-              : p.value % 1 != 0
-                ? p.value.toFixed(2).toLocaleString()
-                : p.name === 'year'
-                  ? p.value
-                  : p.value.toLocaleString()}
+            {`${p.name} : ${getTooltipValue(p)}`}
           </Grid>
         ))}
       </Grid>
