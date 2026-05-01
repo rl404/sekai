@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios';
+import { TooltipPayloadEntry } from 'recharts';
 import { Date } from '@/app/api/anime/[id]/route';
 
 export const getAxiosError = (error: Error | AxiosError): string => {
@@ -18,4 +19,16 @@ export const DateToStr = (date: Date): string => {
   if (date.month !== 0) str = months[date.month] + ' ' + str;
   if (date.day !== 0) str = date.day + ' ' + str;
   return str;
+};
+
+export const getTooltipValue = (p: TooltipPayloadEntry): string => {
+  if (typeof p.value === 'string') {
+    return p.value;
+  }
+
+  if (typeof p.value === 'number') {
+    return p.value % 1 != 0 ? p.value.toFixed(2).toLocaleString() : p.value.toLocaleString();
+  }
+
+  return '0';
 };
