@@ -95,7 +95,7 @@ const ConfigDialog = memo(function ConfigDialog() {
       sx={styles.dialog}
     >
       <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-        <Stack direction="row" justifyContent="space-between" spacing={2}>
+        <Stack direction="row" spacing={2} sx={{ justifyContent: 'space-between' }}>
           <Box>{`${ctx.username}'s Anime World `}</Box>
           <Box>
             <Tooltip placement="right" arrow title={`show ${expand ? 'less' : 'more'}`}>
