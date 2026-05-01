@@ -73,7 +73,7 @@ const AnimeDrawerSkeleton = memo(function AnimeDrawerSkeleton() {
         <Divider sx={{ marginBottom: 1 }}>
           <Skeleton width={100} />
         </Divider>
-        <Stack direction="row" spacing={2} justifyContent="center">
+        <Stack direction="row" spacing={2} sx={{ justifyContent: 'center' }}>
           <Skeleton variant="rectangular" width={60} />
           <Skeleton variant="rectangular" width={60} />
           <Skeleton variant="rectangular" width={60} />
