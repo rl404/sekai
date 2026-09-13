@@ -42,7 +42,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v3
       - name: Setup docker
         run: |
-          gcloud --quiet auth configure-docker
+          gcloud --quiet auth configure-docker ${{ secrets.GCR_HOSTNAME }}
       - name: Build and push image
         uses: docker/build-push-action@v7
         with:
