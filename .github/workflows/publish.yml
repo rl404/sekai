@@ -54,5 +54,4 @@ jobs:
             rl404/sekai:${{ env.IMG_TAG }}
             ghcr.io/rl404/sekai:latest
             ghcr.io/rl404/sekai:${{ env.IMG_TAG }}
-            ${{ secrets.GCR_HOSTNAME }}/${{ secrets.GCP_PROJECT_ID }}/sekai:latest
             ${{ secrets.GCR_HOSTNAME }}/${{ secrets.GCP_PROJECT_ID }}/sekai:${{ env.IMG_TAG }}
