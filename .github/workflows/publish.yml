@@ -34,6 +34,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CR_PAT }}
+      - name: Auth gcloud
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v3
+      - name: Setup docker
+        run: |
+          gcloud --quiet auth configure-docker
       - name: Build and push image
         uses: docker/build-push-action@v7
         with:
@@ -45,3 +54,5 @@ jobs:
             rl404/sekai:${{ env.IMG_TAG }}
             ghcr.io/rl404/sekai:latest
             ghcr.io/rl404/sekai:${{ env.IMG_TAG }}
+            ${{ secrets.GCR_HOSTNAME }}/${{ secrets.GCP_PROJECT_ID }}/akatsuki:latest
+            ${{ secrets.GCR_HOSTNAME }}/${{ secrets.GCP_PROJECT_ID }}/akatsuki:${{ env.IMG_TAG }}
