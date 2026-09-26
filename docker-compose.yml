@@ -2,7 +2,7 @@ services:
   sekai:
     container_name: sekai
     image: rl404/sekai:latest
+    build: .
     restart: always
     env_file: .env
-    ports:
-      - 3000:3000
+    network_mode: host
