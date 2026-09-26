@@ -51,7 +51,7 @@ export default function RootLayout({
             {children}
           </ThemeProvider>
         </AppRouterCacheProvider>
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || 'G-6EM73FR9PE'} />
       </body>
     </html>
   );
