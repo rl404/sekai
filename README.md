@@ -62,18 +62,24 @@ _More will be coming soon..._
 ## Installation
 
 1. Clone the repo.
-```sh
-git clone https://github.com/rl404/sekai
-```
+
+   ```sh
+   git clone https://github.com/rl404/sekai
+   ```
+
 2. Rename `.env.sample` to `.env` and modify the value according to your setup.
 3. Install depedencies.
-```sh
-npm ci
-```
+
+   ```sh
+   npm i
+   ```
+
 4. Start.
-```sh
-npm run dev
-```
+
+   ```sh
+   npm run dev
+   ```
+
 5. [http://localhost:3000](http://localhost:3000) is ready.
 
 ## Disclaimer

@@ -189,14 +189,12 @@ const AnimeDrawer = memo(function AnimeDrawer({
           extendedRelated: ctx.graphData.nodes
             .filter((n) => relatedIDs.includes(n.id))
             .filter((r) => r.id !== animeID)
-            .map(
-              (r: Node): Related => ({
-                id: r.id,
-                title: r.title,
-                picture: '',
-                relation: AnimeRelation[''],
-              }),
-            )
+            .map((r: Node): Related => ({
+              id: r.id,
+              title: r.title,
+              picture: '',
+              relation: AnimeRelation[''],
+            }))
             .sort((a, b) => a.title.localeCompare(b.title)),
         });
 
