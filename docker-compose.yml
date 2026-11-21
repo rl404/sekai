@@ -2,7 +2,10 @@ services:
   sekai:
     container_name: sekai
     image: rl404/sekai:latest
-    build: .
-    restart: always
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_GA_ID: ${NEXT_PUBLIC_GA_ID}
+    restart: unless-stopped
     env_file: .env
     network_mode: host
