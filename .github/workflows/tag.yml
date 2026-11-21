@@ -1,17 +1,22 @@
-name: tag
+name: Tag
 
 on: workflow_dispatch
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tag
+  cancel-in-progress: false
 
 jobs:
   tag:
     name: Tag
     runs-on: ubuntu-latest
     steps:
-    - name: Check out code
-      uses: actions/checkout@v7
-      with:
-        fetch-depth: 0
-    - name: Create tag
-      uses: mathieudutour/github-tag-action@v7.0.0
-      with:
-        github_token: ${{ secrets.CR_PAT }}
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: mathieudutour/github-tag-action@v7
+        with:
+          github_token: ${{ secrets.CR_PAT }}
